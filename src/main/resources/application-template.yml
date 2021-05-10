@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql:///api?serverTimezone=UTC
+    username: root
+    password: 密码
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true

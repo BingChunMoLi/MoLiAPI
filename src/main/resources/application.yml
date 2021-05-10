@@ -1,0 +1,56 @@
+moli:
+  version: v0.3.0
+server:
+  port: 8090
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1
+      pool-name: moliApi
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1
+        min-idle: 0
+    connect-timeout: 3000
+    timeout: 3000
+  application:
+    name: MoLiApi
+  profiles:
+    active: rdb
+mybatis-plus:
+  configuration:
+    cache-enabled: true
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.bingchunmoli.api.**.bean
+  global-config:
+    banner: off
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+logging:
+  charset:
+    file: utf-8
+    console: utf-8
+  file:
+    path: /soft/api/logs
+  config: classpath:config/spring-logback.xml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+        exclude: auditevents,info,metrics,loggers,logfile,httptrace,env,flyway,liquidbase,shutdown,mappings,scheduledtasks,threaddump,heapdump
+    jmx:
+      exposure:
+        exclude: '*'

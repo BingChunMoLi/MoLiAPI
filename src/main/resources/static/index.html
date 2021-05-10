@@ -1,0 +1,83 @@
+<!--
+ * @Author: 冰彦糖
+ * @Date: 2020-11-07 00:16:41
+ * @LastEditTime: 2020-11-28 20:55:41
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: d:\Github\JAVA\api\docs\index.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>茉莉API</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="keywords" content="Moli,MoliAPI,api,冰纯茉莉,冰纯茉莉api,Bing随机图,QQ头像,一言,诗词">
+  <meta name="description" content="茉莉API提供公共的免费的Bing原画随机图,QQ加密头像,一言等">
+  <meta name="author" content="冰纯茉莉,bingchunmoli@foxmail.com">
+  <meta name="revisit-after" content="7 days" >
+  <meta name="renderer" content="webkit">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://api.bingchunmoli.com/" />
+  <link rel="stylesheet" href="css/vue.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      loadSidebar: true,
+      name: '茉莉API',
+      repo: 'https://github.com/BingChunMoLi/MoLiAPI',
+      coverpage: true,
+      autoHeader: true,
+      maxLevel: 4,
+      auto2top: true,
+      mergeNavbar: true,
+      subMaxLevel: true,
+      search: {
+      maxAge: 86400000,
+      paths: 'auto',
+      placeholder: '搜索',
+      placeholder: {
+        '/zh-cn/': '搜索',
+        '/': 'Type to search'
+      },
+      noData: 'No Results!',
+      noData: {
+        '/zh-cn/': '找不到结果',
+        '/': 'No Results'
+      },
+      depth: 4,
+      hideOtherSidebarContent: false,
+      namespace: 'moliapi',
+      pathNamespaces: ['/zh-cn'],
+      pathNamespaces: /^(\/(zh-cn|ru-ru))?(\/(v1|v2))?/
+    },
+      tabs: {
+        persist    : true,      
+        sync       : true,     
+        theme      : 'classic',
+        tabComments: true,     
+        tabHeadings: true     
+      },
+      onlyCover: false
+    }
+  </script>
+  <script src="js/docsify.min.js"></script>
+  <script src="js/search.min.js"></script>
+  <script src="js/zoom-image.min.js"></script>
+  <script src="js/docsify-copy-code.min.js"></script>
+  <script src="js/docsify-pagination.min.js"></script>
+  <script src="js/prism-java.min.js"></script>
+  <script src="js/prism-json.min.js"></script>
+  <!-- <script src="js/prism-yaml.min.js"></script> -->
+  <!-- <script src="js/prism-sql.min.js"></script> -->
+  <!-- <script src="js/prism-javadoc.min.js"></script> -->
+  <script>
+    if (typeof navigator.serviceWorker !== 'undefined') {
+      navigator.serviceWorker.register('pwa.js')
+    }
+  </script>
+</body>
+</html>

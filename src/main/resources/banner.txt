@@ -1,0 +1,17 @@
+${AnsiColor.BRIGHT_GREEN}
+    //   ) )                        //   ) )
+   //___/ /  ( )   __      ___     //        / __                __
+  / __  (   / / //   ) ) //   ) ) //        //   ) ) //   / / //   ) )
+ //    ) ) / / //   / / ((___/ / //        //   / / //   / / //   / /
+//____/ / / / //   / /   //__   ((____/ / //   / / ((___( ( //   / /
+
+
+    /|    //| |              / /
+   //|   // | |     ___     / /        ( )
+  // |  //  | |   //   ) ) / /        / /
+ //  | //   | |  //   / / / /        / /
+//   |//    | | ((___/ / / /____/ / / /
+${AnsiColor.BRIGHT_MAGENTA}
+ApplicaitonName: ${spring.application.name}
+ApplicationVersion: ${moli.version}
+SpringBootVersion: ${spring-boot.formatted-version}
