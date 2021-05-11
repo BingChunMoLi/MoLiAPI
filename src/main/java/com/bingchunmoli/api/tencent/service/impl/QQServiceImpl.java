@@ -17,13 +17,8 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * @copyright(c) 2017-2020 冰纯茉莉
- * @Description: TODO
- * @Author 冰彦糖
- * @Data 2020/11/27 18:12
- * @ClassName QQServiceImpl
- * @PackageName: com.bingchunmoli.api.service.impl
- * @Version 0.0.1-SNAPSHOT
+ * @author 冰彦糖
+ * @version 0.0.1-SNAPSHOT
  **/
 @Slf4j
 @Service

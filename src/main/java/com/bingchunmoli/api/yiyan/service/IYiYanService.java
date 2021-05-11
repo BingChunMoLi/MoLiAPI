@@ -7,5 +7,10 @@ import com.bingchunmoli.api.yiyan.bean.YiYan;
  * @author BingChunMoLi
  */
 public interface IYiYanService extends IService<YiYan> {
-    String findRandomYiYan();
+    /**
+     * 查询一条随机一言数据
+     *
+     * @return 一言对象
+     */
+    Object findRandomYiYan();
 }

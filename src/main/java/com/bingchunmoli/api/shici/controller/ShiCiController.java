@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.shici.controller;
 
 
-import com.bingchunmoli.api.shici.bean.ShiCi;
+import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.shici.service.IShiCiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,17 +26,24 @@ public class ShiCiController {
 
     @Autowired
     RedisTemplate<String,Object> redisTemplate;
+
+
     @GetMapping("{id}")
-    public ShiCi getShiCi(@PathVariable Integer id) {
-        return shiCiService.getById(id);
+    public Object getShiCi(@PathVariable Integer id) {
+        Object shiCi = redisTemplate.opsForList().index(ApiConstant.SHI_CI, id);
+        if (shiCi == null) {
+            return shiCiService.getById(id);
+        }
+        return shiCi;
     }
 
-    //    @GetMapping
-//    public List<Shici> getShiCiAll(){
-//        return shiciService.list();
-//    }
+    /**
+     * 从缓存中读取一条随机诗词，如果不存在从数据库读取
+     *
+     * @return 返回一条诗词
+     */
     @GetMapping("random")
-    public ShiCi getRandomShiCi() {
+    public Object getRandomShiCi() {
         return shiCiService.findRandomShiCi();
     }
 }

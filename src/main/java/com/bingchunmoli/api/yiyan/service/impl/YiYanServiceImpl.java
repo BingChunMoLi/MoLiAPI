@@ -1,6 +1,5 @@
 package com.bingchunmoli.api.yiyan.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
@@ -12,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+/**
+ * @author BingChunMoLi
+ */
 @Service
 public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements IYiYanService {
 
@@ -22,11 +24,11 @@ public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements
     RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public String findRandomYiYan() {
+    public Object findRandomYiYan() {
         Long len = redisTemplate.opsForList().size(ApiConstant.YI_YAN);
         if (len == null || len == 0) {
-            return JSON.toJSONString(yiYanMapper.findRandom());
+            return yiYanMapper.findRandom();
         }
-        return JSON.toJSONString(redisTemplate.opsForList().index(ApiConstant.YI_YAN, new Random().nextInt(len.intValue())));
+        return redisTemplate.opsForList().index(ApiConstant.YI_YAN, new Random().nextInt(len.intValue()));
     }
 }

@@ -12,5 +12,10 @@ import com.bingchunmoli.api.shici.bean.ShiCi;
  * @since 2020-11-11
  */
 public interface IShiCiService extends IService<ShiCi> {
-    ShiCi findRandomShiCi();
+    /**
+     * 从缓存中查出随即一条诗词，如果没有从数据库查询
+     *
+     * @return 一条诗词数据
+     */
+    Object findRandomShiCi();
 }
