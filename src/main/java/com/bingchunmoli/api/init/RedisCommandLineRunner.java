@@ -6,6 +6,7 @@ import com.bingchunmoli.api.yiyan.service.IYiYanService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@ConditionalOnBean(value = {IYiYanService.class, IShiCiService.class, RedisTemplate.class})
 public class RedisCommandLineRunner implements CommandLineRunner {
 
     @Autowired
@@ -24,21 +26,21 @@ public class RedisCommandLineRunner implements CommandLineRunner {
     RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Long yiYanLen = redisTemplate.opsForList().size(ApiConstant.YI_YAN);
         if (yiYanLen == null || yiYanLen == 0) {
             log.info("yiYan数据初始化中");
-            yiYanService.list().forEach((yiYan) -> redisTemplate.opsForList().leftPush(ApiConstant.YI_YAN, yiYan));
+            redisTemplate.opsForList().leftPushAll(ApiConstant.YI_YAN, yiYanService.list().toArray());
             log.info("yiYan初始化完成");
-        }else {
+        } else {
             log.info("yiYan数据不需要初始化");
         }
         Long shiCiLen = redisTemplate.opsForList().size(ApiConstant.SHI_CI);
         if (shiCiLen == null || shiCiLen == 0) {
             log.info("shiCi数据初始化中");
-            shiCiService.list().forEach((shiCi -> redisTemplate.opsForList().leftPush(ApiConstant.SHI_CI, shiCi)));
+            redisTemplate.opsForList().leftPushAll(ApiConstant.SHI_CI, shiCiService.list().toArray());
             log.info("shiCi初始化完成");
-        }else {
+        } else {
             log.info("shiCi数据不需要初始化");
         }
     }
