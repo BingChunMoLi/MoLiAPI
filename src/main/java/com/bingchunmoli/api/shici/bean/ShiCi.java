@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "Shici对象", description = "")
+@ApiModel(value = "Shici对象", description = "诗词")
 public class ShiCi implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,10 +37,10 @@ public class ShiCi implements Serializable {
     private Integer deleted;
     @JsonIgnore
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime gmtCreate;
+    private LocalDateTime createTime;
     @JsonIgnore
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime gmtModified;
+    private LocalDateTime updateTime;
     @Version
     @JsonIgnore
     private String version;

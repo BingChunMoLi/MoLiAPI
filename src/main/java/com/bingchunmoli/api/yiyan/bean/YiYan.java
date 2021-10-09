@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @TableName("yi_yan")
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "Yiyan对象", description = "")
+@ApiModel(value = "Yiyan对象", description = "一言")
 public class YiYan implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,10 +52,10 @@ public class YiYan implements Serializable {
     private Integer deleted;
     @JsonIgnore
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime gmtCreate;
+    private LocalDateTime createTime;
     @JsonIgnore
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime gmtModified;
+    private LocalDateTime updateTime;
     @Version
     @JsonIgnore
     private String version;
