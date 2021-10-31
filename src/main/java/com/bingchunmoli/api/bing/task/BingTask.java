@@ -10,6 +10,9 @@ import com.bingchunmoli.api.bing.service.IBingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +30,7 @@ public class BingTask {
     @Autowired
     private IBingService bingService;
 
+    @Retryable(value = Exception.class, backoff = @Backoff(delay = 5000L, multiplier = 3))
     @Scheduled(cron = "* 1 0 * * *")
     public void getBingImage() {
         String cnBingImage = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=0&format=js");
@@ -39,5 +43,11 @@ public class BingTask {
         redisTemplate.opsForValue().set(BingEnum.ENBING.getKey(), enBingImageVO, 1, TimeUnit.DAYS);
         redisTemplate.opsForValue().set(BingEnum.ALLBING.getKey(), bingImage, 1, TimeUnit.DAYS);
         log.info("getBingImage:" + DateUtil.now());
+    }
+
+    @Recover
+    public void logBingImageError(Exception e){
+        log.error("获取bing图片异常-" + DateUtil.now() + e.getMessage() + e);
+
     }
 }
