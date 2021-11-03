@@ -14,7 +14,7 @@ EXPOSE 8090
 ARG JAR_FILE
 
 # 往容器中添加jar包
-ADD ${JAR_FILE} /api/app.jar
+ADD /target/${JAR_FILE} /api/app.jar
 
 # Add Maven dependencies (not shaded into the artifact; Docker-cached)
 #ADD target/*       /app/

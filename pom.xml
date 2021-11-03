@@ -11,18 +11,20 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>api</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.2</version>
     <name>api</name>
     <description>MoLiApi</description>
 
     <properties>
         <java.version>1.8</java.version>
-        <mybatis-plus.version>3.4.2</mybatis-plus.version>
-        <swagger.version>1.9.1.RELEASE</swagger.version>
-        <knife4j.version>3.0.2</knife4j.version>
-        <fastjson.version>1.2.76</fastjson.version>
+        <mybatis-plus.version>3.4.3.4</mybatis-plus.version>
+        <swagger.version>2.0.1.RELEASE</swagger.version>
+        <knife4j.version>3.0.3</knife4j.version>
+        <fastjson.version>1.2.78</fastjson.version>
         <docker-plugin.version>1.4.9</docker-plugin.version>
         <aspectjweaver.version>1.9.7</aspectjweaver.version>
+        <hutool.version>5.7.15</hutool.version>
+        <zxing.version>3.4.1</zxing.version>
     </properties>
 
     <dependencies>
@@ -84,12 +86,12 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.6.3</version>
+            <version>${hutool.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>3.3.3</version>
+            <version>${zxing.version}</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -120,10 +122,21 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${docker-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <repository>${project.build.finalName}</repository>
                     <tag>${project.version}</tag>
-                    <buildArgs>target/${project.build.finalName}.jar</buildArgs>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
