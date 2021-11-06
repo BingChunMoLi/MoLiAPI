@@ -16,8 +16,5 @@ ARG JAR_FILE
 # 往容器中添加jar包
 ADD /target/${JAR_FILE} /api/app.jar
 
-# Add Maven dependencies (not shaded into the artifact; Docker-cached)
-#ADD target/*       /app/
-
 # 启动镜像自动运行程序
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","/api/app.jar"]

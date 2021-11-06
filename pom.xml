@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>com.bingchunmoli</groupId>
-    <artifactId>api</artifactId>
+    <artifactId>moliapi</artifactId>
     <version>3.1.2</version>
-    <name>api</name>
+    <name>MoLiApi</name>
     <description>MoLiApi</description>
 
     <properties>
@@ -132,14 +132,17 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>${project.build.finalName}</repository>
+                    <repository>${project.artifactId}</repository>
+                    <tag>latest</tag>
                     <tag>${project.version}</tag>
                     <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+<!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
+                        <JAR_FILE>${project.artifactId}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>${project.artifactId}</finalName>
     </build>
 
 </project>
