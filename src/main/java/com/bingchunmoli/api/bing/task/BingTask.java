@@ -31,7 +31,7 @@ public class BingTask {
     private IBingService bingService;
 
     @Retryable(value = Exception.class, backoff = @Backoff(delay = 5000L, multiplier = 3))
-    @Scheduled(cron = "* 1 0 * * *")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void getBingImage() {
         String cnBingImage = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=0&format=js");
         String enBingImage = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=1&format=js");

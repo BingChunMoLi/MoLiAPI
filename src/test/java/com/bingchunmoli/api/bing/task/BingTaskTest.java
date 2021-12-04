@@ -2,8 +2,13 @@ package com.bingchunmoli.api.bing.task;
 
 import com.alibaba.fastjson.JSON;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+
+@SpringBootTest
 class BingTaskTest {
     @Test
     void parse(){
@@ -12,4 +17,12 @@ class BingTaskTest {
         System.out.println(vo);
     }
 
+    @Autowired
+    private BingTask bingTask;
+
+    @Test
+    @Ignore
+    void getBIng(){
+        bingTask.getBingImage();
+    }
 }

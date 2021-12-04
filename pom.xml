@@ -18,7 +18,7 @@
     <properties>
         <java.version>1.8</java.version>
         <mybatis-plus.version>3.4.3.4</mybatis-plus.version>
-        <swagger.version>1.9.1.RELEASE</swagger.version>
+        <swagger.version>3.0.0</swagger.version>
         <knife4j.version>3.0.3</knife4j.version>
         <fastjson.version>1.2.78</fastjson.version>
         <docker-plugin.version>1.4.9</docker-plugin.version>
@@ -57,8 +57,8 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.spring4all</groupId>
-            <artifactId>swagger-spring-boot-starter</artifactId>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
             <version>${swagger.version}</version>
         </dependency>
         <dependency>
@@ -122,15 +122,15 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${docker-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>default</id>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                            <goal>push</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
                 <configuration>
                     <repository>${project.artifactId}</repository>
                     <tag>latest</tag>
