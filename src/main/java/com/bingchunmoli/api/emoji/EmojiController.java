@@ -121,7 +121,7 @@ public class EmojiController {
      * @param alise 别名，例如“smile”
      * @return Emoji对象，如果找不到返回null
      */
-    @GetMapping("tag")
+    @GetMapping("getByAlise")
     @ApiOperation("通过别名获取Emoji")
     public ResultVO getByAlise(String alise){
         return new ResultVO(EmojiUtil.get(alise));
