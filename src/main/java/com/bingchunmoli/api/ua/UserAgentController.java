@@ -2,10 +2,7 @@ package com.bingchunmoli.api.ua;
 
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.bingchunmoli.api.bean.ResultVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author bingchunmoli
@@ -20,7 +17,7 @@ public class UserAgentController {
     }
 
     @GetMapping("userAgentInfoByParam")
-    public ResultVO getUserAgentInfoByParam(String userAgent){
+    public ResultVO getUserAgentInfoByParam(@RequestParam String userAgent){
         return new ResultVO(UserAgentUtil.parse(userAgent));
     }
 }
