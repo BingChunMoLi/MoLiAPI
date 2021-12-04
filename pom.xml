@@ -23,8 +23,9 @@
         <fastjson.version>1.2.78</fastjson.version>
         <docker-plugin.version>1.4.9</docker-plugin.version>
         <aspectjweaver.version>1.9.7</aspectjweaver.version>
-        <hutool.version>5.7.15</hutool.version>
+        <hutool.version>5.7.16</hutool.version>
         <zxing.version>3.4.1</zxing.version>
+        <emoji.version>5.1.1</emoji.version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,12 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>${emoji.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
