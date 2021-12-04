@@ -28,12 +28,6 @@ public class YiYanController {
         return yiYan;
     }
 
-    //    @GetMapping
-//    public List<Yiyan> getYiYanAll(){
-//        return yiyanService.list();
-//    }
-
-
     /**
      * 查询随机一条一言数据
      *
