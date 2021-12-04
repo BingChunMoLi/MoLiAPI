@@ -18,4 +18,9 @@ public class UserAgentController {
     public ResultVO getUserAgentInfo(@RequestHeader("user-agent")String userAgent){
         return new ResultVO(UserAgentUtil.parse(userAgent));
     }
+
+    @GetMapping("userAgentInfoByParam")
+    public ResultVO getUserAgentInfoByParam(String userAgent){
+        return new ResultVO(UserAgentUtil.parse(userAgent));
+    }
 }

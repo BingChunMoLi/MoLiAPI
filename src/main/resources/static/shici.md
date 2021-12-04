@@ -1,11 +1,3 @@
-<!--
- * @Author: 冰彦糖
- * @Date: 2020-11-17 22:53:18
- * @LastEditTime: 2020-11-28 20:45:50
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \undefinedd:\Github\JAVA\api_v2\src\main\resources\templates\shici.md
--->
 ## 诗词
 1. 随机诗词  
 > https://api.bingchunmoli.com/shici/random  
