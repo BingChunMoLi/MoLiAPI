@@ -12,7 +12,7 @@ https://api.bingchunmoli.com/shici/random
 成功返回示例:
 {"code":"00000","msg":"一切OK","data":{"id":88,"content":"春山烟欲收，天淡星稀小。","origin":"生查子·春山烟欲收","author":"牛希济","category":"古诗文-天气-星星","deleted":0,"gmtCreate":null,"gmtModified":null,"version":null}}
 
-1. 指定诗词  
+2. 指定诗词  
 > https://api.bingchunmoli.com/shici/{id}  
 
 请求方式: Get  
