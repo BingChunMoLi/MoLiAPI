@@ -24,11 +24,11 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("byDay")
-    public String getWeather(@RequestParam Integer day, @RequestParam String location){
+    public String getWeather(@RequestParam Integer day, @RequestParam String location) {
         if (StrUtil.isBlank(location)) {
             throw new ApiParamException("地址为空");
         }
-        if (!Objects.equals(day, WeatherDayEnums.THREE_DAY.getDay()) && !Objects.equals(day, WeatherDayEnums.SEVEN_DAY.getDay())) {
+        if (! Objects.equals(day, WeatherDayEnums.THREE_DAY.getDay()) && ! Objects.equals(day, WeatherDayEnums.SEVEN_DAY.getDay())) {
             throw new ApiParamException("暂不支持的参数");
         }
         return weatherService.getWeather(day, location);

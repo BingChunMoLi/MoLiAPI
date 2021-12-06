@@ -26,12 +26,12 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
         if (returnType.getGenericParameterType() instanceof ParameterizedTypeImpl) {
             return ! ((ParameterizedTypeImpl) returnType.getGenericParameterType()).getRawType().getTypeName().equals(ResultVO.class.getTypeName());
         }
-        return !returnType.getGenericParameterType().equals(ResultVO.class);
+        return ! returnType.getGenericParameterType().equals(ResultVO.class);
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (returnType.getGenericParameterType().equals(String.class)){
+        if (returnType.getGenericParameterType().equals(String.class)) {
             //String无法直接包装
             ObjectMapper objectMapper = new ObjectMapper();
             try {
@@ -40,7 +40,7 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
                 e.printStackTrace();
             }
         }
-        if (returnType.getGenericParameterType().equals(BufferedImage.class)){
+        if (returnType.getGenericParameterType().equals(BufferedImage.class)) {
             return body;
         }
         return new ResultVO<>(body);

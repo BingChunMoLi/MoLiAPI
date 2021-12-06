@@ -14,6 +14,7 @@ import java.util.Set;
 
 /**
  * emoji表情的各种接口
+ *
  * @author bingchunmoli
  */
 @RestController
@@ -46,7 +47,7 @@ public class EmojiController {
      */
     @GetMapping("alise")
     @ApiOperation("emoji转别名")
-    public String emojiToAlise(String emoji){
+    public String emojiToAlise(String emoji) {
         return EmojiUtil.toAlias(emoji);
     }
 
@@ -66,7 +67,7 @@ public class EmojiController {
      */
     @GetMapping("unicode")
     @ApiOperation("emoji转unicode")
-    public String emojiToUnicode(String emoji){
+    public String emojiToUnicode(String emoji) {
         return EmojiUtil.toUnicode(emoji);
     }
 
@@ -80,29 +81,31 @@ public class EmojiController {
      */
     @GetMapping("html")
     @ApiOperation("emoji转html表示法")
-    public String emojiToHtml(String emoji){
+    public String emojiToHtml(String emoji) {
         return EmojiUtil.toHtml(emoji);
     }
 
     /**
      * 是否为Emoji表情的Unicode符
+     *
      * @param emoji emoji表情
      * @return unicode
      */
     @GetMapping("isEmoji")
     @ApiOperation("是否是emoji表情的unicode符")
-    public Boolean isEmoji(String emoji){
+    public Boolean isEmoji(String emoji) {
         return EmojiUtil.isEmoji(emoji);
     }
 
     /**
      * 是否包含Emoji表情的Unicode符
+     *
      * @param emoji emoji表情
      * @return unicode
      */
     @GetMapping("contains")
     @ApiOperation("是否含有emoji表情的Unicode符")
-    public Boolean containsEmoji(String emoji){
+    public Boolean containsEmoji(String emoji) {
         return EmojiUtil.containsEmoji(emoji);
     }
 
@@ -114,7 +117,7 @@ public class EmojiController {
      */
     @GetMapping("tag")
     @ApiOperation("根据tag获取对应所有的Emoji表情")
-    public Set<Emoji> getByTag(String tag){
+    public Set<Emoji> getByTag(String tag) {
         return EmojiUtil.getByTag(tag);
     }
 
@@ -126,7 +129,7 @@ public class EmojiController {
      */
     @GetMapping("getByAlise")
     @ApiOperation("通过别名获取Emoji")
-    public Emoji getByAlise(String alise){
+    public Emoji getByAlise(String alise) {
         return EmojiUtil.get(alise);
     }
 
@@ -138,7 +141,7 @@ public class EmojiController {
      */
     @GetMapping("removeAllEmojis")
     @ApiOperation("去除字符串中所有的Emoji Unicode字符")
-    public String removeAllEmojis(String emojiStr){
+    public String removeAllEmojis(String emojiStr) {
         return EmojiUtil.removeAllEmojis(emojiStr);
     }
 
@@ -150,7 +153,7 @@ public class EmojiController {
      */
     @GetMapping("extractEmojis")
     @ApiOperation("提取字符串中所有的Emoji Unicode")
-    public List<String> extractEmojis(String emojiStr){
+    public List<String> extractEmojis(String emojiStr) {
         return EmojiUtil.extractEmojis(emojiStr);
     }
 }

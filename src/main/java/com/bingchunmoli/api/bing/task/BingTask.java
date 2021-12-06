@@ -46,7 +46,7 @@ public class BingTask {
     }
 
     @Recover
-    public void logBingImageError(Exception e){
+    public void logBingImageError(Exception e) {
         log.error("获取bing图片异常-" + DateUtil.now() + e.getMessage() + e);
 
     }

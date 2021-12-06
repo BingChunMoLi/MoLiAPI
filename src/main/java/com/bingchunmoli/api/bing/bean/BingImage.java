@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * @author bingchunmoli
+ */
 @Data
 @TableName("bing_image")
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value="Bing每日图片", description="<startdate>20201114</startdate>\n" +
+@ApiModel(value = "Bing每日图片", description = "<startdate>20201114</startdate>\n" +
         "<fullstartdate>202011140800</fullstartdate>\n" +
         "<enddate>20201115</enddate>\n" +
         "<url>/th?id=OHR.LupineNZ_ZH-CN0613960648_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp</url>\n" +
@@ -45,7 +48,7 @@ public class BingImage implements Serializable {
     private String obsUrlCn;
     private String obsUrlEn;
 
-    public BingImage(BingImageVO cn, BingImageVO en){
+    public BingImage(BingImageVO cn, BingImageVO en) {
         BingImageVO.BingImages bingImagesCn = cn.getImages().get(0);
         BingImageVO.BingImages bingImagesEn = en.getImages().get(0);
         this.startDate = bingImagesCn.getStartDate();

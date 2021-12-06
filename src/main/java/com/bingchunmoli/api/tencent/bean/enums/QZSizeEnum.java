@@ -13,15 +13,15 @@ import lombok.Getter;
 public enum QZSizeEnum {
 
     //30*30 超小图
-    SMALL("小",30),
+    SMALL("小", 30),
     //50*50 中小图
-    ZHONG_SMALL("中小",50),
+    ZHONG_SMALL("中小", 50),
     //100*100 中图
-    ZHONG("中",100),
+    ZHONG("中", 100),
     //140*140 中大图
-    ZHONG_BIG("大",200),
+    ZHONG_BIG("大", 200),
     //640*640 大图
-    BIG("超大",640);
+    BIG("超大", 640);
     private final String name;
     private final Integer size;
 

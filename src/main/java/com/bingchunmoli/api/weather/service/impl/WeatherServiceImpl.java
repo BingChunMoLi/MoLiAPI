@@ -36,7 +36,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     private String getWeatherString(Integer day, String location) {
-        StringJoiner keyJoiner = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":"+location)
+        StringJoiner keyJoiner = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
                 .add(String.valueOf(day));
         String redisCache = redisUtil.get(keyJoiner.toString());
         if (redisCache != null) {
@@ -58,13 +58,14 @@ public class WeatherServiceImpl implements WeatherService {
 
     /**
      * 根据location模糊查询
+     *
      * @param location 地区名称
      * @return 地区Id
      */
     private String getLocationId(String location) {
         StringJoiner keyJoiner = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location);
         String redisCache = redisUtil.get(keyJoiner.toString());
-            if (redisCache != null) {
+        if (redisCache != null) {
             WeatherVO weatherVO = JSON.parseObject(redisCache, WeatherVO.class);
             return weatherVO.getLocation().get(0).getId();
         }

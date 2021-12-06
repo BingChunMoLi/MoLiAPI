@@ -6,6 +6,7 @@ package com.bingchunmoli.api.utils;
 public class IntegerUtil {
     /**
      * 是否是正整数
+     *
      * @param str 可能是数字的字符串
      */
     public static Boolean isInteget(String str) {
