@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ import java.net.URL;
 public class QqServiceImpl implements IQqService {
 
     @Override
+    @Cacheable("getQqImage")
     public BufferedImage getQqImage(String qq, Integer size) {
         try {
             return ImageIO.read(new URL("https://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=" + size));
@@ -49,6 +51,7 @@ public class QqServiceImpl implements IQqService {
     }
 
     @Override
+    @Cacheable("getQzImage")
     public BufferedImage getQzImage(String qq, Integer size) {
         try {
             return ImageIO.read(new URL("https://qlogo1.store.qq.com/qzone/" + qq + "/" + qq + "/" + size));
@@ -65,6 +68,7 @@ public class QqServiceImpl implements IQqService {
     }
 
     @Override
+    @Cacheable("getQqImageForJson")
     public String getQqImageForJson(String qq, Integer size) {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet httpGet = new HttpGet("https://ptlogin2.qq.com/getface?appid=1006102&imgtype=4&uin=" + qq);
@@ -93,6 +97,7 @@ public class QqServiceImpl implements IQqService {
     }
 
     @Override
+    @Cacheable(value = "getQzImageForJsonGetQz")
     public String getQzImageForJson(String qq) {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet httpGet = new HttpGet("https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq);
@@ -121,6 +126,7 @@ public class QqServiceImpl implements IQqService {
     }
 
     @Override
+    @Cacheable("getQqImageForEncrypt")
     public String getQqImageForEncrypt(String qq, Integer size) {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet httpGet = new HttpGet("https://ptlogin2.qq.com/getface?appid=1006102&imgtype=4&uin=" + qq);
