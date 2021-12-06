@@ -3,6 +3,7 @@ moli:
   apiKey:
     weatherKey: 和风天气key
     weatherUri: 和风天气uri
+    weatherGeoUri: 和风天气地址查询uri
     serverSauceKey: server酱key
 server:
   port: 8090

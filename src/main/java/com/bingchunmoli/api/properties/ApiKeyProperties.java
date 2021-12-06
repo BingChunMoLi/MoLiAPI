@@ -20,6 +20,10 @@ public class ApiKeyProperties {
      */
     private String weatherUri = "devapi.qweather.com";
     /**
+     * 和风天气请求地区ApiUri
+     */
+    private String weatherGeoUri = "geoapi.qweather.com";
+    /**
      * server酱key
      */
     private String serverSauceKey;

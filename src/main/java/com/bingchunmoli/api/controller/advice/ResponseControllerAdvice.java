@@ -10,6 +10,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.awt.image.BufferedImage;
 
@@ -22,6 +23,9 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         //@Description: 如果返回值已经是ResultVO的对象就没必要再次封装返回false
+        if (returnType.getGenericParameterType() instanceof ParameterizedTypeImpl) {
+            return ! ((ParameterizedTypeImpl) returnType.getGenericParameterType()).getRawType().getTypeName().equals(ResultVO.class.getTypeName());
+        }
         return !returnType.getGenericParameterType().equals(ResultVO.class);
     }
 
