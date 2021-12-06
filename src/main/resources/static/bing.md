@@ -5,10 +5,12 @@
  * @LastEditors: 修改以Json形式返回
  * @Description: In User Settings Edit
 -->
+
 ## Bing今日美图(默认原画)
+
 1. Bing今日美图
 
-请求方式: Get  
+请求方式: Get
 
 请求参数: 无
 
@@ -17,6 +19,7 @@ https://api.bingchunmoli.com/bing/all
 
 成功返回示例:
 > [https://api.bingchunmoli.com/bing/all](https://api.bingchunmoli.com/bing/all)
+
 ```json
 {
   "code": "00000",
@@ -45,7 +48,9 @@ https://api.bingchunmoli.com/bing/all
   }
 }
 ```
+
 > [https://api.bingchunmoli.com/bing/cn](https://api.bingchunmoli.com/bing/cn)
+
 ```json
 {
     "code": "00000",
@@ -80,7 +85,9 @@ https://api.bingchunmoli.com/bing/all
     }
 }
 ```
+
 > [https://api.bingchunmoli.com/bing/en](https://api.bingchunmoli.com/bing/en)
+
 ```json
 {
     "code": "00000",

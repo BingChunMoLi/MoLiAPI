@@ -14,10 +14,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 @Slf4j
 public class RedisCache implements Cache {
+    private static final long EXPIRE_TIME_IN_MINUTES = 30;
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final String id;
     private RedisTemplate redisTemplate;
-    private static final long EXPIRE_TIME_IN_MINUTES = 30;
 
     public RedisCache(String id) {
         if (id == null) {

@@ -1,6 +1,8 @@
 ## UserAgent
+
 1. 根据请求的请求头解析UserAgent
-> https://api.bingchunmoli.com/ua/userAgentInfo 
+
+> https://api.bingchunmoli.com/ua/userAgentInfo
 
 请求方式: Get
 
@@ -10,6 +12,7 @@
 https://api.bingchunmoli.com/ua/userAgentInfo
 
 成功返回示例:
+
 ```json
 {
     "code": "00000",
@@ -50,16 +53,19 @@ https://api.bingchunmoli.com/ua/userAgentInfo
 ```
 
 2. 根据请求参数的UserAgent字符串解析UserAgent
-> https://api.bingchunmoli.com/ua/userAgentInfoByParam 
+
+> https://api.bingchunmoli.com/ua/userAgentInfoByParam
 
 请求方式: Get
 
 请求参数: userAgent
 
 请求示例:
-https://api.bingchunmoli.com/ua/userAgentInfoByParam?userAgent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36
+https://api.bingchunmoli.com/ua/userAgentInfoByParam?userAgent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (
+KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36
 
 成功返回示例:
+
 ```json
 {
     "code": "00000",

@@ -6,22 +6,11 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
- * @copyright(c) 2017-2020 冰纯茉莉
- * @Description: TODO
- * @Author 冰彦糖
- * @Data 2020/11/12 13:50
- * @ClassName ApplicationContextHolder
- * @PackageName: com.bingchunmoli.api.com.bingchunmoli.api.utils
- * @Version 0.0.1-SNAPSHOT
+ * @author bingchunmoli
  **/
 @Component
 public class ApplicationContextHolder implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        applicationContext = ctx;
-    }
 
     /**
      * Get application context from everywhere
@@ -30,6 +19,11 @@ public class ApplicationContextHolder implements ApplicationContextAware {
      */
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        applicationContext = ctx;
     }
 
     /**
