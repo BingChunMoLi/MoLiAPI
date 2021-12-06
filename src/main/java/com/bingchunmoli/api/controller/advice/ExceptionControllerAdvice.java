@@ -16,26 +16,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class ExceptionControllerAdvice {
     @ExceptionHandler
-    public ResultVO fileIsEmptyException(FileIsEmptyException e) {
+    public ResultVO<String> fileIsEmptyException(FileIsEmptyException e) {
         log.error(e.getMessage());
-        return new ResultVO(CodeEnum.ERROR.getCode(), e.getMessage(), "文件为空,请确认文件是否存在");
+        return new ResultVO<>(CodeEnum.ERROR.getCode(), e.getMessage(), "文件为空,请确认文件是否存在");
     }
 
     @ExceptionHandler
-    public ResultVO httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ResultVO<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error(e.getMessage());
-        return new ResultVO(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), "没有受支持的请求方法，请求方法错误.");
+        return new ResultVO<>(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), "没有受支持的请求方法，请求方法错误.");
     }
 
     @ExceptionHandler
-    public ResultVO defaultException(Exception e) {
+    public ResultVO<String> defaultException(Exception e) {
         log.error(e.getMessage());
-        return new ResultVO(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), "默认未分类异常");
+        return new ResultVO<>(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), "默认未分类异常");
     }
 
     @ExceptionHandler
-    public ResultVO defaultThrowable(Throwable throwable) {
+    public ResultVO<String> defaultThrowable(Throwable throwable) {
         log.error(throwable.getMessage());
-        return new ResultVO(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), "严重异常");
+        return new ResultVO<>(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), "严重异常");
     }
 }
