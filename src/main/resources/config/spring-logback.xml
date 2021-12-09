@@ -23,7 +23,8 @@
     <!-- 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
+            <pattern>%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level)
+                %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
             </pattern>
         </encoder>
     </appender>

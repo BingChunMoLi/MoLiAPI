@@ -6,15 +6,14 @@
  * @Description: In User Settings Edit
  * @FilePath: \undefinedd:\Github\JAVA\api\docs\README.md
 -->
+
 # emm,说点什么好呢?无话可说可还行..
 
 这是一个简单的API
+
 ## 接口说明
+
 目前仅支持https://api.bingchunmoli.com 并且使用了HSTS,不过加入了 HSTS Preload List
 
 注: 此网站支持PWA
-## TODO:
-- [ ] Bing按日期获取
-- [ ] Bing按请求分辨率返回
-- [ ] IP
-- [ ] Bing国际版国内版同时支持
+

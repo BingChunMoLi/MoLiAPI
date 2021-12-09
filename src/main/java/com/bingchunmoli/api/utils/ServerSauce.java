@@ -1,5 +1,7 @@
 package com.bingchunmoli.api.utils;
 
+import com.bingchunmoli.api.properties.ApiKeyProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -12,33 +14,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * @copyright(c) 2017-2020 冰纯茉莉
- * @Description: TODO Server酱
- * @Author 冰彦糖
- * @Data 2020/11/16 22:24
- * @ClassName ServerSauce
- * @PackageName: com.bingchunmoli.api.com.bingchunmoli.api.utils
- * @Version 0.0.1-SNAPSHOT
+ * @author bingchunmoli
  **/
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ServerSauce {
+    private final ApiKeyProperties apiKeyProperties;
 
-    private static String url;
-//    @Value("${server-sauce.uri}")
-    public void setUrl(String url) {
-        this.url = url;
-    }
-    public static void send(String title, String desp){
+    public void send(String title, String desp) {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        StringBuffer params = new StringBuffer();
+        StringBuilder params = new StringBuilder();
         try {
-            params.append(url);
+            params.append(apiKeyProperties.getServerSauceKey());
             params.append("?title=");
-            params.append(URLEncoder.encode(title,"utf-8"));
+            params.append(URLEncoder.encode(title, "utf-8"));
             params.append("&");
             params.append("desp=");
-            params.append(URLEncoder.encode(desp,"utf-8"));
+            params.append(URLEncoder.encode(desp, "utf-8"));
         } catch (UnsupportedEncodingException e) {
             log.debug("URL编码异常");
             e.printStackTrace();
@@ -51,12 +44,12 @@ public class ServerSauce {
         } catch (IOException e) {
             log.debug("Server酱推送失败");
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                if (httpClient != null){
+                if (httpClient != null) {
                     httpClient.close();
                 }
-                if (response != null){
+                if (response != null) {
                     response.close();
                 }
             } catch (IOException e) {

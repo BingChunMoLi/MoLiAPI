@@ -10,20 +10,14 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * @copyright(c) 2017-2020 冰纯茉莉
- * @Description: TODO redis实现Myabti二级缓存
- * @Author 冰彦糖
- * @Data 2020/11/12 13:11
- * @ClassName RedisCache
- * @PackageName: com.bingchunmoli.api.cache
- * @Version 0.0.1-SNAPSHOT
+ * @author bingchunmoli
  **/
 @Slf4j
 public class RedisCache implements Cache {
+    private static final long EXPIRE_TIME_IN_MINUTES = 30;
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final String id;
     private RedisTemplate redisTemplate;
-    private static final long EXPIRE_TIME_IN_MINUTES = 30;
 
     public RedisCache(String id) {
         if (id == null) {
@@ -49,8 +43,7 @@ public class RedisCache implements Cache {
             RedisTemplate redisTemplate = getRedisTemplate();
             redisTemplate.opsForValue().set(key, value);
             log.debug("Put query result to redis");
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             log.error("Redis put failed", t);
         }
     }
@@ -67,8 +60,7 @@ public class RedisCache implements Cache {
             RedisTemplate redisTemplate = getRedisTemplate();
             log.debug("Get cached query result from redis");
             return redisTemplate.opsForValue().get(key);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             log.error("Redis get failed, fail over to db", t);
             return null;
         }
@@ -87,8 +79,7 @@ public class RedisCache implements Cache {
             RedisTemplate redisTemplate = getRedisTemplate();
             redisTemplate.delete(key);
             log.debug("Remove cached query result from redis");
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             log.error("Redis remove failed", t);
         }
         return null;

@@ -1,5 +1,7 @@
 ## Emoji
+
 1. 将字符串中的Unicode Emoji字符转换为别名表现形式（两个":"包围的格式）
+
 > https://api.bingchunmoli.com/emoji/alise
 
 请求方式: Get
@@ -10,6 +12,7 @@
 https://api.bingchunmoli.com/emoji/alise?emoji=😄
 
 成功返回示例:
+
 ```json
 {
     "code": "00000",
@@ -19,6 +22,7 @@ https://api.bingchunmoli.com/emoji/alise?emoji=😄
 ```
 
 2. 将子串中的Emoji别名（两个":"包围的格式）和其HTML表示形式替换为为Unicode Emoji符号
+
 > https://api.bingchunmoli.com/emoji/unicode
 
 请求方式: Get
@@ -29,6 +33,7 @@ https://api.bingchunmoli.com/emoji/alise?emoji=😄
 https://api.bingchunmoli.com/emoji/unicode?emoji=:smile:
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -38,6 +43,7 @@ https://api.bingchunmoli.com/emoji/unicode?emoji=:smile:
 ```
 
 3. 将字符串中的Unicode Emoji字符转换为HTML表现形式
+
 > https://api.bingchunmoli.com/emoji/html
 
 请求方式: Get
@@ -48,6 +54,7 @@ https://api.bingchunmoli.com/emoji/unicode?emoji=:smile:
 https://api.bingchunmoli.com/emoji/unicode?emoji=👦🏿
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -57,6 +64,7 @@ https://api.bingchunmoli.com/emoji/unicode?emoji=👦🏿
 ```
 
 4. 是否为Emoji表情的Unicode符
+
 > https://api.bingchunmoli.com/emoji/isEmoji
 
 请求方式: Get
@@ -67,6 +75,7 @@ https://api.bingchunmoli.com/emoji/unicode?emoji=👦🏿
 https://api.bingchunmoli.com/emoji/isEmoji?emoji=👦🏿
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -76,6 +85,7 @@ https://api.bingchunmoli.com/emoji/isEmoji?emoji=👦🏿
 ```
 
 5. 是否含有emoji表情的Unicode符
+
 > https://api.bingchunmoli.com/emoji/contains
 
 请求方式: Get
@@ -86,6 +96,7 @@ https://api.bingchunmoli.com/emoji/isEmoji?emoji=👦🏿
 https://api.bingchunmoli.com/emoji/contains?emoji=👦🏿
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -95,6 +106,7 @@ https://api.bingchunmoli.com/emoji/contains?emoji=👦🏿
 ```
 
 6. 根据tag获取对应所有的Emoji表情
+
 > https://api.bingchunmoli.com/emoji/tag
 
 请求方式: Get
@@ -105,6 +117,7 @@ https://api.bingchunmoli.com/emoji/contains?emoji=👦🏿
 https://api.bingchunmoli.com/emoji/tag?tag=happy
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -174,6 +187,7 @@ https://api.bingchunmoli.com/emoji/tag?tag=happy
 ```
 
 7. 通过别名获取Emoji
+
 > https://api.bingchunmoli.com/emoji/getByAlise
 
 请求方式: Get
@@ -184,6 +198,7 @@ https://api.bingchunmoli.com/emoji/tag?tag=happy
 https://api.bingchunmoli.com/emoji/getByAlise?alise=happy
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -207,6 +222,7 @@ https://api.bingchunmoli.com/emoji/getByAlise?alise=happy
 ```
 
 8. removeAllEmojis
+
 > https://api.bingchunmoli.com/emoji/getByAlise
 
 请求方式: Get
@@ -217,6 +233,7 @@ https://api.bingchunmoli.com/emoji/getByAlise?alise=happy
 https://api.bingchunmoli.com/emoji/removeAllEmojis?emojiStr=123😄321
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -226,6 +243,7 @@ https://api.bingchunmoli.com/emoji/removeAllEmojis?emojiStr=123😄321
 ```
 
 9. 提取字符串中所有的Emoji Unicode
+
 > https://api.bingchunmoli.com/emoji/extractEmojis
 
 请求方式: Get
@@ -236,6 +254,7 @@ https://api.bingchunmoli.com/emoji/removeAllEmojis?emojiStr=123😄321
 https://api.bingchunmoli.com/emoji/extractEmojis?emojiStr=123😄321
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
