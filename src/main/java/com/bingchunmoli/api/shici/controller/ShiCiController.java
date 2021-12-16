@@ -25,7 +25,7 @@ public class ShiCiController {
     IShiCiService shiCiService;
 
     @Autowired
-    RedisTemplate<String,Object> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
 
 
     @GetMapping("{id}")

@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.2.1</version>
+    <version>3.3.0</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -108,7 +108,11 @@
             <artifactId>emoji-java</artifactId>
             <version>${emoji.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
@@ -146,6 +150,13 @@
 <!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
                         <JAR_FILE>${project.artifactId}.jar</JAR_FILE>
                     </buildArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <proc>none</proc>
                 </configuration>
             </plugin>
         </plugins>

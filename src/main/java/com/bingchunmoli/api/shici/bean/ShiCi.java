@@ -20,8 +20,7 @@ import java.time.LocalDateTime;
 public class ShiCi implements Serializable {
 
     private static final long serialVersionUID = 1L;
-//    @NotNull
-    @TableId(type = IdType.AUTO) //主键自增 数据库中需要设置主键自增
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     private String content;

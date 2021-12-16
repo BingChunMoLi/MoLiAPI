@@ -7,29 +7,40 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @copyright(c) 2017-2020 冰纯茉莉
- * @Description: TODO 响应模板
- * @Author 冰彦糖
- * @Data 2020/11/16 15:35
- * @ClassName ResonseBase
- * @PackageName: com.bingchunmoli.api.response
- * @Version 0.0.1-SNAPSHOT
- **/
-
+ * @author bingchunmoli
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultVO {
+public class ResultVO<T> {
+
+    /**
+     * 业务状态码
+     */
     private String code;
+
+    /**
+     * 业务友好消息
+     */
     private String msg;
-    private Object data;
-    public ResultVO(CodeEnum code, Object data){
+
+    /**
+     * 业务承载数据
+     */
+    private T data;
+
+    public ResultVO(CodeEnum code, T data) {
         this.code = code.getCode();
         this.msg = code.getMsg();
         this.data = data;
     }
-    public ResultVO(Object data){
-        this(CodeEnum.SUCCESS,data);
+
+    public ResultVO(T data) {
+        this(CodeEnum.SUCCESS, data);
+    }
+
+    public static <T> ResultVO<T> ok(T data) {
+        return new ResultVO<>(data);
     }
 
 

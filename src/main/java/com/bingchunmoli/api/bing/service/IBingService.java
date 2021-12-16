@@ -10,18 +10,21 @@ import com.bingchunmoli.api.bing.bean.BingImageVO;
 public interface IBingService extends IService<BingImage> {
     /**
      * 获取bing图片
+     *
      * @return BingImage
      */
     BingImage getAllBingImage();
 
     /**
      * 获取国内版Bing每日美图
+     *
      * @return 国内版Bing美图
      */
     BingImageVO getCnBingImage();
 
     /**
      * 获取国际版Bing美图美图
+     *
      * @return 国际版Bing美图
      */
     BingImageVO getEnBingImage();
