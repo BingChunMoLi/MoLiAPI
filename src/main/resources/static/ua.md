@@ -1,5 +1,7 @@
 ## user-agent
+
 1. 解析请求头UA
+
 > https://api.bingchunmoli.com/ua/userAgentInfo
 
 请求方式: Get
@@ -7,9 +9,10 @@
 请求参数: 无
 
 请求示例:
-> https://api.bingchunmoli.com/ua/userAgentInfo  
+> https://api.bingchunmoli.com/ua/userAgentInfo
 
 成功返回示例:
+
 ```json
 {
     "code": "00000",
@@ -50,6 +53,7 @@
 ```
 
 2. 解析请求参数UA
+
 > https://api.bingchunmoli.com/ua/userAgentInfoByParam
 
 请求方式: Get
@@ -60,6 +64,7 @@
 > https://api.bingchunmoli.com/ua/userAgentInfoByParam?userAgent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",
@@ -100,6 +105,7 @@
 ```
 
 3. 自适应获取解析结果
+
 > https://api.bingchunmoli.com/ua/userAgent
 
 请求方式: Get
@@ -110,6 +116,7 @@
 > https://api.bingchunmoli.com/ua/userAgent?userAgent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36
 
 成功返回示例:
+
 ```json
 {
   "code": "00000",

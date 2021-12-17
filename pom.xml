@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.2.1</version>
+    <version>3.3.0</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -23,7 +23,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <docker-plugin.version>1.4.9</docker-plugin.version>
         <aspectjweaver.version>1.9.7</aspectjweaver.version>
-        <hutool.version>5.7.16</hutool.version>
+        <hutool.version>5.7.17</hutool.version>
         <zxing.version>3.4.1</zxing.version>
         <emoji.version>5.1.1</emoji.version>
     </properties>
@@ -108,7 +108,21 @@
             <artifactId>emoji-java</artifactId>
             <version>${emoji.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.16.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.16.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -146,6 +160,13 @@
 <!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
                         <JAR_FILE>${project.artifactId}.jar</JAR_FILE>
                     </buildArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <proc>none</proc>
                 </configuration>
             </plugin>
         </plugins>

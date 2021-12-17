@@ -1,8 +1,8 @@
 package com.bingchunmoli.api.ua;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.bingchunmoli.api.bean.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserAgentController {
 
     @GetMapping("userAgentInfo")
-    public ResultVO getUserAgentInfo(@RequestHeader("user-agent")String userAgent){
-        return new ResultVO(UserAgentUtil.parse(userAgent));
+    public UserAgent getUserAgentInfo(@RequestHeader("user-agent") String userAgent) {
+        return UserAgentUtil.parse(userAgent);
     }
 
     @GetMapping("userAgentInfoByParam")
-    public ResultVO getUserAgentInfoByParam(@RequestParam String userAgent){
-        return new ResultVO(UserAgentUtil.parse(userAgent));
+    public UserAgent getUserAgentInfoByParam(@RequestParam String userAgent) {
+        return UserAgentUtil.parse(userAgent);
     }
 
     @GetMapping("userAgent")
-    public ResultVO getUserAgent(String userAgent, @RequestHeader("user-agent") String userAgentByHeader){
+    public UserAgent getUserAgent(String userAgent, @RequestHeader("user-agent") String userAgentByHeader) {
         if (StrUtil.isBlank(userAgent)) {
-            return new ResultVO(UserAgentUtil.parse(userAgent));
+            return UserAgentUtil.parse(userAgent);
         }
-        return new ResultVO(UserAgentUtil.parse(userAgentByHeader));
+        return UserAgentUtil.parse(userAgentByHeader);
     }
 
 }

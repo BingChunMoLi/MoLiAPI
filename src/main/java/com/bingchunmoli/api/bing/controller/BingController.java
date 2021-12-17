@@ -31,12 +31,12 @@ public class BingController {
     }
 
     @GetMapping("all")
-    public Object getAllBingImage(){
+    public Object getAllBingImage() {
         return bingService.getAllBingImage();
     }
 
     @GetMapping("task")
-    public String invokeBingTask(){
+    public String invokeBingTask() {
         bingTask.getBingImage();
         return "已执行";
     }
