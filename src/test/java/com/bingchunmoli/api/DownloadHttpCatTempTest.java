@@ -1,6 +1,7 @@
 package com.bingchunmoli.api;
 
 import cn.hutool.http.HttpUtil;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.Set;
 public class DownloadHttpCatTempTest {
 
     @Test
+    @Ignore
     public void downloadHttpGet() throws IllegalAccessException {
         Set<Integer> set = new HashSet<>(100);
         for (HttpStatus value : HttpStatus.values()) {

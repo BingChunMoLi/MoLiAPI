@@ -5,9 +5,11 @@ import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.bean.enums.NotSupportHttpCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 /**
@@ -28,6 +29,9 @@ import java.util.Arrays;
 @Slf4j
 @RestController
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
+
+    @Autowired
+    ResourceLoader resourceLoader;
 
     /**
      * 有好错误返回页面
@@ -43,6 +47,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         log.error("错误状态码: {},错误消息: {}, 错误路径: {}, 响应状态码: {}", statusCode, message, path, response.getStatus());
         if (Arrays.stream(NotSupportHttpCode.values()).filter(v -> v.getValue() == statusCode).findFirst().orElse(null) != null) {
             //在不支持友好返回的状态吗中
+            log.info("在不支持友好返回的状态吗中");
             BufferedImage img = new BufferedImage(750, 750, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = (Graphics2D) img.getGraphics();
             graphics.setColor(Color.BLACK);
@@ -54,18 +59,9 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
             graphics.drawString("statusCode: " + statusCode, 10, 20);
             return img;
         }
-        File file = null;
-        try {
-            file = ResourceUtils.getFile("classpath:img/" + statusCode + ".jpg");
-        } catch (FileNotFoundException e) {
-            log.error("错误状态码: {}, 读取文件路径: {}, 获取文件失败!",statusCode, "classpath:img/" + statusCode + ".jpg");
-        }
-        try {
-            if (file == null) {
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            }
-            assert file != null;
-            return ImageIO.read(file);
+        Resource resource = resourceLoader.getResource("classpath:img/" + statusCode + ".jpg");
+        try (InputStream inputStream = resource.getInputStream()){
+            return ImageIO.read(inputStream);
         } catch (IOException e) {
             log.error("错误状态码: {}, 读取文件路径: {}, 转换图片失败!",statusCode, "classpath:img/" + statusCode + ".jpg");
         }
