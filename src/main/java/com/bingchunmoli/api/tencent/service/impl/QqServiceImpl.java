@@ -26,7 +26,6 @@ import java.net.URL;
 public class QqServiceImpl implements IQqService {
 
     @Override
-    @Cacheable("getQqImage")
     public BufferedImage getQqImage(String qq, Integer size) {
         try {
             return ImageIO.read(new URL("https://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=" + size));
@@ -51,7 +50,6 @@ public class QqServiceImpl implements IQqService {
     }
 
     @Override
-    @Cacheable("getQzImage")
     public BufferedImage getQzImage(String qq, Integer size) {
         try {
             return ImageIO.read(new URL("https://qlogo1.store.qq.com/qzone/" + qq + "/" + qq + "/" + size));
