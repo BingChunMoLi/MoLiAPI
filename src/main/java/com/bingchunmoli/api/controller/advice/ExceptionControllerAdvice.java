@@ -31,7 +31,8 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     public ResultVO<String> defaultException(Exception e) {
-        log.error(e.getMessage());
+        log.error("defaultException: {}, msg: {}", e, e.getMessage());
+        e.printStackTrace();
         return new ResultVO<>(CodeEnum.FAILURE.getCode(), CodeEnum.FAILURE.getMsg(), "默认未分类异常");
     }
 
