@@ -5,8 +5,8 @@ import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import com.bingchunmoli.api.shici.mapper.ShiCiMapper;
 import com.bingchunmoli.api.shici.service.IShiCiService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +22,10 @@ import java.util.Random;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements IShiCiService {
-    @Autowired
-    private ShiCiMapper shiCiMapper;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final ShiCiMapper shiCiMapper;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Object findRandomShiCi() {

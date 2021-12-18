@@ -3,8 +3,8 @@ package com.bingchunmoli.api.init;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.shici.service.IShiCiService;
 import com.bingchunmoli.api.yiyan.service.IYiYanService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,15 +15,12 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 @ConditionalOnBean(value = {IYiYanService.class, IShiCiService.class, RedisTemplate.class})
 public class RedisCommandLineRunner implements CommandLineRunner {
-
-    @Autowired
-    IYiYanService yiYanService;
-    @Autowired
-    IShiCiService shiCiService;
-    @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    private final IYiYanService yiYanService;
+    private final IShiCiService shiCiService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void run(String... args) {

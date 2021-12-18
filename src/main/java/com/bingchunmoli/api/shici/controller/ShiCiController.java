@@ -3,7 +3,7 @@ package com.bingchunmoli.api.shici.controller;
 
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.shici.service.IShiCiService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,13 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-11-11
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("shici")
 public class ShiCiController {
-    @Autowired
-    IShiCiService shiCiService;
-
-    @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    private final IShiCiService shiCiService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
 
     @GetMapping("{id}")

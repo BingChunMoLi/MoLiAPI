@@ -35,7 +35,11 @@ public class BingController {
         return bingService.getAllBingImage();
     }
 
-    @GetMapping("task")
+    /**
+     * 执行定时任务补充需要
+     * @return 已执行
+     * //    @GetMapping("task")
+     */
     public String invokeBingTask() {
         bingTask.getBingImage();
         return "已执行";

@@ -6,7 +6,7 @@ import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.mapper.BingImageMapper;
 import com.bingchunmoli.api.bing.service.IBingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
  * @author BingChunMoLi
  */
 @Service
+@RequiredArgsConstructor
 public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> implements IBingService {
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public BingImage getAllBingImage() {
