@@ -5,7 +5,7 @@ import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.mapper.YiYanMapper;
 import com.bingchunmoli.api.yiyan.service.IYiYanService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +15,10 @@ import java.util.Random;
  * @author BingChunMoLi
  */
 @Service
+@RequiredArgsConstructor
 public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements IYiYanService {
-
-    @Autowired
-    YiYanMapper yiYanMapper;
-
-    @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    private final YiYanMapper yiYanMapper;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Object findRandomYiYan() {

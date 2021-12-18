@@ -6,11 +6,11 @@ import com.bingchunmoli.api.tencent.bean.enums.QQSizeEnum;
 import com.bingchunmoli.api.tencent.bean.enums.QZSizeEnum;
 import com.bingchunmoli.api.tencent.service.IQqService;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -22,10 +22,10 @@ import java.net.URL;
  **/
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("tencent")
 public class QqController {
-    @Resource
-    private IQqService qqService;
+    private final IQqService qqService;
 
     @ApiOperation("返回QQ头像")
     @GetMapping(value = "qq", produces = MediaType.IMAGE_JPEG_VALUE)
