@@ -7,8 +7,8 @@ import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.service.IBingService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
@@ -23,12 +23,10 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BingTask {
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    private IBingService bingService;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final IBingService bingService;
 
     @Retryable(value = Exception.class, backoff = @Backoff(delay = 5000L, multiplier = 3))
     @Scheduled(cron = "0 0 0 * * ?")
