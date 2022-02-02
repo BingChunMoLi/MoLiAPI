@@ -26,6 +26,11 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
         if (returnType.getGenericParameterType() instanceof ParameterizedTypeImpl) {
             return ! ((ParameterizedTypeImpl) returnType.getGenericParameterType()).getRawType().getTypeName().equals(ResultVO.class.getTypeName());
         }
+//拓展式卫语句写法
+//        if (!returnType.getGenericParameterType().equals(ResultVO.class)) {
+//            return true;
+//        }
+//        return false;
         return ! returnType.getGenericParameterType().equals(ResultVO.class);
     }
 
