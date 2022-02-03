@@ -26,11 +26,11 @@ public class ServerSauce {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         StringBuilder params = new StringBuilder();
         try {
+            params.append("https://sctapi.ftqq.com/");
             params.append(apiKeyProperties.getServerSauceKey());
-            params.append("?title=");
+            params.append(".send?title=");
             params.append(URLEncoder.encode(title, "utf-8"));
-            params.append("&");
-            params.append("desp=");
+            params.append("&desp=");
             params.append(URLEncoder.encode(desp, "utf-8"));
         } catch (UnsupportedEncodingException e) {
             log.debug("URL编码异常");

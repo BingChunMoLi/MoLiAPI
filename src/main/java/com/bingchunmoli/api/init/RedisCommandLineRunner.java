@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.init;
 
 import com.bingchunmoli.api.bean.ApiConstant;
+import com.bingchunmoli.api.img.task.ImgTask;
 import com.bingchunmoli.api.shici.service.IShiCiService;
 import com.bingchunmoli.api.yiyan.service.IYiYanService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class RedisCommandLineRunner implements CommandLineRunner {
     private final IYiYanService yiYanService;
     private final IShiCiService shiCiService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ImgTask imgTask;
 
     @Override
     public void run(String... args) {
@@ -40,5 +42,7 @@ public class RedisCommandLineRunner implements CommandLineRunner {
         } else {
             log.info("shiCi数据不需要初始化");
         }
+        imgTask.saveImg();
+        log.info("随机图初始化完成");
     }
 }

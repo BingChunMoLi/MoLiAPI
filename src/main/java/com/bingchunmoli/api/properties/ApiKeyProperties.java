@@ -28,4 +28,13 @@ public class ApiKeyProperties {
      */
     private String serverSauceKey;
 
+    /**
+     * pc图片路径
+     */
+    private String pcPath;
+    /**
+     * mobile图片路径
+     */
+    private String mobilePath;
+
 }

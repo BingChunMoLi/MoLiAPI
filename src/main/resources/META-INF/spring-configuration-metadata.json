@@ -8,6 +8,18 @@
   ],
   "properties": [
     {
+      "name": "moli.api-key.mobile-path",
+      "type": "java.lang.String",
+      "description": "mobile图片路径",
+      "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
+    },
+    {
+      "name": "moli.api-key.pc-path",
+      "type": "java.lang.String",
+      "description": "pc图片路径",
+      "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
+    },
+    {
       "name": "moli.api-key.server-sauce-key",
       "type": "java.lang.String",
       "description": "server酱key",
