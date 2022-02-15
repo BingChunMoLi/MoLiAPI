@@ -4,6 +4,7 @@ import com.bingchunmoli.api.bean.ResultVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -24,6 +25,7 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         //@Description: 如果返回值已经是ResultVO的对象就没必要再次封装返回false
         if (returnType.getGenericParameterType() instanceof ParameterizedTypeImpl) {
+//            !((ParameterizedTypeImpl) returnType.getGenericParameterType()).getRawType().getTypeName().equals(.class.getTypeName());
             return ! ((ParameterizedTypeImpl) returnType.getGenericParameterType()).getRawType().getTypeName().equals(ResultVO.class.getTypeName());
         }
 //拓展式卫语句写法
@@ -46,6 +48,9 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
             }
         }
         if (returnType.getGenericParameterType().equals(BufferedImage.class)) {
+            return body;
+        }
+        if (body instanceof FileSystemResource) {
             return body;
         }
         return new ResultVO<>(body);
