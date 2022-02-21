@@ -2,6 +2,7 @@ package com.bingchunmoli.api.host.controller;
 
 import com.bingchunmoli.api.host.service.IHostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +40,7 @@ public class HostController {
      * @param response servlet响应
      * @throws IOException response返回可能引发异常
      */
-    @GetMapping("raw")
+    @GetMapping(value = "raw", produces = MediaType.TEXT_HTML_VALUE)
     public void getRaw(@RequestParam ArrayList<Integer> type, HttpServletResponse response) throws IOException {
         response.getOutputStream().print(hostService.getHosts(type));
     }
