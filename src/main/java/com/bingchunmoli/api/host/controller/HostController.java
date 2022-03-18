@@ -30,7 +30,7 @@ public class HostController {
      * @return json的Host序列化
      */
     @GetMapping("json")
-    public String getHosts(@RequestParam ArrayList<Integer> type) {
+    public String getHosts(@RequestParam(defaultValue = "0") ArrayList<Integer> type) {
         return hostService.getHosts(type);
     }
 
@@ -41,12 +41,13 @@ public class HostController {
      * @throws IOException response返回可能引发异常
      */
     @GetMapping(value = "raw", produces = MediaType.TEXT_HTML_VALUE)
-    public void getRaw(@RequestParam ArrayList<Integer> type, HttpServletResponse response) throws IOException {
+    public void getRaw(@RequestParam(defaultValue="0") ArrayList<Integer> type, HttpServletResponse response) throws IOException {
+        response.setHeader("Content-Type", "text/plain");
         response.getOutputStream().print(hostService.getHosts(type));
     }
 
     @GetMapping("file")
-    public void getFile(@RequestParam ArrayList<Integer> type, HttpServletResponse response) throws IOException {
+    public void getFile(@RequestParam(defaultValue = "0") ArrayList<Integer> type, HttpServletResponse response) throws IOException {
         response.setHeader("Content-Disposition", "attachment;fileName=hosts");
         response.getOutputStream().write(hostService.getHosts(type).getBytes(StandardCharsets.UTF_8));
     }
