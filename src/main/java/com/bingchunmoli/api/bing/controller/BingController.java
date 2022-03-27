@@ -36,6 +36,15 @@ public class BingController {
     }
 
     /**
+     * 获取随机一张图的url
+     *
+     * @return 随即Bing图的url
+     */
+    @GetMapping("random")
+    public String getRandomBingImg(){
+        return bingService.getRandomImg();
+    }
+    /**
      * 执行定时任务补充需要
      * @return 已执行
      * //    @GetMapping("task")

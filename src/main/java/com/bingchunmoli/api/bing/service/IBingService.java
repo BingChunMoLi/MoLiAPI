@@ -28,4 +28,11 @@ public interface IBingService extends IService<BingImage> {
      * @return 国际版Bing美图
      */
     BingImageVO getEnBingImage();
+
+    /**
+     * 获取随机一张图的url
+     *
+     * @return 随即Bing图的url
+     */
+    String getRandomImg();
 }
