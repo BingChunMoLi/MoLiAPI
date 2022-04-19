@@ -1,5 +1,5 @@
 moli:
-  version: v3.2.1
+  version: v3.4.1
   apiKey:
     weatherKey: 和风天气key
     weatherUri: 和风天气uri
@@ -29,11 +29,12 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: rdb
+    active: dev
 mybatis-plus:
   configuration:
     cache-enabled: true
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:/mapper/**/*.xml
   type-aliases-package: com.bingchunmoli.api.**.bean
   global-config:

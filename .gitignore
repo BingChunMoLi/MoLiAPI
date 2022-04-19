@@ -49,3 +49,7 @@ hs_err_pid*
 
 src/main/resources/application-*.yml
 !src/main/resources/application-template.yml
+src/main/java/com/bingchunmoli/api/me/
+src/test/java/com/bingchunmoli/api/me/
+src/main/resources/mapper/FavMapper.xml
+deploy.bat
