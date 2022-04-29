@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class BingController {
     private final IBingService bingService;
 
+    /**
+     * @apiNote 每日随机图国内版
+     * @return bing图片对象|
+     */
     @GetMapping("cn")
     public BingImageVO cnBingImage() {
         return bingService.getCnBingImage();

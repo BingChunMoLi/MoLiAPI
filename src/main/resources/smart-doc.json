@@ -1,3 +1,9 @@
 {
-  "outPath": "D:/home/bingchunmoli/smart-doc"
+  "outPath": "D:/home/bingchunmoli/smart-doc",
+  "allInOne": true,
+  "coverOld": true,
+  "serverUrl": "http://127.0.0.1:8090",
+  "responseBodyAdvice": {
+    "className": "com.bingchunmoli.api.bean.ResultVO"
+  }
 }

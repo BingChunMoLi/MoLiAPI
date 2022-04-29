@@ -110,7 +110,7 @@ public class EmojiController {
     }
 
     /**
-     * 通过tag方式获取对应的所有Emoji表情
+     * @apiNote 通过tag方式获取对应的所有Emoji表情
      *
      * @param tag tag标签，例如“happy”
      * @return Emoji表情集合，如果找不到返回null

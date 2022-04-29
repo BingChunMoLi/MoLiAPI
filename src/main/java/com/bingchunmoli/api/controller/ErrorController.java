@@ -34,7 +34,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     ResourceLoader resourceLoader;
 
     /**
-     * 有好错误返回页面
+     * 友好错误返回页面
      * @param request 请求
      * @param response 响应
      * @return ModelAndView视图
