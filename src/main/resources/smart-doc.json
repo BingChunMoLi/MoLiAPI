@@ -2,7 +2,7 @@
   "outPath": "src\\main\\resources\\static\\doc",
   "allInOne": true,
   "coverOld": true,
-  "serverUrl": "http://127.0.0.1:8090",
+  "serverUrl": "https://api.bingchunmoli.com",
   "responseBodyAdvice": {
     "className": "com.bingchunmoli.api.bean.ResultVO"
   }
