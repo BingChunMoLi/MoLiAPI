@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * bing每日美图
  * @author BingChunMoLi
  */
 @RestController
@@ -25,11 +26,19 @@ public class BingController {
         return bingService.getCnBingImage();
     }
 
+    /**
+     * @apiNote 每日随机图国际版
+     * @return bing图片对象|
+     */
     @GetMapping("en")
     public BingImageVO enBingImage() {
         return bingService.getEnBingImage();
     }
 
+    /**
+     * @apiNote 每日随机图
+     * @return bing图片对象|
+     */
     @GetMapping("all")
     public Object getAllBingImage() {
         return bingService.getAllBingImage();

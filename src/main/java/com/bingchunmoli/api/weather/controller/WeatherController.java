@@ -14,6 +14,7 @@ import java.util.Objects;
 
 
 /**
+ * 天气
  * @author bingchunmoli
  */
 @RestController
@@ -23,6 +24,12 @@ public class WeatherController {
 
     private final WeatherService weatherService;
 
+    /**
+     * 按天查询天气
+     * @param day 天数(3,7,10,15)|7
+     * @param location 可以是经维度也可以是locationId并且可以是城市名称
+     * @return 天气数据
+     */
     @GetMapping("byDay")
     public String getWeather(@RequestParam Integer day, @RequestParam String location) {
         if (StrUtil.isBlank(location)) {

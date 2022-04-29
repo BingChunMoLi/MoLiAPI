@@ -69,6 +69,12 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     }
 
 
+    /**
+     * 友好错误信息
+     * @param request 请求
+     * @param response 响应
+     * @return ResultVO<String>
+     */
     @RequestMapping(value = "/error", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResultVO<Object> handleErrorBody(HttpServletRequest request, HttpServletResponse response){
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
