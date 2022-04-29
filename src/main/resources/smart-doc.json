@@ -1,5 +1,5 @@
 {
-  "outPath": "D:/home/bingchunmoli/smart-doc",
+  "outPath": "src\\main\\resources\\static\\doc",
   "allInOne": true,
   "coverOld": true,
   "serverUrl": "http://127.0.0.1:8090",

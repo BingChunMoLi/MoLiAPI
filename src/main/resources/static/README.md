@@ -8,5 +8,7 @@
 
 [https://api.bingchunmoli.com/doc.html](https://api.bingchunmoli.com/doc.html)
 
+# smart-doc接口文档
+[https://api.bingchunmoi.com/doc/index.html](https://api.bingchunmoi.com/doc/index.html)
 注: 此网站支持PWA
 
