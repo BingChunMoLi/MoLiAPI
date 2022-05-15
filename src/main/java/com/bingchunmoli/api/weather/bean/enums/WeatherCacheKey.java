@@ -14,7 +14,8 @@ public enum WeatherCacheKey {
      * 按天查询前缀
      */
     BY_DAY("weather:by_day:"),
-    LOOKUP("weather:lookup:");
+    LOOKUP("weather:lookup:"),
+    BY_NOW("weather:now:");
 
     private final String key;
 
