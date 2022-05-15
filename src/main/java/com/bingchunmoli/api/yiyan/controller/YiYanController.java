@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * 一言
  * @author BingChunMoLi
  */
 @RestController
@@ -16,6 +17,11 @@ public class YiYanController {
     private final IYiYanService yiYanService;
     private final RedisTemplate<String, Object> redisTemplate;
 
+    /**
+     * 根据ID获取一言
+     * @param id id|1
+     * @return 一言数据
+     */
     @GetMapping("{id}")
     public Object getYiYan(@PathVariable Integer id) {
         Object yiYan = redisTemplate.opsForList().index(ApiConstant.YI_YAN, id);

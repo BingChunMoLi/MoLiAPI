@@ -11,12 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <p>
- * 前端控制器
- * </p>
- *
+ * 诗词
  * @author 冰纯茉莉
- * @since 2020-11-11
  */
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +22,12 @@ public class ShiCiController {
     private final RedisTemplate<String, Object> redisTemplate;
 
 
+    /**
+     * 指定ID诗词
+     * @param id id|1
+     * @return 诗词|com.bingchunmoli.api.shici.bean.ShiCi
+     * @response com.bingchunmoli.api.shici.bean.ShiCi
+     */
     @GetMapping("{id}")
     public Object getShiCi(@PathVariable Integer id) {
         Object shiCi = redisTemplate.opsForList().index(ApiConstant.SHI_CI, id);
@@ -37,8 +39,7 @@ public class ShiCiController {
 
     /**
      * 从缓存中读取一条随机诗词，如果不存在从数据库读取
-     *
-     * @return 返回一条诗词
+     * @return 返回一条诗词|com.bingchunmoli.api.shici.bean.ShiCi
      */
     @GetMapping("random")
     public Object getRandomShiCi() {

@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
+ * hosts订阅
  * @author BingChunMoLi
  */
 
@@ -25,8 +26,8 @@ public class HostController {
     private final IHostService hostService;
 
     /**
-     * 暂有问题
-     * @param type 请求类型
+     * 根据参数获取hosts
+     * @param type 请求类型|0
      * @return json的Host序列化
      */
     @GetMapping("json")
@@ -36,7 +37,7 @@ public class HostController {
 
     /**
      * raw的host
-     * @param type 请求类型
+     * @param type 请求类型|0
      * @param response servlet响应
      * @throws IOException response返回可能引发异常
      */
@@ -46,6 +47,12 @@ public class HostController {
         response.getOutputStream().print(hostService.getHosts(type));
     }
 
+    /**
+     * 下载文件的hosts
+     * @param type 请求了行|0
+     * @param response servlet响应
+     * @throws IOException esponse返回可能引发异常
+     */
     @GetMapping("file")
     public void getFile(@RequestParam(defaultValue = "0") ArrayList<Integer> type, HttpServletResponse response) throws IOException {
         response.setHeader("Content-Disposition", "attachment;fileName=hosts");
