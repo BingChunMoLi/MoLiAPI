@@ -12,6 +12,9 @@ import com.bingchunmoli.api.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
@@ -25,61 +28,113 @@ public class WeatherServiceImpl implements WeatherService {
     private final RedisUtil redisUtil;
 
     @Override
-    public String getWeather(Integer day, String location) {
+    public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException {
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteget(location)) {
             // 按经维度查询 或者 id查询
-            return getWeatherString(day, location);
+            return getWeatherByDayCommon(day, location);
         }
         //按城市名查询，需要查询城市id
-        String locationId = getLocationId(location);
-        return getWeatherString(day, locationId);
+        return getWeatherByDayCommon(day, getLocationId(location));
     }
 
-    private String getWeatherString(Integer day, String location) {
-        StringJoiner keyJoiner = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
-                .add(String.valueOf(day));
-        String redisCache = redisUtil.get(keyJoiner.toString());
-        if (redisCache != null) {
-            return redisCache;
-        }
-        StringJoiner joiner = new StringJoiner("")
-                .add("https://")
-                .add(apiKeyProperties.getWeatherUri())
-                .add("/v7/weather/")
-                .add(String.valueOf(day))
-                .add("d?key=")
-                .add(apiKeyProperties.getWeatherKey())
-                .add("&location=")
-                .add(location);
-        String response = HttpUtil.get(joiner.toString());
-        redisUtil.setEx(keyJoiner.toString(), response, 24, TimeUnit.HOURS);
-        return response;
+    @Override
+    public String getWeatherByNow(String address) throws UnsupportedEncodingException {
+        String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
+        String redisCache = redisUtil.get(redisCacheKey);
+        return Optional.ofNullable(redisCache).orElse(doGetWeatherByNow(redisCacheKey, address));
     }
 
     /**
-     * 根据location模糊查询
+     * 获取按天天气(3,5,7)
+     *
+     * @param day      天数
+     * @param location 地址
+     * @return 天气信息
+     * @throws UnsupportedEncodingException 无法编码异常
+     */
+    private String getWeatherByDayCommon(Integer day, String location) throws UnsupportedEncodingException {
+        String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
+                .add(String.valueOf(day)).toString();
+        String redisCache = redisUtil.get(redisCacheKey);
+        return Optional.ofNullable(redisCache).orElse(doGetWeatherByDay(redisCacheKey, day, location));
+    }
+
+    /**
+     * 根据请求获取按天天气
+     *
+     * @param redisCacheKey 缓存的key
+     * @param day           天数
+     * @param location      地址
+     * @return 天气信息
+     * @throws UnsupportedEncodingException 无法编码异常
+     */
+    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws UnsupportedEncodingException {
+        String joiner = "https://" +
+                apiKeyProperties.getWeatherUri() +
+                "/v7/weather/" +
+                day +
+                "d?key=" +
+                apiKeyProperties.getWeatherKey() +
+                "&location=" +
+                getLocationId(location);
+        String res = HttpUtil.get(joiner);
+        redisUtil.setEx(redisCacheKey, res, 12, TimeUnit.HOURS);
+        return res;
+    }
+
+
+    /**
+     * 请求接口获取按天天气并缓存
+     *
+     * @param redisCacheKey 缓存的key
+     * @param location      地址
+     * @return 天气
+     * @throws UnsupportedEncodingException url编码异常
+     */
+    private String doGetWeatherByNow(String redisCacheKey, String location) throws UnsupportedEncodingException {
+        String requestUrl = "https://" +
+                apiKeyProperties.getWeatherUri() +
+                "/v7/weather/now?key=" +
+                apiKeyProperties.getWeatherKey() +
+                "&location=" +
+                getLocationId(location);
+        String res = HttpUtil.get(requestUrl);
+        redisUtil.setEx(redisCacheKey, res, 1, TimeUnit.HOURS);
+        return res;
+    }
+
+    /**
+     * 根据location模糊查询LocationId根据相关度排序
      *
      * @param location 地区名称
      * @return 地区Id
+     * @throws UnsupportedEncodingException 不支持的字符编码异常
      */
-    private String getLocationId(String location) {
-        StringJoiner keyJoiner = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location);
-        String redisCache = redisUtil.get(keyJoiner.toString());
-        if (redisCache != null) {
-            WeatherVO weatherVO = JSON.parseObject(redisCache, WeatherVO.class);
-            return weatherVO.getLocation().get(0).getId();
-        }
-        StringJoiner joiner = new StringJoiner("")
-                .add("https://")
-                .add(apiKeyProperties.getWeatherGeoUri())
-                .add("/v2/city/lookup?key=")
-                .add(apiKeyProperties.getWeatherKey())
-                .add("&location=")
-                .add(location);
-        String response = HttpUtil.get(joiner.toString());
-        redisUtil.setEx(keyJoiner.toString(), response, 24, TimeUnit.HOURS);
-        WeatherVO weatherVO = JSON.parseObject(response, WeatherVO.class);
-        return weatherVO.getLocation().get(0).getId();
+    private String getLocationId(String location) throws UnsupportedEncodingException {
+        String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
+        String redisCache = redisUtil.get(redisCacheKey);
+        String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));
+        return JSON.parseObject(res, WeatherVO.class).getLocation().get(0).getId();
+    }
+
+    /**
+     * 请求接口获取locationId
+     *
+     * @param redisCacheKey 缓存的key
+     * @param location      地址| 可以是中文地址
+     * @return LocationId 根据相关度排序
+     * @throws UnsupportedEncodingException 不支持的字符编码异常
+     */
+    private String doGetLocationId(String redisCacheKey, String location) throws UnsupportedEncodingException {
+        String requestUrl = "https://" +
+                apiKeyProperties.getWeatherGeoUri() +
+                "/v2/city/lookup?key=" +
+                apiKeyProperties.getWeatherKey() +
+                "&location=" +
+                URLEncoder.encode(location, "utf-8");
+        String res = HttpUtil.get(requestUrl);
+        redisUtil.setEx(redisCacheKey, res, 24, TimeUnit.HOURS);
+        return res;
     }
 
 }
