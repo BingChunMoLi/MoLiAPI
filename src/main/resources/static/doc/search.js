@@ -179,6 +179,12 @@ api[0].list[5].list.push({
     url: 'https://api.bingchunmoli.com/ip',
     desc: '请求的IP',
 });
+api[0].list[5].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/address',
+    desc: '获取请求IP的地址',
+});
 api[0].list.push({
     alias: 'QrCodeController',
     order: '7',
@@ -316,6 +322,12 @@ api[0].list[11].list.push({
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/weather/byDay',
     desc: '按天查询天气',
+});
+api[0].list[11].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/weather/now',
+    desc: '查找当前天气',
 });
 api[0].list.push({
     alias: 'YiYanController',

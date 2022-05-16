@@ -1,5 +1,6 @@
 package com.bingchunmoli.api.ip.controller;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import org.lionsoul.ip2region.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * 来源IP
@@ -37,7 +37,7 @@ public class IpController {
     @GetMapping("address")
     public String getAddress(HttpServletRequest request) throws DbMakerConfigException, IOException {
         String ip = ip(request);
-        DbSearcher dbSearcher = new DbSearcher(new DbConfig(), Objects.requireNonNull(this.getClass().getClassLoader().getResource("ip2region.db")).getFile());
+        DbSearcher dbSearcher = new DbSearcher(new DbConfig(), IoUtil.readBytes(this.getClass().getClassLoader().getResourceAsStream("ip2region.db")));
         String region;
         if (Util.isIpAddress(ip)) {
             DataBlock dataBlock = dbSearcher.memorySearch(ip);
