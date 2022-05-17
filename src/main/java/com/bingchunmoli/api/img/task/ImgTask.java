@@ -54,7 +54,6 @@ public class ImgTask {
         redisTemplate.opsForList().leftPushAll(ApiConstant.PC_IMG, pcPath.stream().map(Path :: toString).toArray());
         redisTemplate.opsForList().trim(ApiConstant.MOBILE_IMG, - 1, - 2);
         redisTemplate.opsForList().leftPushAll(ApiConstant.MOBILE_IMG, mobilePath.stream().map(Path :: toString).toArray());
-        serverSauce.send("随机图定时任务 更新成功", "更新PC图片:" + pcPath.size() + "     更新移动图片:" + mobilePath.size());
         applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("随机图定时任务 更新成功").body("更新PC图片:" + pcPath.size() + "     更新移动图片:" + mobilePath.size()).build()));
     }
 }

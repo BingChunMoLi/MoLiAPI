@@ -22,6 +22,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class ApiApplication {
 
     public static void main(String[] args) {
+        System.setProperty("spring.config.additional-location","optional:file:${user.home}/.api/");
         SpringApplication.run(ApiApplication.class, args);
     }
 

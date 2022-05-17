@@ -166,6 +166,12 @@ api[0].list[4].list.push({
     url: 'https://api.bingchunmoli.com/img/pc1',
     desc: 'pc图片 备用写法，使用BufferedImage对象写出',
 });
+api[0].list[4].list.push({
+    order: '4',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/img/1080',
+    desc: '返回随机1080P图片接口',
+});
 api[0].list.push({
     alias: 'IpController',
     order: '6',

@@ -36,5 +36,9 @@ public class ApiKeyProperties {
      * mobile图片路径
      */
     private String mobilePath;
+    /**
+     * 1080p
+     */
+    private String path1080;
 
 }

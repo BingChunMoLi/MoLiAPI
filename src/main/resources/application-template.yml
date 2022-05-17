@@ -1,9 +1,43 @@
 spring:
   datasource:
-    url: jdbc:mysql:///api?serverTimezone=UTC
+    url: jdbc:mysql:///api?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
     username: root
     password: 密码
+  redis:
+    database: 0
+    password: 你的密钥
+    port: 6379
+    host: 你的redis地址
+  mail:
+    host: 邮箱服务器，例如 腾讯企业邮（smtp.exmail.qq.com）
+    port: 465
+    username: 你的邮箱账号
+    password: 你的邮箱密码(注意腾讯邮箱使用的是授权吗，请百度查询腾讯邮箱授权码)
+    default-encoding: UTF-8
+    protocol: smtps
+    defaultTo: 默认发送通知给那个邮箱
 springfox:
   documentation:
     swagger-ui:
       enabled: true
+management:
+  #  endpoints:
+  #    web:
+  #      exposure:
+  #        include: '*'
+  endpoint:
+    health:
+      show-details: WHEN_AUTHORIZED
+moli:
+  apiKey:
+    weatherKey: 开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
+    weatherUri: devapi.qweather.com
+    weatherGeoUri: geoapi.qweather.com
+    serverSauceKey: server酱通知的key
+    pcPath: pc随机图的图片路径
+    mobilePath: mobile随机图的图片路径
+    path1080: 1080接口随机图的图片路径
+logging:
+  level:
+    com.bingchunmoli: info
+    com.baomidou.example.mapper: info

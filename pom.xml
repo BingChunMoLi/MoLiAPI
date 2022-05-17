@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.7.1</version>
+    <version>3.8.0</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -20,10 +20,10 @@
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <swagger.version>3.0.0</swagger.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <fastjson.version>2.0.2</fastjson.version>
+        <fastjson.version>2.0.3</fastjson.version>
         <docker-plugin.version>1.4.9</docker-plugin.version>
         <aspectjweaver.version>1.9.9.1</aspectjweaver.version>
-        <hutool.version>5.7.22</hutool.version>
+        <hutool.version>5.8.0</hutool.version>
         <zxing.version>3.5.0</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <ip2region.version>1.7.2</ip2region.version>
