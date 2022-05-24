@@ -1,50 +1,50 @@
 {
   "groups": [
     {
-      "name": "moli.api-key",
+      "name": "moli.api-Config",
       "type": "com.bingchunmoli.api.properties.ApiKeyProperties",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     }
   ],
   "properties": [
     {
-      "name": "moli.api-key.mobile-path",
+      "name": "moli.api-Config.mobile-path",
       "type": "java.lang.String",
       "description": "mobile图片路径",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     },
     {
-      "name": "moli.api-key.pc-path",
+      "name": "moli.api-Config.pc-path",
       "type": "java.lang.String",
       "description": "pc图片路径",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     },
     {
-      "name": "moli.api-key.path1080",
+      "name": "moli.api-Config.path1080",
       "type": "java.lang.String",
       "description": "1080p图片路径",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     },
     {
-      "name": "moli.api-key.server-sauce-key",
+      "name": "moli.api-Config.server-sauce-key",
       "type": "java.lang.String",
       "description": "server酱key",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     },
     {
-      "name": "moli.api-key.weather-geo-uri",
+      "name": "moli.api-Config.weather-geo-uri",
       "type": "java.lang.String",
       "description": "和风天气请求地区ApiUri",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     },
     {
-      "name": "moli.api-key.weather-key",
+      "name": "moli.api-Config.weather-key",
       "type": "java.lang.String",
       "description": "和风天气key",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"
     },
     {
-      "name": "moli.api-key.weather-uri",
+      "name": "moli.api-Config.weather-uri",
       "type": "java.lang.String",
       "description": "和风天气请求uri",
       "sourceType": "com.bingchunmoli.api.properties.ApiKeyProperties"

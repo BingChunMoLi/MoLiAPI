@@ -3,6 +3,7 @@ package com.bingchunmoli.api.interceptor;
 import cn.hutool.extra.servlet.ServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnBean(RedisTemplate.class)
 public class IpInterceptor implements HandlerInterceptor {
     private final RedisTemplate<String, Object> redisTemplate;
 

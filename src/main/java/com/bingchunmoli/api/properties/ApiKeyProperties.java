@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("moli.api-key")
+@ConfigurationProperties("moli.api-config")
 public class ApiKeyProperties {
     /**
      * 和风天气key

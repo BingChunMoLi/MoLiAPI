@@ -4,6 +4,7 @@ import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.img.service.IImgService;
 import com.bingchunmoli.api.properties.ApiKeyProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("img")
+@ConditionalOnProperty(prefix = "moli.api-config", name = {"pcPath", "mobilePath", "path1080"})
 public class ImgController {
 
     private final IImgService imgService;

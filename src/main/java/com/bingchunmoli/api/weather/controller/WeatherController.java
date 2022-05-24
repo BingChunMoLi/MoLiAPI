@@ -7,6 +7,7 @@ import com.bingchunmoli.api.weather.bean.enums.WeatherDayEnums;
 import com.bingchunmoli.api.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.lionsoul.ip2region.DbMakerConfigException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,11 +20,13 @@ import java.util.Objects;
 
 /**
  * 天气
+ *
  * @author bingchunmoli
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("weather")
+@ConditionalOnProperty(prefix = "moli.api-config", name = {"weatherKey", "weatherUri", "weatherGeoUri"})
 public class WeatherController {
 
     private final WeatherService weatherService;

@@ -1,5 +1,6 @@
 moli:
   version: v3.8.0
+  path: ${user.home}/.api/
 server:
   port: 8090
 spring:
@@ -22,7 +23,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: template
+    active: dev
 mybatis-plus:
   configuration:
     cache-enabled: true
@@ -42,7 +43,7 @@ logging:
     file: utf-8
     console: utf-8
   file:
-    path: ${user.home}/.api/logs/
+    path: ${moli.path}logs/
   config: classpath:config/spring-logback.xml
 management:
   endpoints:
