@@ -5,6 +5,7 @@ import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.ip.controller.IpController;
 import com.bingchunmoli.api.weather.bean.enums.WeatherDayEnums;
 import com.bingchunmoli.api.weather.service.WeatherService;
+import com.jthinking.common.util.ip.IPInfo;
 import lombok.RequiredArgsConstructor;
 import org.lionsoul.ip2region.DbMakerConfigException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,7 +27,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("weather")
-@ConditionalOnProperty(prefix = "moli.api-config", name = {"weatherKey", "weatherUri", "weatherGeoUri"})
+@ConditionalOnProperty(prefix = "moli.api-config", name = {"weather-key", "weather-uri", "weather-geo-uri"})
 public class WeatherController {
 
     private final WeatherService weatherService;
@@ -42,7 +43,8 @@ public class WeatherController {
     @GetMapping("byDay")
     public String getWeatherByDay(@RequestParam(defaultValue = "3") Integer day, @RequestParam String location, HttpServletRequest request) throws IOException, DbMakerConfigException {
         if (StrUtil.isBlank(location)) {
-            location = ipController.getAddress(request);
+            IPInfo ipInfo = ipController.getAddress(request);
+            location = ipInfo.getLng() + "," + ipInfo.getLat();
         }
         if (! Objects.equals(day, WeatherDayEnums.THREE_DAY.getDay()) && ! Objects.equals(day, WeatherDayEnums.SEVEN_DAY.getDay())) {
             throw new ApiParamException("暂不支持的参数");
@@ -60,11 +62,9 @@ public class WeatherController {
      * @throws DbMakerConfigException ip地址数据库配置有误
      */
     @GetMapping("now")
-    public String getWeatherByNow(HttpServletRequest request) throws DbMakerConfigException, IOException {
-        String address = ipController.getAddress(request);
-        String[] split = address.split("\\|");
-        address = split[3];
-        return weatherService.getWeatherByNow(address);
+    public String getWeatherByNow(HttpServletRequest request) throws IOException {
+        IPInfo ipInfo = ipController.getAddress(request);
+        return weatherService.getWeatherByNow(ipInfo.getLng() + "," + ipInfo.getLat());
     }
 
 }

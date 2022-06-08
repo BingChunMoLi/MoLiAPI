@@ -2,6 +2,7 @@ package com.bingchunmoli.api;
 
 import cn.hutool.http.HttpUtil;
 import jdk.nashorn.internal.ir.annotations.Ignore;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -10,9 +11,14 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @SpringBootTest
 public class DownloadHttpCatTempTest {
 
+    /**
+     * 仅用于下载状态码猫图片的代码
+     * @throws IllegalAccessException
+     */
     @Test
     @Ignore
     public void downloadHttpGet() throws IllegalAccessException {

@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.8.1</version>
+    <version>3.8.2</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -119,16 +119,26 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.lionsoul</groupId>
-            <artifactId>ip2region</artifactId>
-            <version>${ip2region.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
             <version>2.1.212</version>
         </dependency>
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jthinking.common</groupId>
+            <artifactId>ip-info</artifactId>
+            <version>2.1.5</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.maxmind.geoip2</groupId>-->
+<!--            <artifactId>geoip2</artifactId>-->
+<!--            <version>2.15.0</version>-->
+<!--        </dependency>-->
 <!--        <dependency>-->
 <!--            <groupId>org.springdoc</groupId>-->
 <!--            <artifactId>springdoc-openapi-ui</artifactId>-->

@@ -24,8 +24,12 @@ public class StringRedisUtil {
     /**
      * Login username of the redis server.
      */
-    @Value("${spring.redis.enable}")
     private static boolean isEnable;
+
+    @Value("${spring.redis.enable}")
+    public void setIsEnable(boolean isEnable) {
+        StringRedisUtil.isEnable = isEnable;
+    }
 
     public boolean isEnable(){
         return isEnable;
