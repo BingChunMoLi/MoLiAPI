@@ -23,7 +23,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: h2
+    active: dev
 mybatis-plus:
   configuration:
     cache-enabled: true

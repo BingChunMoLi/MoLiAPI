@@ -10,6 +10,7 @@ import com.bingchunmoli.api.weather.bean.WeatherVO;
 import com.bingchunmoli.api.weather.bean.enums.WeatherCacheKey;
 import com.bingchunmoli.api.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author bingchunmoli
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WeatherServiceImpl implements WeatherService {
@@ -30,7 +32,7 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException {
         if (stringRedisUtil.isNotEnable()) {
-            return "未开通此功能";
+            return "redis未启用，不支持此功能";
         }
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteget(location)) {
             // 按经维度查询 或者 id查询
@@ -43,7 +45,7 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public String getWeatherByNow(String address) throws UnsupportedEncodingException {
         if (stringRedisUtil.isNotEnable()) {
-            return "未开通此功能";
+            return "redis未启用，不支持此功能";
         }
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
@@ -120,7 +122,14 @@ public class WeatherServiceImpl implements WeatherService {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));
-        return JSON.parseObject(res, WeatherVO.class).getLocation().get(0).getId();
+        WeatherVO weatherVO = JSON.parseObject(res, WeatherVO.class);
+        if ("200".equalsIgnoreCase(weatherVO.getCode())) {
+            return weatherVO.getLocation().get(0).getId();
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("和风天气状态码为非200, weatherVO: {}", weatherVO);
+        }
+        return "第三方错误";
     }
 
     /**

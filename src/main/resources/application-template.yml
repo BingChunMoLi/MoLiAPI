@@ -4,6 +4,7 @@ spring:
     username: root
     password: #密码
   redis:
+    enable: true #请确定是否使用redis
     database: 0
     password: #你的密钥
     port: 6379

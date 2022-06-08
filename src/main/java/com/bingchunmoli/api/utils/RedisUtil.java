@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisUtil {
     private final RedisTemplate redisTemplate;
-    /**
-     * Login username of the redis server.
-     */
-    @Value("${spring.redis.enable}")
     private static boolean isEnable;
 
+    @Value("${spring.redis.enable}")
+    public void setIsEnable(boolean isEnable) {
+        RedisUtil.isEnable = isEnable;
+    }
     /**
      * 是否配置了redis的用户名去判断是否启用redis
      * @return 开启状态，true为username不为null表示开启
