@@ -1,10 +1,6 @@
 moli:
-  version: v3.4.1
-  apiKey:
-    weatherKey: 和风天气key
-    weatherUri: 和风天气uri
-    weatherGeoUri: 和风天气地址查询uri
-    serverSauceKey: server酱key
+  version: v3.8.0
+  path: ${user.home}/.api/
 server:
   port: 8090
 spring:
@@ -16,8 +12,6 @@ spring:
       pool-name: moliApi
   redis:
     database: 1
-    host: localhost
-    port: 6379
     jedis:
       pool:
         max-active: 8
@@ -49,7 +43,7 @@ logging:
     file: utf-8
     console: utf-8
   file:
-    path: /soft/api/logs
+    path: ${moli.path}logs/
   config: classpath:config/spring-logback.xml
 management:
   endpoints:

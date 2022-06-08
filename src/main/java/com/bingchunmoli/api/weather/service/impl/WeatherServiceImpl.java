@@ -5,11 +5,12 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.bingchunmoli.api.properties.ApiKeyProperties;
 import com.bingchunmoli.api.utils.IntegerUtil;
-import com.bingchunmoli.api.utils.RedisUtil;
+import com.bingchunmoli.api.utils.StringRedisUtil;
 import com.bingchunmoli.api.weather.bean.WeatherVO;
 import com.bingchunmoli.api.weather.bean.enums.WeatherCacheKey;
 import com.bingchunmoli.api.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -21,14 +22,18 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author bingchunmoli
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WeatherServiceImpl implements WeatherService {
     private final ApiKeyProperties apiKeyProperties;
-    private final RedisUtil redisUtil;
+    private final StringRedisUtil stringRedisUtil;
 
     @Override
     public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException {
+        if (stringRedisUtil.isNotEnable()) {
+            return "redis未启用，不支持此功能";
+        }
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteget(location)) {
             // 按经维度查询 或者 id查询
             return getWeatherByDayCommon(day, location);
@@ -39,8 +44,11 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Override
     public String getWeatherByNow(String address) throws UnsupportedEncodingException {
+        if (stringRedisUtil.isNotEnable()) {
+            return "redis未启用，不支持此功能";
+        }
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
-        String redisCache = redisUtil.get(redisCacheKey);
+        String redisCache = stringRedisUtil.get(redisCacheKey);
         return Optional.ofNullable(redisCache).orElse(doGetWeatherByNow(redisCacheKey, address));
     }
 
@@ -55,7 +63,7 @@ public class WeatherServiceImpl implements WeatherService {
     private String getWeatherByDayCommon(Integer day, String location) throws UnsupportedEncodingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
                 .add(String.valueOf(day)).toString();
-        String redisCache = redisUtil.get(redisCacheKey);
+        String redisCache = stringRedisUtil.get(redisCacheKey);
         return Optional.ofNullable(redisCache).orElse(doGetWeatherByDay(redisCacheKey, day, location));
     }
 
@@ -78,7 +86,7 @@ public class WeatherServiceImpl implements WeatherService {
                 "&location=" +
                 getLocationId(location);
         String res = HttpUtil.get(joiner);
-        redisUtil.setEx(redisCacheKey, res, 12, TimeUnit.HOURS);
+        stringRedisUtil.setEx(redisCacheKey, res, 12, TimeUnit.HOURS);
         return res;
     }
 
@@ -99,7 +107,7 @@ public class WeatherServiceImpl implements WeatherService {
                 "&location=" +
                 getLocationId(location);
         String res = HttpUtil.get(requestUrl);
-        redisUtil.setEx(redisCacheKey, res, 1, TimeUnit.HOURS);
+        stringRedisUtil.setEx(redisCacheKey, res, 1, TimeUnit.HOURS);
         return res;
     }
 
@@ -112,9 +120,16 @@ public class WeatherServiceImpl implements WeatherService {
      */
     private String getLocationId(String location) throws UnsupportedEncodingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
-        String redisCache = redisUtil.get(redisCacheKey);
+        String redisCache = stringRedisUtil.get(redisCacheKey);
         String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));
-        return JSON.parseObject(res, WeatherVO.class).getLocation().get(0).getId();
+        WeatherVO weatherVO = JSON.parseObject(res, WeatherVO.class);
+        if ("200".equalsIgnoreCase(weatherVO.getCode())) {
+            return weatherVO.getLocation().get(0).getId();
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("和风天气状态码为非200, weatherVO: {}", weatherVO);
+        }
+        return "第三方错误";
     }
 
     /**
@@ -133,7 +148,7 @@ public class WeatherServiceImpl implements WeatherService {
                 "&location=" +
                 URLEncoder.encode(location, "utf-8");
         String res = HttpUtil.get(requestUrl);
-        redisUtil.setEx(redisCacheKey, res, 24, TimeUnit.HOURS);
+        stringRedisUtil.setEx(redisCacheKey, res, 24, TimeUnit.HOURS);
         return res;
     }
 

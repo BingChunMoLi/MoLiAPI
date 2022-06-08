@@ -1,9 +1,7 @@
 package com.bingchunmoli.api.yiyan.controller;
 
-import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.yiyan.service.IYiYanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("yiyan")
 public class YiYanController {
     private final IYiYanService yiYanService;
-    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 根据ID获取一言
@@ -24,11 +21,7 @@ public class YiYanController {
      */
     @GetMapping("{id}")
     public Object getYiYan(@PathVariable Integer id) {
-        Object yiYan = redisTemplate.opsForList().index(ApiConstant.YI_YAN, id);
-        if (yiYan == null) {
-            return yiYanService.getById(id);
-        }
-        return yiYan;
+        return yiYanService.getYiYan(id);
     }
 
     /**

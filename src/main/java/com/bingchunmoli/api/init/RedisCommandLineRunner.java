@@ -35,7 +35,6 @@ public class RedisCommandLineRunner implements CommandLineRunner {
     private final ApplicationEventPublisher applicationEventPublisher;
     @Value("${spring.profiles.active}")
     String profile;
-
     @Override
     public void run(String... args) {
         Long yiYanLen = redisTemplate.opsForList().size(ApiConstant.YI_YAN);

@@ -1,5 +1,6 @@
 package com.bingchunmoli.api.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.properties.ApiKeyProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class ServerSauce {
     private final ApiKeyProperties apiKeyProperties;
 
     public void send(String title, String desp) {
+        if (StrUtil.isEmpty(apiKeyProperties.getServerSauceKey())) {
+            return;
+        }
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         StringBuilder params = new StringBuilder();
         try {

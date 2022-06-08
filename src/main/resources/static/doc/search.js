@@ -166,6 +166,12 @@ api[0].list[4].list.push({
     url: 'https://api.bingchunmoli.com/img/pc1',
     desc: 'pc图片 备用写法，使用BufferedImage对象写出',
 });
+api[0].list[4].list.push({
+    order: '4',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/img/1080',
+    desc: '返回随机1080P图片接口',
+});
 api[0].list.push({
     alias: 'IpController',
     order: '6',
@@ -178,6 +184,12 @@ api[0].list[5].list.push({
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/ip',
     desc: '请求的IP',
+});
+api[0].list[5].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/address',
+    desc: '获取请求IP的地址',
 });
 api[0].list.push({
     alias: 'QrCodeController',
@@ -316,6 +328,12 @@ api[0].list[11].list.push({
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/weather/byDay',
     desc: '按天查询天气',
+});
+api[0].list[11].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/weather/now',
+    desc: '查找当前天气',
 });
 api[0].list.push({
     alias: 'YiYanController',

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("moli.api-key")
+@ConfigurationProperties("moli.api-config")
 public class ApiKeyProperties {
     /**
      * 和风天气key
@@ -36,5 +36,9 @@ public class ApiKeyProperties {
      * mobile图片路径
      */
     private String mobilePath;
+    /**
+     * 1080p
+     */
+    private String path1080;
 
 }

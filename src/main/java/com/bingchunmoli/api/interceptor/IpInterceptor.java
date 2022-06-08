@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.interceptor;
 
 import cn.hutool.extra.servlet.ServletUtil;
+import com.bingchunmoli.api.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,11 +22,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class IpInterceptor implements HandlerInterceptor {
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisUtil redisUtil;
 
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        ServletContext servletContext = request.getServletContext();
+        if (redisUtil.isNotEnable()) {
+            return true;
+        }
         String requestURI = request.getRequestURI();
         String clientIP = ServletUtil.getClientIP(request);
         StringBuffer stringBuffer = new StringBuffer();

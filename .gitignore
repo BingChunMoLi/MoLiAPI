@@ -53,3 +53,4 @@ src/main/java/com/bingchunmoli/api/me/
 src/test/java/com/bingchunmoli/api/me/
 src/main/resources/mapper/FavMapper.xml
 deploy.bat
+!src/main/resources/application-h2.yml

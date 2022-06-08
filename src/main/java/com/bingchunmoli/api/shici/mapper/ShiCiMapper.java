@@ -3,7 +3,6 @@ package com.bingchunmoli.api.shici.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Repository;
  * @author 冰纯茉莉
  * @since 2020-11-11
  */
-@Repository
-//@CacheNamespace(implementation = RedisCache.class,eviction = RedisCache.class)
 public interface ShiCiMapper extends BaseMapper<ShiCi> {
     /**
      * description: 查询随机一条诗词
@@ -25,6 +22,6 @@ public interface ShiCiMapper extends BaseMapper<ShiCi> {
      *
      * @return com.bingchunmoli.api.entity.Shici
      */
-    @Select("SELECT * FROM shici as t1 WHERE t1.id>=(RAND()*(SELECT MAX(id) FROM shici))LIMIT 1")
+    @Select("SELECT * FROM shi_ci as t1 WHERE t1.id>=(RAND()*(SELECT MAX(id) FROM shi_ci))LIMIT 1")
     ShiCi findRandom();
 }
