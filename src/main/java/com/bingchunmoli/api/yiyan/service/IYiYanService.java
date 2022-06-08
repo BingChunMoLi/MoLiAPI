@@ -13,4 +13,6 @@ public interface IYiYanService extends IService<YiYan> {
      * @return 一言对象
      */
     Object findRandomYiYan();
+
+    Object getYiYan(Integer id);
 }

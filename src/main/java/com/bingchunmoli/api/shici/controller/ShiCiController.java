@@ -1,10 +1,8 @@
 package com.bingchunmoli.api.shici.controller;
 
 
-import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.shici.service.IShiCiService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("shici")
 public class ShiCiController {
     private final IShiCiService shiCiService;
-    private final RedisTemplate<String, Object> redisTemplate;
-
 
     /**
      * 指定ID诗词
@@ -30,11 +26,7 @@ public class ShiCiController {
      */
     @GetMapping("{id}")
     public Object getShiCi(@PathVariable Integer id) {
-        Object shiCi = redisTemplate.opsForList().index(ApiConstant.SHI_CI, id);
-        if (shiCi == null) {
-            return shiCiService.getById(id);
-        }
-        return shiCi;
+        return shiCiService.getShiCi(id);
     }
 
     /**

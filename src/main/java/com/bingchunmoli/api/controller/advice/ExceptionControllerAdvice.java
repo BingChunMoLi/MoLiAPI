@@ -10,6 +10,7 @@ import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.qrcode.exception.FileIsEmptyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionControllerAdvice {
 
     private final ApplicationEventPublisher applicationEventPublisher;
+    @Value("${spring.mail.enable}")
+    private boolean mailEnable;
 
     @ExceptionHandler
     public ResultVO<String> fileIsEmptyException(FileIsEmptyException e) {
@@ -42,8 +45,10 @@ public class ExceptionControllerAdvice {
     public ResultVO<String> defaultException(Exception e) {
         log.error("defaultException: {}, msg: {}", e.getMessage(), e);
         e.printStackTrace();
-        MailMessage errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: "+ JSON.toJSONString(e)).build();
-        applicationEventPublisher.publishEvent(new MailMessageEven(errMailMessage));
+        if (mailEnable) {
+            MailMessage errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: "+ JSON.toJSONString(e)).build();
+            applicationEventPublisher.publishEvent(new MailMessageEven(errMailMessage));
+        }
         return new ResultVO<>(CodeEnum.FAILURE.getCode(), CodeEnum.FAILURE.getMsg(), "默认未分类异常");
     }
 

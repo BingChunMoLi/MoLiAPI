@@ -1,9 +1,10 @@
 package com.bingchunmoli.api.utils;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.even.MailMessageEven;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,13 +21,18 @@ import java.util.Optional;
  * @author MoLi
  */
 @Component
-@RequiredArgsConstructor
 public class SendMailUtil {
     private final JavaMailSender javaMailSender;
     @Value("${spring.mail.username}")
     private String defaultFrom;
     @Value("${spring.mail.defaultTo}")
     private String defaultTo;
+    @Value("${spring.mail.enable}")
+    private boolean enable;
+
+    public SendMailUtil(@Autowired(required = false) JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
 
     /**
@@ -36,6 +42,9 @@ public class SendMailUtil {
      * @return 是否成功
      */
     public boolean sendEvenMail(MailMessageEven mailMessageEven) {
+        if (!enable) {
+            return false;
+        }
         MailMessage message = (MailMessage) mailMessageEven.getSource();
         Optional<String> fromOptional = Optional.ofNullable(message.getFrom());
         Optional<String> toOptional = Optional.ofNullable(message.getTo());
@@ -65,6 +74,9 @@ public class SendMailUtil {
      * @return 是否成功
      */
     public boolean sendMail(String from, String to, String title, String body) {
+        if (checkEnable()) {
+            return false;
+        }
         SimpleMailMessage simpleMail = new SimpleMailMessage();
         simpleMail.setFrom(from);
         simpleMail.setTo(to);
@@ -72,5 +84,9 @@ public class SendMailUtil {
         simpleMail.setText(body);
         javaMailSender.send(simpleMail);
         return true;
+    }
+
+    public boolean checkEnable(){
+        return  !enable || StrUtil.isEmpty(defaultTo);
     }
 }
