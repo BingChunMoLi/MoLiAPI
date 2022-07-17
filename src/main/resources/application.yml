@@ -1,5 +1,5 @@
 moli:
-  version: v3.8.0
+  version: v3.8.3
   path: ${user.home}/.api/
 server:
   port: 8090
