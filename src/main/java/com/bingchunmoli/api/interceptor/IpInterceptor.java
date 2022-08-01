@@ -27,7 +27,6 @@ public class IpInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        ServletContext servletContext = request.getServletContext();
         if (redisUtil.isNotEnable()) {
             return true;
         }
@@ -35,30 +34,24 @@ public class IpInterceptor implements HandlerInterceptor {
         String clientIP = ServletUtil.getClientIP(request);
         StringBuffer stringBuffer = new StringBuffer();
         String key = stringBuffer.append("filter:").append(requestURI).append(":").append(clientIP).append(":").append(request.getRequestedSessionId()).toString();
-//        Lock lock = new ReentrantLock();
-//        lock.lock();
-//        try {
-            Integer value = (Integer)redisTemplate.opsForValue().get(key);
-            if (value != null && value > 10) {
-                response.setStatus(429);
-                return false;
-            }
-            AtomicInteger count = new AtomicInteger();
-            if (value == null) {
-                count.getAndIncrement();
-                if (log.isDebugEnabled()) {
-                    log.debug("{}用户首次访问{}", clientIP, requestURI);
-                }
-            }else {
-                count.getAndAdd(value + 1);
-            }
+        Integer value = (Integer)redisTemplate.opsForValue().get(key);
+        if (value != null && value > 10) {
+            response.setStatus(429);
+            return false;
+        }
+        AtomicInteger count = new AtomicInteger();
+        if (value == null) {
+            count.getAndIncrement();
             if (log.isDebugEnabled()) {
-                log.debug("{}访问{}{}次", clientIP, requestURI, count.get());
+                log.debug("{}用户首次访问{}", clientIP, requestURI);
             }
-            redisTemplate.opsForValue().set(key, count.get(), 60, TimeUnit.SECONDS);
-//        }finally {
-//            lock.unlock();
-//        }
+        }else {
+            count.getAndAdd(value + 1);
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("{}访问{}{}次", clientIP, requestURI, count.get());
+        }
+        redisTemplate.opsForValue().set(key, count.get(), 60, TimeUnit.SECONDS);
         return true;
     }
 
