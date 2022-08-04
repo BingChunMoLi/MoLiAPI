@@ -18,19 +18,16 @@ import java.util.UUID;
 @Component
 public class RequestTraceIdInterceptor implements HandlerInterceptor {
 
-    public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    public static final String TRACE_ID = "traceId";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String traceId = UUID.randomUUID().toString();
-        threadLocal.set(traceId);
-        MDC.put("traceId", traceId);
+        MDC.put(TRACE_ID, UUID.randomUUID().toString());
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        threadLocal.remove();
+    public void afterCompletion( HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         MDC.clear();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
