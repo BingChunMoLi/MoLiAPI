@@ -2,6 +2,7 @@ package com.bingchunmoli.api.bing.task;
 
 import com.alibaba.fastjson.JSON;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ class BingTaskTest {
 
     @Test
     @Ignore
-    void getBIng() {
+    void getBIng() throws JsonProcessingException {
         bingTask.getBingImage();
     }
 }

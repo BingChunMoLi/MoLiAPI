@@ -12,8 +12,9 @@ public enum BingEnum {
     /**
      * bing图片key
      */
-    CNBING("bing:image:cn"),
-    ENBING("bing:image:en"),
-    ALLBING("bing:image:all");
+    CN_BING("bing:image:cn", 0),
+    EN_BING("bing:image:en", 1),
+    ALL_BING("bing:image:all", null);
     private String key;
+    private Integer search;
 }
