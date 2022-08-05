@@ -1,5 +1,6 @@
 package com.bingchunmoli.api.bing.controller;
 
+import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.service.IBingService;
@@ -42,7 +43,7 @@ public class BingController {
      * @return bing图片对象|
      */
     @GetMapping("all")
-    public Object getAllBingImage() throws JsonProcessingException {
+    public BingImage getAllBingImage() throws JsonProcessingException {
         return bingService.getAllBingImage();
     }
 

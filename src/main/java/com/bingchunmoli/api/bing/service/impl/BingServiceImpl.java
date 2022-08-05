@@ -1,7 +1,6 @@
 package com.bingchunmoli.api.bing.service.impl;
 
 import cn.hutool.http.HttpUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.bing.bean.BingImage;
@@ -9,10 +8,11 @@ import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.mapper.BingImageMapper;
 import com.bingchunmoli.api.bing.service.IBingService;
+import com.bingchunmoli.api.utils.RedisUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,20 +25,20 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> implements IBingService {
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper om;
+    private final RedisUtil redisUtil;
 
     @Override
     public BingImage getAllBingImage() throws JsonProcessingException {
-        Object t = redisTemplate.opsForValue().get(BingEnum.ALL_BING.getKey());
+        BingImage t = redisUtil.getObject(BingEnum.ALL_BING.getKey());
         if (t == null) {
-            t = this.getOne(new LambdaQueryWrapper<BingImage>().eq(BingImage :: getCreateTime, LocalDate.now()));
+            Long id = baseMapper.getIdByCreateDate(LocalDate.now());
+            if (id == null) {
+                return getBingImageByRemote();
+            }
+            return getById(id);
         }
-        if (t == null) {
-            getBingImageByRemote();
-            return (BingImage) redisTemplate.opsForValue().get(BingEnum.ALL_BING.getKey());
-        }
-        return (BingImage) t;
+        return t;
     }
 
 
@@ -49,21 +49,20 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
      */
     @Override
     public String getRandomImg() {
-        long count = count();
-        int i = new Random().nextInt(Math.toIntExact(count));
+        int i = new Random().nextInt(Math.toIntExact(count()));
         QueryWrapper<BingImage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.last("limit " +  i + ",1");
+        queryWrapper.last("limit " + i + ",1");
         return "https://bing.com" + getOne(queryWrapper).getUrl();
     }
 
     @Override
     public BingImageVO getBingImage(BingEnum bingEnum) throws JsonProcessingException {
-        Object t = redisTemplate.opsForValue().get(bingEnum.getKey());
+        BingImageVO t = redisUtil.getObject(bingEnum.getKey());
         if (t == null) {
             getBingImageByRemote();
-            return (BingImageVO) redisTemplate.opsForValue().get(bingEnum.getKey());
+            return redisUtil.getObject(bingEnum.getKey());
         }
-        return (BingImageVO) t;
+        return t;
     }
 
     @Override
@@ -81,14 +80,21 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
             Long id = baseMapper.getIdByCreateDate(LocalDate.now());
             if (id == null) {
                 save(bingImage);
-            }else {
+            } else {
                 return bingImage;
             }
         }
-        redisTemplate.opsForValue().set(BingEnum.CN_BING.getKey(), cnBingImageVO, 1, TimeUnit.DAYS);
-        redisTemplate.opsForValue().set(BingEnum.EN_BING.getKey(), enBingImageVO, 1, TimeUnit.DAYS);
-        redisTemplate.opsForValue().set(BingEnum.ALL_BING.getKey(), bingImage, 1, TimeUnit.DAYS);
+        saveCache(cnBingImageVO, enBingImageVO, bingImage);
         return bingImage;
+    }
+
+    @Async
+    void saveCache(BingImageVO cnBingImageVO, BingImageVO enBingImageVO, BingImage bingImage) {
+        if (redisUtil.isEnable()) {
+            redisUtil.setObject(BingEnum.CN_BING.getKey(), cnBingImageVO, 1, TimeUnit.DAYS);
+            redisUtil.setObject(BingEnum.EN_BING.getKey(), enBingImageVO, 1, TimeUnit.DAYS);
+            redisUtil.setObject(BingEnum.ALL_BING.getKey(), bingImage, 1, TimeUnit.DAYS);
+        }
     }
 
 }
