@@ -2,15 +2,17 @@ package com.bingchunmoli.api.weather.service.impl;
 
 import cn.hutool.core.text.StrPool;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
 import com.bingchunmoli.api.properties.ApiKeyProperties;
 import com.bingchunmoli.api.utils.IntegerUtil;
 import com.bingchunmoli.api.utils.StringRedisUtil;
 import com.bingchunmoli.api.weather.bean.WeatherVO;
 import com.bingchunmoli.api.weather.bean.enums.WeatherCacheKey;
 import com.bingchunmoli.api.weather.service.WeatherService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -28,9 +30,10 @@ import java.util.concurrent.TimeUnit;
 public class WeatherServiceImpl implements WeatherService {
     private final ApiKeyProperties apiKeyProperties;
     private final StringRedisUtil stringRedisUtil;
+    private final ObjectMapper om;
 
     @Override
-    public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException {
+    public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
         if (stringRedisUtil.isNotEnable()) {
             return "redis未启用，不支持此功能";
         }
@@ -43,7 +46,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public String getWeatherByNow(String address) throws UnsupportedEncodingException {
+    public String getWeatherByNow(String address) throws UnsupportedEncodingException, JsonProcessingException {
         if (stringRedisUtil.isNotEnable()) {
             return "redis未启用，不支持此功能";
         }
@@ -60,7 +63,7 @@ public class WeatherServiceImpl implements WeatherService {
      * @return 天气信息
      * @throws UnsupportedEncodingException 无法编码异常
      */
-    private String getWeatherByDayCommon(Integer day, String location) throws UnsupportedEncodingException {
+    private String getWeatherByDayCommon(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
                 .add(String.valueOf(day)).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
@@ -76,10 +79,10 @@ public class WeatherServiceImpl implements WeatherService {
      * @return 天气信息
      * @throws UnsupportedEncodingException 无法编码异常
      */
-    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws UnsupportedEncodingException {
+    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
         String joiner = "https://" +
                 apiKeyProperties.getWeatherUri() +
-                "/v7/weather/" +
+                   "/v7/weather/" +
                 day +
                 "d?key=" +
                 apiKeyProperties.getWeatherKey() +
@@ -99,7 +102,7 @@ public class WeatherServiceImpl implements WeatherService {
      * @return 天气
      * @throws UnsupportedEncodingException url编码异常
      */
-    private String doGetWeatherByNow(String redisCacheKey, String location) throws UnsupportedEncodingException {
+    private String doGetWeatherByNow(String redisCacheKey, String location) throws UnsupportedEncodingException, JsonProcessingException {
         String requestUrl = "https://" +
                 apiKeyProperties.getWeatherUri() +
                 "/v7/weather/now?key=" +
@@ -117,13 +120,14 @@ public class WeatherServiceImpl implements WeatherService {
      * @param location 地区名称
      * @return 地区Id
      * @throws UnsupportedEncodingException 不支持的字符编码异常
+     * @throws JsonProcessingException JSON转换异常
      */
-    private String getLocationId(String location) throws UnsupportedEncodingException {
+    private String getLocationId(String location) throws UnsupportedEncodingException, JsonProcessingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));
-        WeatherVO weatherVO = JSON.parseObject(res, WeatherVO.class);
-        if ("200".equalsIgnoreCase(weatherVO.getCode())) {
+        WeatherVO weatherVO = om.readValue(res, WeatherVO.class);
+        if (String.valueOf(HttpStatus.OK.value()).equalsIgnoreCase(weatherVO.getCode())) {
             return weatherVO.getLocation().get(0).getId();
         }
         if (log.isDebugEnabled()) {

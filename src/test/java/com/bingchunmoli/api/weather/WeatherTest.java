@@ -2,6 +2,7 @@ package com.bingchunmoli.api.weather;
 
 import com.bingchunmoli.api.weather.controller.WeatherController;
 import com.bingchunmoli.api.weather.service.WeatherService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jthinking.common.util.ip.IPInfo;
 import com.jthinking.common.util.ip.IPInfoUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class WeatherTest {
     }
 
     @Test
-    void serviceTest() throws UnsupportedEncodingException {
+    void serviceTest() throws UnsupportedEncodingException, JsonProcessingException {
         IPInfo ipInfo = IPInfoUtils.getIpInfo("");
         String address = weatherService.getWeatherByNow(ipInfo.getLng() + "," + ipInfo.getLat());
         log.info("addressResult: {}", address);

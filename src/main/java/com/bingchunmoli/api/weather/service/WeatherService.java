@@ -1,5 +1,7 @@
 package com.bingchunmoli.api.weather.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -14,7 +16,7 @@ public interface WeatherService {
      * @return 查询出的天气数据
      * @throws UnsupportedEncodingException 字符编码异常（URL无法编码）
      */
-    String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException;
+    String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException;
 
 
     /**
@@ -24,5 +26,5 @@ public interface WeatherService {
      * @return 天气信息
      * @throws UnsupportedEncodingException 不支持的URL编码异常
      */
-    String getWeatherByNow(String address) throws UnsupportedEncodingException;
+    String getWeatherByNow(String address) throws UnsupportedEncodingException, JsonProcessingException;
 }
