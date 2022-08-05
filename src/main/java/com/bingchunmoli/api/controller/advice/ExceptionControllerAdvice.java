@@ -9,6 +9,7 @@ import com.bingchunmoli.api.exception.ApiException;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import com.bingchunmoli.api.qrcode.exception.FileIsEmptyException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -39,7 +40,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler
     public ResultVO<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\t没有受支持的方法", e);
-        return new ResultVO<>(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "没有受支持的请求方法，请求方法错误.");
+        return new ResultVO<>(CodeEnum.ERROR, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "没有受支持的请求方法，请求方法错误.");
     }
 
     @ExceptionHandler
@@ -50,24 +51,30 @@ public class ExceptionControllerAdvice {
             MailMessage errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: " + JSON.toJSONString(e)).build();
             applicationEventPublisher.publishEvent(new MailMessageEven(errMailMessage));
         }
-        return new ResultVO<>(CodeEnum.FAILURE.getCode(), CodeEnum.FAILURE.getMsg(), RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "默认未分类异常");
+        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "默认未分类异常");
     }
 
     @ExceptionHandler
     public ResultVO<String> defaultThrowable(Throwable throwable) {
         log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\t系统错误: ", throwable);
-        return new ResultVO<>(CodeEnum.FAILURE.getCode(), CodeEnum.FAILURE.getMsg(), RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "严重异常");
+        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "严重异常");
     }
 
     @ExceptionHandler
     public ResultVO<String> apiException(ApiException e) {
         log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\tapi顶层异常: ", e);
-        return new ResultVO<>(CodeEnum.FAILURE.getCode(), CodeEnum.FAILURE.getMsg(), RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\tapi异常");
+        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\tapi异常");
     }
 
     @ExceptionHandler
     public ResultVO<String> apiParamException(ApiParamException e) {
         log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\t请求参数不正确或不支持: ", e);
-        return new ResultVO<>(CodeEnum.ERROR.getCode(), CodeEnum.ERROR.getMsg(), RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "请求参数异常");
+        return new ResultVO<>(CodeEnum.ERROR, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "请求参数异常");
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> jsonProcessingException(JsonProcessingException e){
+        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\tJSON转换异常: ", e);
+        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "JSON转换异常");
     }
 }

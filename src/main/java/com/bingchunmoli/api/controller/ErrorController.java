@@ -4,7 +4,9 @@ package com.bingchunmoli.api.controller;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.bean.enums.NotSupportHttpCode;
+import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -44,7 +46,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         Object message = request.getAttribute("javax.servlet.error.message");
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Object path = request.getAttribute("javax.servlet.error.request_uri");
-        log.error("错误状态码: {},错误消息: {}, 错误路径: {}, 响应状态码: {}", statusCode, message, path, response.getStatus());
+        log.error("错误状态码: {}, 错误消息: {}, 错误路径: {}, traceId: {}, 响应状态码: {}", statusCode, message, path, MDC.get(RequestTraceIdInterceptor.TRACE_ID), response.getStatus());
         if (Arrays.stream(NotSupportHttpCode.values()).filter(v -> v.getValue() == statusCode).findFirst().orElse(null) != null) {
             //在不支持友好返回的状态吗中
             log.info("在不支持友好返回的状态吗中");
@@ -80,7 +82,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Object message = request.getAttribute("javax.servlet.error.message");
         Object path = request.getAttribute("javax.servlet.error.request_uri");
-        log.error("错误状态码: {},错误消息: {}, 错误路径: {}, 响应状态码: {}", statusCode, message, path, response.getStatus());
+        log.error("错误状态码: {},错误消息: {}, 错误路径: {}, traceId: {}, 响应状态码: {}", statusCode, message, path, MDC.get(RequestTraceIdInterceptor.TRACE_ID), response.getStatus());
         if (statusCode >= HttpStatus.BAD_REQUEST.value() && statusCode <= HttpStatus.INTERNAL_SERVER_ERROR.value()) {
             return new ResultVO<>(CodeEnum.ERROR, message);
         }else if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR.value()){
