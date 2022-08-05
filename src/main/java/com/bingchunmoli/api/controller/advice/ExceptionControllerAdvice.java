@@ -1,6 +1,5 @@
 package com.bingchunmoli.api.controller.advice;
 
-import com.alibaba.fastjson.JSON;
 import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
@@ -10,7 +9,9 @@ import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import com.bingchunmoli.api.qrcode.exception.FileIsEmptyException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ public class ExceptionControllerAdvice {
     private final ApplicationEventPublisher applicationEventPublisher;
     @Value("${spring.mail.enable}")
     private boolean mailEnable;
+    private final ObjectMapper om;
 
     @ExceptionHandler
     public ResultVO<String> fileIsEmptyException(FileIsEmptyException e) {
@@ -43,12 +45,13 @@ public class ExceptionControllerAdvice {
         return new ResultVO<>(CodeEnum.ERROR, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "没有受支持的请求方法，请求方法错误.");
     }
 
+    @SneakyThrows
     @ExceptionHandler
     public ResultVO<String> defaultException(Exception e) {
         log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "\tdefaultException: {}, msg: {}", e.getMessage(), e);
         e.printStackTrace();
         if (mailEnable) {
-            MailMessage errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: " + JSON.toJSONString(e)).build();
+            MailMessage errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: " + om.writeValueAsString(e)).build();
             applicationEventPublisher.publishEvent(new MailMessageEven(errMailMessage));
         }
         return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "默认未分类异常");
