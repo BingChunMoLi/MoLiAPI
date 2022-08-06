@@ -2,7 +2,10 @@ package com.bingchunmoli.api.yiyan.controller;
 
 import com.bingchunmoli.api.yiyan.service.IYiYanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 一言
@@ -30,7 +33,6 @@ public class YiYanController {
      * @return 一条一言
      */
     @GetMapping("random")
-    @CrossOrigin
     public Object getRandomYiYan() {
         return yiYanService.findRandomYiYan();
     }

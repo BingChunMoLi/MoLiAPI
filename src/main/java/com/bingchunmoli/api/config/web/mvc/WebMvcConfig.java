@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.config.web.mvc;
 
 import com.bingchunmoli.api.interceptor.IpInterceptor;
+import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
     private final IpInterceptor ipInterceptor;
+    private final RequestTraceIdInterceptor requestTraceIdInterceptor;
     /**
      * 图片转换器
      */
@@ -28,5 +30,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(ipInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(requestTraceIdInterceptor).addPathPatterns("/**");
     }
 }

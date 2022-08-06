@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.8.2</version>
+    <version>3.8.5</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -20,7 +20,6 @@
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <swagger.version>3.0.0</swagger.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <fastjson.version>2.0.3</fastjson.version>
         <docker-plugin.version>1.4.9</docker-plugin.version>
         <aspectjweaver.version>1.9.9.1</aspectjweaver.version>
         <hutool.version>5.8.0</hutool.version>
@@ -79,11 +78,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>

@@ -1,5 +1,6 @@
 package com.bingchunmoli.api.bing.bean;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,12 +26,17 @@ public class BingImageVO implements Serializable {
     @AllArgsConstructor
     static class BingImages implements Serializable {
         private static final long serialVersionUID = 2L;
+        @JsonProperty("startdate")
         private String startDate;
+        @JsonProperty("fullstartdate")
         private String fullStartDate;
+        @JsonProperty("enddate")
         private String endDate;
         private String url;
+        @JsonProperty("urlbase")
         private String urlBase;
         private String copyright;
+        @JsonProperty("copyrightlink")
         private String copyrightLink;
         private String title;
         private String quiz;
