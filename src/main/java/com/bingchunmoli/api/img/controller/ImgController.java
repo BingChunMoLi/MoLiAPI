@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("img")
-@ConditionalOnProperty(prefix = "moli.api-config", name = {"pcPath", "mobilePath", "path1080"})
+@ConditionalOnProperty(prefix = "moli.apiConfig", name = {"pcPath", "mobilePath", "path1080"})
 public class ImgController {
 
     private final IImgService imgService;
