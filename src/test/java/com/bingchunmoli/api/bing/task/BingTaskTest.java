@@ -3,7 +3,7 @@ package com.bingchunmoli.api.bing.task;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +25,7 @@ class BingTaskTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     void getBIng() throws JsonProcessingException {
         bingTask.getBingImage();
     }

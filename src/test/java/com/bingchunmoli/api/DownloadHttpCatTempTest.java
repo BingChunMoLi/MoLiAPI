@@ -1,8 +1,8 @@
 package com.bingchunmoli.api;
 
 import cn.hutool.http.HttpUtil;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class DownloadHttpCatTempTest {
      * @throws IllegalAccessException
      */
     @Test
-    @Ignore
+    @Disabled
     public void downloadHttpGet() throws IllegalAccessException {
         Set<Integer> set = new HashSet<>(100);
         for (HttpStatus value : HttpStatus.values()) {
