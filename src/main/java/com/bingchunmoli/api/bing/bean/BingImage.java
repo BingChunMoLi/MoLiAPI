@@ -1,7 +1,6 @@
 package com.bingchunmoli.api.bing.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +15,6 @@ import java.time.LocalDateTime;
 @TableName("bing_image")
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "Bing每日图片", description = "<startdate>20201114</startdate>\n" +
-        "<fullstartdate>202011140800</fullstartdate>\n" +
-        "<enddate>20201115</enddate>\n" +
-        "<url>/th?id=OHR.LupineNZ_ZH-CN0613960648_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp</url>\n" +
-        "<urlBase>/th?id=OHR.LupineNZ_ZH-CN0613960648</urlBase>\n" +
-        "<copyright>特卡波湖岸上的羽扇豆，新西兰 (© Stanislav Kachyna/Shutterstock)</copyright>\n" +
-        "<copyrightlink>https://www.bing.com/search?q=%E7%BE%BD%E6%89%87%E8%B1%86&form=hpcapt&mkt=zh-cn</copyrightlink>")
 public class BingImage implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO)
