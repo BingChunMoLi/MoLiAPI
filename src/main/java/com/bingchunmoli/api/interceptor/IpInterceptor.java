@@ -43,13 +43,13 @@ public class IpInterceptor implements HandlerInterceptor {
         if (value == null) {
             count.getAndIncrement();
             if (log.isDebugEnabled()) {
-                log.debug("{}用户首次访问{}", clientIP, requestURI);
+                log.debug("{} 用户首次访问 {}", clientIP, requestURI);
             }
         }else {
             count.getAndAdd(value + 1);
         }
         if (log.isDebugEnabled()) {
-            log.debug("{}访问{}{}次", clientIP, requestURI, count.get());
+            log.debug("{} 访问 {} {} 次", clientIP, requestURI, count.get());
         }
         redisTemplate.opsForValue().set(key, count.get(), 60, TimeUnit.SECONDS);
         return true;

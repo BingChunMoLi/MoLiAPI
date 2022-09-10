@@ -21,7 +21,7 @@ public class BingController {
     private final IBingService bingService;
 
     /**
-     * @apiNote 每日随机图国内版
+     * //@ApiNote 每日随机图国内版
      * @return bing图片对象|
      */
     @GetMapping("cn")
@@ -30,7 +30,7 @@ public class BingController {
     }
 
     /**
-     * @apiNote 每日随机图国际版
+     * //@ApiNote 每日随机图国际版
      * @return bing图片对象|
      */
     @GetMapping("en")
@@ -39,7 +39,7 @@ public class BingController {
     }
 
     /**
-     * @apiNote 每日随机图
+     * //@ApiNote 每日随机图
      * @return bing图片对象|
      */
     @GetMapping("all")
