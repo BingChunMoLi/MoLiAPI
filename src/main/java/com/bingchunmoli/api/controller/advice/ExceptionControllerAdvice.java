@@ -35,20 +35,56 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     public ResultVO<String> fileIsEmptyException(FileIsEmptyException e) {
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \t文件为空, ", e);
-        return new ResultVO<>(CodeEnum.ERROR.getCode(), e.getMessage(), "文件为空,请确认文件是否存在");
+        log.error(getExceptionErrorLogMessage("文件为空,请确认文件是否存在"), e);
+        ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+        result.setMsg("文件为空,请确认文件是否存在");
+        return result;
     }
 
     @ExceptionHandler
     public ResultVO<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \t没有受支持的方法", e);
-        return new ResultVO<>(CodeEnum.ERROR, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; 没有受支持的请求方法，请求方法错误.");
+        log.error(getExceptionErrorLogMessage("请求方法不正确或者没有受支持的方法"), e);
+        ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+        result.setMsg("请求方法不正确或者没有受支持的方法");
+        return result;
+    }
+
+
+    @ExceptionHandler
+    public ResultVO<String> apiException(ApiException e) {
+        log.error(getExceptionErrorLogMessage("api异常"), e);
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> apiParamException(ApiParamException e) {
+        log.error(getExceptionErrorLogMessage("请求参数不正确或者不支持"), e);
+        return new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> jsonProcessingException(JsonProcessingException e){
+        log.error(getExceptionErrorLogMessage("json转换错误(json格式化不正确)"), e);
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
+        log.error(getExceptionErrorLogMessage("方法参数类型无法匹配"), e);
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> nullPointerException(NullPointerException e) {
+        log.error(getExceptionErrorLogMessage("空指针异常"), e);
+        ResultVO<String> result = new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
+        result.setMsg("空指针异常");
+        return result;
     }
 
     @ExceptionHandler
     public ResultVO<String> defaultException(Exception e) {
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \tdefaultException: {}, msg: {}", e.getMessage(), e);
-        e.printStackTrace();
+        log.error(getExceptionErrorLogMessage("未分类异常"), e);
         if (mailEnable) {
             MailMessage errMailMessage = null;
             try {
@@ -58,36 +94,26 @@ public class ExceptionControllerAdvice {
             }
             applicationEventPublisher.publishEvent(new MailMessageEven(errMailMessage));
         }
-        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; 默认未分类异常");
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
     }
 
     @ExceptionHandler
     public ResultVO<String> defaultThrowable(Throwable throwable) {
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \t系统错误: ", throwable);
-        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; 严重异常");
+        log.error(getExceptionErrorLogMessage("系统错误"), throwable);
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
     }
 
-    @ExceptionHandler
-    public ResultVO<String> apiException(ApiException e) {
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \tapi顶层异常: ", e);
-        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; api异常");
+    private String getExceptionErrorLogMessage(String exceptionMessage){
+        return getExceptionJsonMessage() +
+                "; \t" +
+                exceptionMessage;
     }
 
-    @ExceptionHandler
-    public ResultVO<String> apiParamException(ApiParamException e) {
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \t请求参数不正确或不支持: ", e);
-        return new ResultVO<>(CodeEnum.ERROR, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; 请求参数异常");
-    }
-
-    @ExceptionHandler
-    public ResultVO<String> jsonProcessingException(JsonProcessingException e){
-        log.error("traceId: " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; \tJSON转换异常: ", e);
-        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; JSON转换异常");
-    }
-
-    @ExceptionHandler
-    public ResultVO<String> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
-         log.debug("methodArgumentTypeMismatchException: ", e);
-        return new ResultVO<>(CodeEnum.FAILURE, RequestTraceIdInterceptor.TRACE_ID + ": " + MDC.get(RequestTraceIdInterceptor.TRACE_ID) + "; 请求参数类型异常");
+    private String getExceptionJsonMessage(){
+        return "{" +
+                RequestTraceIdInterceptor.TRACE_ID +
+                ": " +
+                MDC.get(RequestTraceIdInterceptor.TRACE_ID) +
+                "}";
     }
 }

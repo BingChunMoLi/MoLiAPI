@@ -15,4 +15,8 @@ public class ApiException extends RuntimeException {
     public ApiException(String msg) {
         super(MessageFormat.format("traceId: {0}\n{1}", MDC.get("traceId"), msg));
     }
+
+    public ApiException(Throwable cause) {
+        super(MessageFormat.format("traceId: {0}\n{1}", MDC.get("traceId")), cause);
+    }
 }

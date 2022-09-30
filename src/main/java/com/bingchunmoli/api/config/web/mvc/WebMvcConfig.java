@@ -27,6 +27,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         converters.add(new BufferedImageHttpMessageConverter());
     }
 
+    /**
+     * 拦截器注册
+     * @param registry 拦截器注册器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(ipInterceptor).addPathPatterns("/**");

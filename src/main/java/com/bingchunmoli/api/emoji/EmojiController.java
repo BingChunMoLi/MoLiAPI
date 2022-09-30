@@ -3,8 +3,6 @@ package com.bingchunmoli.api.emoji;
 import cn.hutool.extra.emoji.EmojiUtil;
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiParser;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +17,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("emoji")
-@Api("emoji表情处理")
+//@Api("emoji表情处理")
 public class EmojiController {
 
     /**
@@ -46,7 +44,7 @@ public class EmojiController {
      * @return 替换后的字符串
      */
     @GetMapping("alise")
-    @ApiOperation("emoji转别名")
+//    @ApiOperation("emoji转别名")
     public String emojiToAlise(String emoji) {
         return EmojiUtil.toAlias(emoji);
     }
@@ -66,7 +64,7 @@ public class EmojiController {
      * @return 替换后的字符串
      */
     @GetMapping("unicode")
-    @ApiOperation("emoji转unicode")
+    //@ApiOperation("emoji转unicode")
     public String emojiToUnicode(String emoji) {
         return EmojiUtil.toUnicode(emoji);
     }
@@ -80,7 +78,7 @@ public class EmojiController {
      * @return 替换后的字符串
      */
     @GetMapping("html")
-    @ApiOperation("emoji转html表示法")
+    //@ApiOperation("emoji转html表示法")
     public String emojiToHtml(String emoji) {
         return EmojiUtil.toHtml(emoji);
     }
@@ -92,7 +90,7 @@ public class EmojiController {
      * @return unicode
      */
     @GetMapping("isEmoji")
-    @ApiOperation("是否是emoji表情的unicode符")
+    //@ApiOperation("是否是emoji表情的unicode符")
     public Boolean isEmoji(String emoji) {
         return EmojiUtil.isEmoji(emoji);
     }
@@ -104,19 +102,19 @@ public class EmojiController {
      * @return unicode
      */
     @GetMapping("contains")
-    @ApiOperation("是否含有emoji表情的Unicode符")
+    //@ApiOperation("是否含有emoji表情的Unicode符")
     public Boolean containsEmoji(String emoji) {
         return EmojiUtil.containsEmoji(emoji);
     }
 
     /**
-     * @apiNote 通过tag方式获取对应的所有Emoji表情
+     * //@ApiNote 通过tag方式获取对应的所有Emoji表情
      *
      * @param tag tag标签，例如“happy”
      * @return Emoji表情集合，如果找不到返回null
      */
     @GetMapping("tag")
-    @ApiOperation("根据tag获取对应所有的Emoji表情")
+    //@ApiOperation("根据tag获取对应所有的Emoji表情")
     public Set<Emoji> getByTag(String tag) {
         return EmojiUtil.getByTag(tag);
     }
@@ -128,7 +126,7 @@ public class EmojiController {
      * @return Emoji对象，如果找不到返回null
      */
     @GetMapping("getByAlise")
-    @ApiOperation("通过别名获取Emoji")
+    //@ApiOperation("通过别名获取Emoji")
     public Emoji getByAlise(String alise) {
         return EmojiUtil.get(alise);
     }
@@ -140,7 +138,7 @@ public class EmojiController {
      * @return 替换后的字符串
      */
     @GetMapping("removeAllEmojis")
-    @ApiOperation("去除字符串中所有的Emoji Unicode字符")
+    //@ApiOperation("去除字符串中所有的Emoji Unicode字符")
     public String removeAllEmojis(String emojiStr) {
         return EmojiUtil.removeAllEmojis(emojiStr);
     }
@@ -152,7 +150,7 @@ public class EmojiController {
      * @return Emoji字符列表
      */
     @GetMapping("extractEmojis")
-    @ApiOperation("提取字符串中所有的Emoji Unicode")
+    //@ApiOperation("提取字符串中所有的Emoji Unicode")
     public List<String> extractEmojis(String emojiStr) {
         return EmojiUtil.extractEmojis(emojiStr);
     }

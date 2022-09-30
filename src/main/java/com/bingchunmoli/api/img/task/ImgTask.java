@@ -5,7 +5,6 @@ import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.even.MailMessageEven;
 import com.bingchunmoli.api.img.service.IImgService;
 import com.bingchunmoli.api.properties.ApiKeyProperties;
-import com.bingchunmoli.api.utils.SendMailUtil;
 import com.bingchunmoli.api.utils.ServerSauce;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,7 +26,6 @@ public class ImgTask {
     private final IImgService imgService;
     private final ServerSauce serverSauce;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final SendMailUtil sendMailUtil;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Scheduled(cron = "0 0 0 1 * ?")

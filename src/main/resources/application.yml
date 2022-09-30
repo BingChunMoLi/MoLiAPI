@@ -1,8 +1,15 @@
 moli:
-  version: v3.8.5
+  version: @version@
   path: ${user.home}/.api/
 server:
   port: 8090
+  http2:
+    enabled: true
+  tomcat:
+    basedir: ${moli.path}/log/tomcat/
+    accesslog:
+      enabled: true
+      pattern: "%t %a %r %s (%D ms)"
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
