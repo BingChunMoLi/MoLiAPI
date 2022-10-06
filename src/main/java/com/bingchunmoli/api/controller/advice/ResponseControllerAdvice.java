@@ -22,7 +22,7 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return ! returnType.getGenericParameterType().equals(ResultVO.class);
+        return true;
     }
 
     @Override
@@ -40,6 +40,9 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
             return body;
         }
         if (body instanceof FileSystemResource) {
+            return body;
+        }
+        if (body instanceof ResultVO<?>) {
             return body;
         }
         return new ResultVO<>(body);
