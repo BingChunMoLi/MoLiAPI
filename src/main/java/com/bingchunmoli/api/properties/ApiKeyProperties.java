@@ -41,4 +41,14 @@ public class ApiKeyProperties {
      */
     private String path1080;
 
+    /**
+     * 上传临时文件的路径
+     */
+    private String uploadTempPath;
+
+    /**
+     * 上传临时文件的密钥
+     */
+    private String uploadTempSecret;
+
 }

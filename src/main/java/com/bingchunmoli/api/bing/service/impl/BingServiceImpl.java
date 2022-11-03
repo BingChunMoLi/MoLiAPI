@@ -8,6 +8,7 @@ import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.mapper.BingImageMapper;
 import com.bingchunmoli.api.bing.service.IBingService;
+import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.utils.RedisUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +30,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     private final RedisUtil redisUtil;
 
     @Override
-    public BingImage getAllBingImage() throws JsonProcessingException {
+    public BingImage getAllBingImage() {
         BingImage t = redisUtil.getObject(BingEnum.ALL_BING.getKey());
         if (t == null) {
             Long id = baseMapper.getIdByCreateDate(LocalDate.now());
@@ -56,7 +57,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     }
 
     @Override
-    public BingImageVO getBingImage(BingEnum bingEnum) throws JsonProcessingException {
+    public BingImageVO getBingImage(BingEnum bingEnum){
         BingImageVO t = redisUtil.getObject(bingEnum.getKey());
         if (t == null) {
             getBingImageByRemote();
@@ -66,13 +67,17 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     }
 
     @Override
-    public BingImageVO getBingImageByRemote(BingEnum bingEnum) throws JsonProcessingException {
+    public BingImageVO getBingImageByRemote(BingEnum bingEnum){
         String bingResult = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=" + bingEnum.getSearch() + "&format=js");
-        return om.readValue(bingResult, BingImageVO.class);
+        try {
+            return om.readValue(bingResult, BingImageVO.class);
+        } catch (JsonProcessingException e) {
+            throw new ApiJsonProcessingException(e);
+        }
     }
 
     @Override
-    public BingImage getBingImageByRemote() throws JsonProcessingException {
+    public BingImage getBingImageByRemote() {
         BingImageVO cnBingImageVO = getBingImageByRemote(BingEnum.CN_BING);
         BingImageVO enBingImageVO = getBingImageByRemote(BingEnum.EN_BING);
         BingImage bingImage = new BingImage(cnBingImageVO, enBingImageVO);

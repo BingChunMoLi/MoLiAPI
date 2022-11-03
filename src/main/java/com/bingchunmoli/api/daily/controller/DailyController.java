@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DailyController {
 
-    Map<String, Collection<String>> map = new HashMap<>();
+    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://cloud.tencent.com/act/integralmall?from=13925", "https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
 
     @GetMapping
     public ResultVO<Object> getDailys(String key) {
