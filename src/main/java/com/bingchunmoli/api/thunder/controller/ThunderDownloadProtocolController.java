@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 迅雷链接
+ * 迅雷链接转换
  * @author MoLi
  */
 @RestController

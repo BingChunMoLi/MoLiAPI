@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * 天气接口返回实体
  * @author bingchunmoli
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

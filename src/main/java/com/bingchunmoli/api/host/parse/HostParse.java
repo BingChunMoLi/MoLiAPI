@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Host解析工具类
  * @author BingChunMoLi
  */
 public class HostParse {

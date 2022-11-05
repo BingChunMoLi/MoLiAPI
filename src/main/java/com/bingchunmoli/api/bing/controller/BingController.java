@@ -4,7 +4,7 @@ import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
-import com.bingchunmoli.api.bing.service.IBingService;
+import com.bingchunmoli.api.bing.service.BingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("bing")
 public class BingController {
-    private final IBingService bingService;
+    private final BingService bingService;
 
     /**
-     * //@ApiNote 每日随机图国内版
+     * 每日随机图国内版
      *
      * @return bing图片对象|
      */
@@ -32,7 +32,7 @@ public class BingController {
     }
 
     /**
-     * //@ApiNote 每日随机图国际版
+     * 每日随机图国际版
      *
      * @return bing图片对象|
      */
@@ -42,7 +42,7 @@ public class BingController {
     }
 
     /**
-     * //@ApiNote 每日随机图
+     * 每日随机图
      *
      * @return bing图片对象|
      */

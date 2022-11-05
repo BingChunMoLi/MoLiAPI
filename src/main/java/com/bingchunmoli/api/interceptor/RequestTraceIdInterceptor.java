@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
+ * TraceId拦截器生成和清除traceId
  * @author MoLi
  */
 @Slf4j

@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * Profile环境枚举
  * @author MoLi
  */
-
 @Getter
 @AllArgsConstructor
 public enum ProfileEnum {

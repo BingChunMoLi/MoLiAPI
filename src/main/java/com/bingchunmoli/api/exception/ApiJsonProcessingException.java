@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.exception;
 
 /**
- * moliapi的json解析异常,通常为com.fasterxml.jackson.core.JsonProcessingException捕获后wrapper后抛出
+ * api的json解析异常,通常为com.fasterxml.jackson.core.JsonProcessingException捕获后wrapper后抛出
  * @author MoLi
  */
 public class ApiJsonProcessingException extends ApiException{

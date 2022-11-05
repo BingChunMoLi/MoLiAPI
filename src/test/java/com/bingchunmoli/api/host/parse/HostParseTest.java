@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.host.parse;
 
 import com.bingchunmoli.api.host.bean.Host;
-import com.bingchunmoli.api.host.service.IHostService;
+import com.bingchunmoli.api.host.service.HostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,7 @@ import java.util.List;
 public class HostParseTest {
 
     @Autowired
-    private IHostService hostService;
+    private HostService hostService;
     @Test
     void HostParseFromFile(){
         try {

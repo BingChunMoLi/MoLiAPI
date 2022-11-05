@@ -5,9 +5,10 @@ import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.even.MailMessageEven;
 import com.bingchunmoli.api.exception.ApiException;
+import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
+import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
-import com.bingchunmoli.api.qrcode.exception.FileIsEmptyException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
+ * 统一异常处理
  * @author 冰彦糖
- * @version 0.0.1-SNAPSHOT
  **/
 @Slf4j
 @RestControllerAdvice
@@ -34,7 +35,7 @@ public class ExceptionControllerAdvice {
     private final ObjectMapper om;
 
     @ExceptionHandler
-    public ResultVO<String> fileIsEmptyException(FileIsEmptyException e) {
+    public ResultVO<String> fileIsEmptyException(ApiFileIsEmptyException e) {
         log.error(getExceptionErrorLogMessage("文件为空,请确认文件是否存在"), e);
         ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
         result.setMsg("文件为空,请确认文件是否存在");
@@ -59,6 +60,12 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler
     public ResultVO<String> apiParamException(ApiParamException e) {
         log.error(getExceptionErrorLogMessage("请求参数不正确或者不支持"), e);
+        return new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> apiJsonProcessingException(ApiJsonProcessingException e) {
+        log.error(getExceptionErrorLogMessage("json转换错误(json格式化不正确)"), e);
         return new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
     }
 

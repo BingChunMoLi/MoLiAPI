@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
+ * 图片转换器及拦截器注册
  * @author bingchunmoli
  **/
 @Configuration

@@ -4,7 +4,6 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.bingchunmoli.api.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,13 +14,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 基于IP的次数拦截器
  * @author MoLi
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class IpInterceptor implements HandlerInterceptor {
-    private final RedisTemplate<String, Object> redisTemplate;
     private final RedisUtil redisUtil;
 
 
@@ -32,9 +31,8 @@ public class IpInterceptor implements HandlerInterceptor {
         }
         String requestURI = request.getRequestURI();
         String clientIP = ServletUtil.getClientIP(request);
-        StringBuffer stringBuffer = new StringBuffer();
-        String key = stringBuffer.append("filter:").append(requestURI).append(":").append(clientIP).append(":").append(request.getRequestedSessionId()).toString();
-        Integer value = (Integer)redisTemplate.opsForValue().get(key);
+        String key = "filter:" + requestURI + ":" + clientIP + ":" + request.getRequestedSessionId();
+        Integer value = redisUtil.getObject(key);
         if (value != null && value > 10) {
             response.setStatus(429);
             return false;
@@ -51,7 +49,7 @@ public class IpInterceptor implements HandlerInterceptor {
         if (log.isDebugEnabled()) {
             log.debug("{} 访问 {} {} 次", clientIP, requestURI, count.get());
         }
-        redisTemplate.opsForValue().set(key, count.get(), 60, TimeUnit.SECONDS);
+        redisUtil.setObject(key, count.get(), 60, TimeUnit.SECONDS);
         return true;
     }
 

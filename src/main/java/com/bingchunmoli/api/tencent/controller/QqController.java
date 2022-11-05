@@ -4,7 +4,7 @@ package com.bingchunmoli.api.tencent.controller;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.tencent.bean.enums.QQSizeEnum;
 import com.bingchunmoli.api.tencent.bean.enums.QZSizeEnum;
-import com.bingchunmoli.api.tencent.service.IQqService;
+import com.bingchunmoli.api.tencent.service.QqService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ import java.net.URL;
 @RequiredArgsConstructor
 @RequestMapping("tencent")
 public class QqController {
-    private final IQqService qqService;
+    private final QqService qqService;
 
     /**
      * 返回QQ头像
@@ -33,7 +33,6 @@ public class QqController {
      * @param size 大小(默认140)|140
      * @return qq头像
      */
-    //@ApiOperation("返回QQ头像")
     @GetMapping(value = "qq", produces = MediaType.IMAGE_JPEG_VALUE)
     public BufferedImage getQqImage(String qq, @RequestParam(required = false, defaultValue = "140") Integer size) {
         if (size <= 0) {
@@ -54,7 +53,6 @@ public class QqController {
      * @param size 大小(默认100)|100
      * @return QQ空间头像
      */
-    //@ApiOperation("返回QQ空间头像")
     @GetMapping(value = "qz", produces = MediaType.IMAGE_JPEG_VALUE)
     public BufferedImage getQzImage(String qq, @RequestParam(required = false, defaultValue = "100") Integer size) {
         if (size <= 0) {
@@ -73,7 +71,6 @@ public class QqController {
      * @param size 大小(默认100)|100
      * @return QQ空间头像
      */
-    //@ApiOperation("返回JSON的QQ头像地址,加密")
     @GetMapping("qq/json")
     public String getQqImageForJson(String qq, @RequestParam(required = false, defaultValue = "v") Integer size) {
         if (size <= 0) {
@@ -91,7 +88,6 @@ public class QqController {
      * @param qq qq号码|3239720020
      * @return json
      */
-    //@ApiOperation("返回JSON的QQ空间头像地址")
     @GetMapping("qz/json")
     public String getQzImageForJson(String qq) {
         return qqService.getQzImageForJson(qq);
@@ -103,7 +99,6 @@ public class QqController {
      * @param size 大小(默认100)|100
      * @return qq头像地址
      */
-    //@ApiOperation("返回加密的QQ头像地址")
     @GetMapping("qq/json/encrypt")
     @PostMapping("qq/json/encrypt")
     public String getQqImageForJsonEncrypt(String qq, @RequestParam(required = false, defaultValue = "100") Integer size) {
@@ -123,7 +118,6 @@ public class QqController {
      * @param size 大小(默认100)|100
      * @return qq头像
      */
-    //@ApiOperation("返回加密的QQ头像")
     @GetMapping(value = "qq/encrypt", produces = MediaType.IMAGE_JPEG_VALUE)
     @PostMapping(value = "qq/encrypt", produces = MediaType.IMAGE_JPEG_VALUE)
     public BufferedImage getQqImageForEncrypt(String qq, @RequestParam(required = false, defaultValue = "100") Integer size) {

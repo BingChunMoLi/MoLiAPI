@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * Host类型
  * @author BingChunMoLi
  */
 

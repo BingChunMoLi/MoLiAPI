@@ -5,6 +5,7 @@ import lombok.Getter;
 
 
 /**
+ * QQ空间头像大小枚举
  * @author bingchunmoli
  */
 

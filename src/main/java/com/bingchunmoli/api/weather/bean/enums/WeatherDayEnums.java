@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 天气支持按天枚举
  * @author bingchunmoli
  */
 @Getter

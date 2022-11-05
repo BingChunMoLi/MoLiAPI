@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.tencent.service.impl;
 
-import com.bingchunmoli.api.tencent.service.IQqService;
+import com.bingchunmoli.api.tencent.service.QqService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,7 +23,7 @@ import java.net.URL;
  **/
 @Slf4j
 @Service
-public class QqServiceImpl implements IQqService {
+public class QqServiceImpl implements QqService {
 
     @Override
     public BufferedImage getQqImage(String qq, Integer size) {

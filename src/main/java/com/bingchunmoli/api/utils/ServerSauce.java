@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.utils;
 
 import cn.hutool.core.util.StrUtil;
-import com.bingchunmoli.api.properties.ApiKeyProperties;
+import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -19,19 +19,20 @@ import java.net.URLEncoder;
  **/
 @Slf4j
 @Component
+@Deprecated
 @RequiredArgsConstructor
 public class ServerSauce {
-    private final ApiKeyProperties apiKeyProperties;
+    private final ApiConfig apiConfig;
 
     public void send(String title, String desp) {
-        if (StrUtil.isEmpty(apiKeyProperties.getServerSauceKey())) {
+        if (StrUtil.isEmpty(apiConfig.getServerSauceKey())) {
             return;
         }
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         StringBuilder params = new StringBuilder();
         try {
             params.append("https://sctapi.ftqq.com/");
-            params.append(apiKeyProperties.getServerSauceKey());
+            params.append(apiConfig.getServerSauceKey());
             params.append(".send?title=");
             params.append(URLEncoder.encode(title, "utf-8"));
             params.append("&desp=");

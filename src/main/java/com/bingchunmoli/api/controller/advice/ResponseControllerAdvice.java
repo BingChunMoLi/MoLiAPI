@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import java.awt.image.BufferedImage;
 
 /**
+ * 统一响应处理
  * @author bingchunmoli
  **/
 @RestControllerAdvice("com.bingchunmoli.api")

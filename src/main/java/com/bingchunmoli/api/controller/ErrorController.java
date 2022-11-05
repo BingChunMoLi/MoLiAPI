@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 /**
- * 错误页面与错误信息处理
+ * 自定义错误页面与错误信息处理
  * @author bingchunmoli
  */
 @Slf4j

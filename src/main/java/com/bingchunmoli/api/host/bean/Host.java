@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * Host实体
  * @author BingChunMoLi
  */
 @Data

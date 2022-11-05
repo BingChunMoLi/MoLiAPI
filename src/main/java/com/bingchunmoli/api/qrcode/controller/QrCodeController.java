@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.qrcode.controller;
 
 import cn.hutool.extra.qrcode.QrCodeUtil;
-import com.bingchunmoli.api.qrcode.exception.FileIsEmptyException;
+import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +27,7 @@ public class QrCodeController {
     @GetMapping("decode")
     public String decode(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
-            throw new FileIsEmptyException();
+            throw new ApiFileIsEmptyException();
         }
         return QrCodeUtil.decode(file.getInputStream());
     }

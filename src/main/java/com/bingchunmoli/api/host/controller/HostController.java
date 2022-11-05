@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.host.controller;
 
-import com.bingchunmoli.api.host.service.IHostService;
+import com.bingchunmoli.api.host.service.HostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 @RequestMapping("host")
 public class HostController {
 
-    private final IHostService hostService;
+    private final HostService hostService;
 
     /**
      * 根据参数获取hosts
@@ -51,7 +51,7 @@ public class HostController {
      * 下载文件的hosts
      * @param type 请求了行|0
      * @param response servlet响应
-     * @throws IOException esponse返回可能引发异常
+     * @throws IOException response返回可能引发异常
      */
     @GetMapping("file")
     public void getFile(@RequestParam(defaultValue = "0") ArrayList<Integer> type, HttpServletResponse response) throws IOException {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * BingRedis缓存Key枚举
  * @author BingChunMoLi
  */
 @Getter

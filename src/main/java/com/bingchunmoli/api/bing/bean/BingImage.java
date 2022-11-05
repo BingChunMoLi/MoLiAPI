@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * 数据库bing图片实体
  * @author bingchunmoli
  */
 @Data
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BingImage implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO)
     private Long id;

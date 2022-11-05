@@ -7,7 +7,7 @@ import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.mapper.BingImageMapper;
-import com.bingchunmoli.api.bing.service.IBingService;
+import com.bingchunmoli.api.bing.service.BingService;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.utils.RedisUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @RequiredArgsConstructor
-public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> implements IBingService {
+public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> implements BingService {
     private final ObjectMapper om;
     private final RedisUtil redisUtil;
 

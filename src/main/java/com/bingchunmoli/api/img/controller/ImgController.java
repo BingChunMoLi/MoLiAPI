@@ -1,8 +1,8 @@
 package com.bingchunmoli.api.img.controller;
 
 import com.bingchunmoli.api.bean.ApiConstant;
-import com.bingchunmoli.api.img.service.IImgService;
-import com.bingchunmoli.api.properties.ApiKeyProperties;
+import com.bingchunmoli.api.img.service.ImgService;
+import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.FileSystemResource;
@@ -25,8 +25,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @ConditionalOnProperty(prefix = "moli.apiConfig", name = {"pcPath", "mobilePath", "path1080"})
 public class ImgController {
 
-    private final IImgService imgService;
-    private final ApiKeyProperties apiKeyProperties;
+    private final ImgService imgService;
+    private final ApiConfig apiConfig;
 
     /**
      * 手机版
@@ -47,22 +47,13 @@ public class ImgController {
     }
 
     /**
-     * pc图片 备用写法，使用BufferedImage对象写出
-     * @return BufferedImage|图片
-     */
-    @GetMapping(value = "pc1", produces = MediaType.IMAGE_JPEG_VALUE)
-    public BufferedImage randomImgByPc() {
-        return imgService.getRandomImageByPc();
-    }
-
-    /**
      * 返回随机1080P图片接口
      * @return 1080Pwebp图片
      */
     @GetMapping(value = "1080", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<FileSystemResource> get1080PImage(){
         int i = ThreadLocalRandom.current().nextInt(48);
-        return ResponseEntity.ok(new FileSystemResource(apiKeyProperties.getPath1080() + "1080P" + i + ".webp"));
+        return ResponseEntity.ok(new FileSystemResource(apiConfig.getPath1080() + "1080P" + i + ".webp"));
     }
 
 }

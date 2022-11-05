@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
+ * 不支持的http响应状态码枚举
  * @author bingchunmoli
  */
 @Getter

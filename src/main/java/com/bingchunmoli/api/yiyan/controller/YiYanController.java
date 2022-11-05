@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.yiyan.controller;
 
-import com.bingchunmoli.api.yiyan.service.IYiYanService;
+import com.bingchunmoli.api.yiyan.bean.YiYan;
+import com.bingchunmoli.api.yiyan.service.YiYanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("yiyan")
 public class YiYanController {
-    private final IYiYanService yiYanService;
+    private final YiYanService yiYanService;
 
     /**
      * 根据ID获取一言
@@ -23,7 +24,7 @@ public class YiYanController {
      * @return 一言数据
      */
     @GetMapping("{id}")
-    public Object getYiYan(@PathVariable Integer id) {
+    public YiYan getYiYan(@PathVariable Integer id) {
         return yiYanService.getYiYan(id);
     }
 
@@ -33,7 +34,7 @@ public class YiYanController {
      * @return 一条一言
      */
     @GetMapping("random")
-    public Object getRandomYiYan() {
+    public YiYan getRandomYiYan() {
         return yiYanService.findRandomYiYan();
     }
 }
