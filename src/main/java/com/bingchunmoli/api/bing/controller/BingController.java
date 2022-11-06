@@ -1,10 +1,10 @@
 package com.bingchunmoli.api.bing.controller;
 
+import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
-import com.bingchunmoli.api.bing.service.IBingService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.bingchunmoli.api.bing.service.BingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,39 +12,43 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * bing每日美图
+ *
  * @author BingChunMoLi
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("bing")
 public class BingController {
-    private final IBingService bingService;
+    private final BingService bingService;
 
     /**
-     * @apiNote 每日随机图国内版
+     * 每日随机图国内版
+     *
      * @return bing图片对象|
      */
     @GetMapping("cn")
-    public BingImageVO cnBingImage() throws JsonProcessingException {
-        return bingService.getBingImage(BingEnum.CN_BING);
+    public ResultVO<BingImageVO> cnBingImage() {
+        return ResultVO.ok(bingService.getBingImage(BingEnum.CN_BING));
     }
 
     /**
-     * @apiNote 每日随机图国际版
+     * 每日随机图国际版
+     *
      * @return bing图片对象|
      */
     @GetMapping("en")
-    public BingImageVO enBingImage() throws JsonProcessingException {
-        return bingService.getBingImage(BingEnum.EN_BING);
+    public ResultVO<BingImageVO> enBingImage() {
+        return ResultVO.ok(bingService.getBingImage(BingEnum.EN_BING));
     }
 
     /**
-     * @apiNote 每日随机图
+     * 每日随机图
+     *
      * @return bing图片对象|
      */
     @GetMapping("all")
-    public BingImage getAllBingImage() throws JsonProcessingException {
-        return bingService.getAllBingImage();
+    public ResultVO<BingImage> getAllBingImage() {
+        return ResultVO.ok(bingService.getAllBingImage());
     }
 
     /**
@@ -53,7 +57,7 @@ public class BingController {
      * @return 随即Bing图的url
      */
     @GetMapping("random")
-    public String getRandomBingImg(){
-        return bingService.getRandomImg();
+    public ResultVO<String> getRandomBingImg() {
+        return ResultVO.ok(bingService.getRandomImg());
     }
 }

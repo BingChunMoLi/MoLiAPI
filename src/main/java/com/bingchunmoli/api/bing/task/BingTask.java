@@ -3,13 +3,12 @@ package com.bingchunmoli.api.bing.task;
 import cn.hutool.core.date.DateUtil;
 import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.bing.bean.BingImage;
-import com.bingchunmoli.api.bing.service.IBingService;
+import com.bingchunmoli.api.bing.service.BingService;
 import com.bingchunmoli.api.even.MailMessageEven;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -17,14 +16,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
+ * 定时获取bing图片
  * @author BingChunMoLi
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class BingTask {
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final IBingService bingService;
+    private final BingService bingService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Retryable(value = Exception.class, backoff = @Backoff(delay = 5000L, multiplier = 3))

@@ -59,22 +59,4 @@ public class RedisConfig extends CachingConfigurerSupport {
         serializer.setObjectMapper(om);
         return serializer;
     }
-
-//    @Bean
-//    public CacheManager cacheManager(RedisConnectionFactory factory) {
-//        RedisSerializer<String> redisSerializer = new StringRedisSerializer();
-//         配置序列化（解决乱码的问题）
-//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-//                 缓存有效期
-//                .entryTtl(Duration.ZERO)
-//                 使用StringRedisSerializer来序列化和反序列化redis的key值
-//                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-//                 使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值
-//                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer()))
-//                 禁用空值
-//                .disableCachingNullValues();
-//        return RedisCacheManager.builder(factory)
-//                .cacheDefaults(config)
-//                .build();
-//    }
 }

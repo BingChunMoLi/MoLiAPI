@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
+ * Mail发送实体
  * @author MoLi
  */
 @Data

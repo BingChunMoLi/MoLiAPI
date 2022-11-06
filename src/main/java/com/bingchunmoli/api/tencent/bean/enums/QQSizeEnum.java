@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * QQ头像大小枚举
  * @author bingchunmoli
  */
 @Getter

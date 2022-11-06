@@ -2,8 +2,9 @@ package com.bingchunmoli.api.img.service.img;
 
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.exception.ApiCacheException;
-import com.bingchunmoli.api.img.service.IImgService;
-import com.bingchunmoli.api.properties.ApiKeyProperties;
+import com.bingchunmoli.api.exception.ApiImgException;
+import com.bingchunmoli.api.img.service.ImgService;
+import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ import java.util.Random;
  */
 @Service
 @RequiredArgsConstructor
-public class ImgServiceImpl implements IImgService {
+public class ImgServiceImpl implements ImgService {
 
-    private final ApiKeyProperties apiKeyProperties;
+    private final ApiConfig apiConfig;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
@@ -45,7 +46,7 @@ public class ImgServiceImpl implements IImgService {
         i = 0;
         while (i < 3) {
             try {
-                return ImageIO.read(getRandomImgByFileSystem(apiKeyProperties.getPcPath()));
+                return ImageIO.read(getRandomImgByFileSystem(apiConfig.getPcPath()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,11 +73,12 @@ public class ImgServiceImpl implements IImgService {
         i = 0;
         while (i < 3) {
             try {
-                return ImageIO.read(getRandomImgByFileSystem(apiKeyProperties.getMobilePath()));
+                return ImageIO.read(getRandomImgByFileSystem(apiConfig.getMobilePath()));
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new ApiImgException(e);
+            }finally {
+                i++;
             }
-            i++;
         }
         return img;
     }
@@ -100,13 +102,14 @@ public class ImgServiceImpl implements IImgService {
 
     @Override
     public List<Path> getImgListByFileSystem(String path) throws IOException {
-        DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path));
-        List<Path> list = new ArrayList<>();
-        for (Path p:stream) {
-            if (!Files.isDirectory(p, LinkOption.NOFOLLOW_LINKS)) {
-                list.add(p);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
+            List<Path> list = new ArrayList<>();
+            for (Path p:stream) {
+                if (!Files.isDirectory(p, LinkOption.NOFOLLOW_LINKS)) {
+                    list.add(p);
+                }
             }
+            return list;
         }
-        return list;
     }
 }

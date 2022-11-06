@@ -6,7 +6,6 @@ import lombok.Getter;
 /**
  * @author MoLi
  */
-
 @Getter
 @AllArgsConstructor
 public enum DownloadProtocolConstant {

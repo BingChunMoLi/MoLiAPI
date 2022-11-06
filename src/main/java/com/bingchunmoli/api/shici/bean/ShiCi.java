@@ -3,10 +3,10 @@ package com.bingchunmoli.api.shici.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -16,10 +16,11 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "Shici对象", description = "诗词")
 public class ShiCi implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
+
     @TableId(type = IdType.AUTO)
     private Long id;
 
@@ -34,15 +35,17 @@ public class ShiCi implements Serializable {
     @JsonIgnore
     @TableLogic
     private Integer deleted;
+
     @JsonIgnore
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
+
     @JsonIgnore
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
     @Version
     @JsonIgnore
     private String version;
-
 
 }

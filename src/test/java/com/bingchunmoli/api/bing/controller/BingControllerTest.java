@@ -2,7 +2,6 @@ package com.bingchunmoli.api.bing.controller;
 
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +15,20 @@ public class BingControllerTest {
     private BingController bingController;
 
     @Test
-    void getBingAllTest() throws JsonProcessingException {
-        BingImage image = bingController.getAllBingImage();
+    void getBingAllTest() {
+        BingImage image = bingController.getAllBingImage().getData();
         log.info("getBingAllTest: {}", image);
     }
 
     @Test
-    void getBingCnTest() throws JsonProcessingException {
-        BingImageVO image = bingController.cnBingImage();
+    void getBingCnTest() {
+        BingImageVO image = bingController.cnBingImage().getData();
         log.info("getBingCnTest: {}", image);
     }
 
     @Test
-    void getBingEnTest() throws JsonProcessingException {
-        BingImageVO image = bingController.enBingImage();
+    void getBingEnTest() {
+        BingImageVO image = bingController.enBingImage().getData();
         log.info("getBingEnTest: {}", image);
     }
 

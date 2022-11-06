@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.host.bean.Host;
-import com.bingchunmoli.api.host.service.IHostService;
+import com.bingchunmoli.api.host.service.HostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 定时获取host
  * @author BingChunMoLi
  */
 @Slf4j
@@ -25,7 +26,7 @@ public class HostTask {
     private static final String NEO_HOST = " https://raw.githubusercontent.com/neoFelhz/neohosts/gh-pages/basic/hosts";
     private static final String NEO_HOST_2 = "https://cdn.jsdelivr.net/gh/neoFelhz/neohosts@gh-pages/basic/hosts";
     @Autowired
-    private IHostService hostService;
+    private HostService hostService;
     @Scheduled(cron = "0 0 0 * * ?")
     public void getHost(){
         String result = null;

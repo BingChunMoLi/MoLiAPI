@@ -3,10 +3,8 @@ package com.bingchunmoli.api.img.task;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.even.MailMessageEven;
-import com.bingchunmoli.api.img.service.IImgService;
-import com.bingchunmoli.api.properties.ApiKeyProperties;
-import com.bingchunmoli.api.utils.SendMailUtil;
-import com.bingchunmoli.api.utils.ServerSauce;
+import com.bingchunmoli.api.img.service.ImgService;
+import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,16 +16,15 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
+ * 随即图定时任务 每月刷新
  * @author BingChunMoLi
  */
 @Component
 @RequiredArgsConstructor
 public class ImgTask {
-    private final ApiKeyProperties apiKeyProperties;
-    private final IImgService imgService;
-    private final ServerSauce serverSauce;
+    private final ApiConfig apiConfig;
+    private final ImgService imgService;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final SendMailUtil sendMailUtil;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Scheduled(cron = "0 0 0 1 * ?")
@@ -35,17 +32,15 @@ public class ImgTask {
         List<Path> pcPath = null;
         List<Path> mobilePath = null;
         try {
-            pcPath = imgService.getImgListByFileSystem(apiKeyProperties.getPcPath());
+            pcPath = imgService.getImgListByFileSystem(apiConfig.getPcPath());
         } catch (IOException e) {
             e.printStackTrace();
-            serverSauce.send("pc定时任务失败", "异常信息:  " + e.getMessage() + "            ");
             applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("pc定时任务失败").body("异常信息:  " + e.getMessage() + "            ").build()));
         }
         try {
-            mobilePath = imgService.getImgListByFileSystem(apiKeyProperties.getMobilePath());
+            mobilePath = imgService.getImgListByFileSystem(apiConfig.getMobilePath());
         } catch (IOException e) {
             e.printStackTrace();
-            serverSauce.send("mobile定时任务失败", "异常信息:  " + e.getMessage() + "            ");
             applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("mobile定时任务失败").body("异常信息:  " + e.getMessage() + "            ").build()));
         }
         assert pcPath != null;

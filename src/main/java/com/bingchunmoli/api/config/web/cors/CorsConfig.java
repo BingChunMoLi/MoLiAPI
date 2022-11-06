@@ -5,6 +5,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
+ * 跨域设置
  * @author BingChunMoLi
  */
 @Configuration
@@ -18,6 +19,5 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedMethods(ORIGINS)
                 .maxAge(3600);
-//                WebMvcConfigurer.super.addCorsMappings(registry);
     }
 }

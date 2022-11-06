@@ -7,7 +7,6 @@ import com.bingchunmoli.api.weather.bean.enums.WeatherDayEnums;
 import com.bingchunmoli.api.weather.service.WeatherService;
 import com.jthinking.common.util.ip.IPInfo;
 import lombok.RequiredArgsConstructor;
-import org.lionsoul.ip2region.DbMakerConfigException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +40,7 @@ public class WeatherController {
      * @return 天气数据
      */
     @GetMapping("byDay")
-    public String getWeatherByDay(@RequestParam(defaultValue = "3") Integer day, @RequestParam String location, HttpServletRequest request) throws IOException, DbMakerConfigException {
+    public String getWeatherByDay(@RequestParam(defaultValue = "3") Integer day, @RequestParam String location, HttpServletRequest request) throws IOException {
         if (StrUtil.isBlank(location)) {
             IPInfo ipInfo = ipController.getAddress(request);
             location = ipInfo.getLng() + "," + ipInfo.getLat();
@@ -59,7 +58,6 @@ public class WeatherController {
      * @param request 获取请求IP
      * @return 当前实时天气
      * @throws IOException            内存异常或者字符编码异常
-     * @throws DbMakerConfigException ip地址数据库配置有误
      */
     @GetMapping("now")
     public String getWeatherByNow(HttpServletRequest request) throws IOException {

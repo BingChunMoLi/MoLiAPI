@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.host.bean.Host;
 import com.bingchunmoli.api.host.bean.HostTypeEnum;
 import com.bingchunmoli.api.host.mapper.HostMapper;
-import com.bingchunmoli.api.host.service.IHostService;
+import com.bingchunmoli.api.host.service.HostService;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -14,10 +14,11 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
+ * Host实现业务类
  * @author BingChunMoLi
  */
 @Service
-public class HostServiceImpl extends ServiceImpl<HostMapper, Host> implements IHostService {
+public class HostServiceImpl extends ServiceImpl<HostMapper, Host> implements HostService {
 
     @Override
     public String getHosts(List<Integer> type) {

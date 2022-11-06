@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
+ * 为createTime和updateTime自动填充
  * @author BingChunMoLi
  */
 @Component

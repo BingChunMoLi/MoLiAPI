@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
+ * 邮箱消息监听
  * @author MoLi
  */
 @Slf4j

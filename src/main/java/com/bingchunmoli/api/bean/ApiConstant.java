@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.bean;
 
 /**
+ * Api常量
  * @author BingChunMoLi
  */
 public class ApiConstant {

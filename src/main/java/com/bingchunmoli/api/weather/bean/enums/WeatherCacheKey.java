@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 天气缓存key
  * @author bingchunmoli
  */
 @Getter

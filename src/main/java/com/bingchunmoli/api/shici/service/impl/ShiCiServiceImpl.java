@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import com.bingchunmoli.api.shici.mapper.ShiCiMapper;
-import com.bingchunmoli.api.shici.service.IShiCiService;
+import com.bingchunmoli.api.shici.service.ShiCiService;
 import com.bingchunmoli.api.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +24,13 @@ import java.util.Random;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements IShiCiService {
+public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements ShiCiService {
     private final ShiCiMapper shiCiMapper;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisUtil redisUtil;
 
     @Override
-    public Object findRandomShiCi() {
+    public ShiCi findRandomShiCi() {
         if (redisUtil.isNotEnable()) {
             return shiCiMapper.findRandom();
         }
@@ -40,15 +40,15 @@ public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements
             log.info("redis数据为空,数组长度len:" + len);
             return shiCiMapper.findRandom();
         }
-        return redisTemplate.opsForList().index(ApiConstant.SHI_CI, new Random().nextInt(len.intValue()));
+        return (ShiCi) redisTemplate.opsForList().index(ApiConstant.SHI_CI, new Random().nextInt(len.intValue()));
     }
 
     @Override
-    public Object getShiCi(Integer id) {
+    public ShiCi getShiCi(Integer id) {
         if (redisUtil.isNotEnable()) {
             return this.getById(id);
         }
-        Object shiCi = redisTemplate.opsForList().index(ApiConstant.SHI_CI, id);
+        ShiCi shiCi = (ShiCi) redisTemplate.opsForList().index(ApiConstant.SHI_CI, id);
         if (shiCi == null) {
             return this.getById(id);
         }

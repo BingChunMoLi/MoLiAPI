@@ -2,7 +2,7 @@ package com.bingchunmoli.api.weather.service.impl;
 
 import cn.hutool.core.text.StrPool;
 import cn.hutool.http.HttpUtil;
-import com.bingchunmoli.api.properties.ApiKeyProperties;
+import com.bingchunmoli.api.properties.ApiConfig;
 import com.bingchunmoli.api.utils.IntegerUtil;
 import com.bingchunmoli.api.utils.StringRedisUtil;
 import com.bingchunmoli.api.weather.bean.WeatherVO;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class WeatherServiceImpl implements WeatherService {
-    private final ApiKeyProperties apiKeyProperties;
+    private final ApiConfig apiConfig;
     private final StringRedisUtil stringRedisUtil;
     private final ObjectMapper om;
 
@@ -81,11 +81,11 @@ public class WeatherServiceImpl implements WeatherService {
      */
     private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
         String joiner = "https://" +
-                apiKeyProperties.getWeatherUri() +
+                apiConfig.getWeatherUri() +
                    "/v7/weather/" +
                 day +
                 "d?key=" +
-                apiKeyProperties.getWeatherKey() +
+                apiConfig.getWeatherKey() +
                 "&location=" +
                 getLocationId(location);
         String res = HttpUtil.get(joiner);
@@ -104,9 +104,9 @@ public class WeatherServiceImpl implements WeatherService {
      */
     private String doGetWeatherByNow(String redisCacheKey, String location) throws UnsupportedEncodingException, JsonProcessingException {
         String requestUrl = "https://" +
-                apiKeyProperties.getWeatherUri() +
+                apiConfig.getWeatherUri() +
                 "/v7/weather/now?key=" +
-                apiKeyProperties.getWeatherKey() +
+                apiConfig.getWeatherKey() +
                 "&location=" +
                 getLocationId(location);
         String res = HttpUtil.get(requestUrl);
@@ -146,9 +146,9 @@ public class WeatherServiceImpl implements WeatherService {
      */
     private String doGetLocationId(String redisCacheKey, String location) throws UnsupportedEncodingException {
         String requestUrl = "https://" +
-                apiKeyProperties.getWeatherGeoUri() +
+                apiConfig.getWeatherGeoUri() +
                 "/v2/city/lookup?key=" +
-                apiKeyProperties.getWeatherKey() +
+                apiConfig.getWeatherKey() +
                 "&location=" +
                 URLEncoder.encode(location, "utf-8");
         String res = HttpUtil.get(requestUrl);

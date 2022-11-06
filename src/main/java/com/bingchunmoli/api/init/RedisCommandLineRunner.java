@@ -5,8 +5,8 @@ import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.bean.enums.ProfileEnum;
 import com.bingchunmoli.api.even.MailMessageEven;
 import com.bingchunmoli.api.img.task.ImgTask;
-import com.bingchunmoli.api.shici.service.IShiCiService;
-import com.bingchunmoli.api.yiyan.service.IYiYanService;
+import com.bingchunmoli.api.shici.service.ShiCiService;
+import com.bingchunmoli.api.yiyan.service.YiYanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,16 +20,17 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
+ * 一言，诗词，随机图初始化 仅限prod环境
  * @author BingChunMoLi
  */
 @Slf4j
 @Profile("prod")
 @Component
 @RequiredArgsConstructor
-@ConditionalOnBean(value = {IYiYanService.class, IShiCiService.class, RedisTemplate.class})
+@ConditionalOnBean(value = {YiYanService.class, ShiCiService.class, RedisTemplate.class})
 public class RedisCommandLineRunner implements CommandLineRunner {
-    private final IYiYanService yiYanService;
-    private final IShiCiService shiCiService;
+    private final YiYanService yiYanService;
+    private final ShiCiService shiCiService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ImgTask imgTask;
     private final ApplicationEventPublisher applicationEventPublisher;

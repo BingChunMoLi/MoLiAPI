@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
+ * 图片转换器及拦截器注册
  * @author bingchunmoli
  **/
 @Configuration
@@ -27,6 +28,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         converters.add(new BufferedImageHttpMessageConverter());
     }
 
+    /**
+     * 拦截器注册
+     * @param registry 拦截器注册器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(ipInterceptor).addPathPatterns("/**");

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 业务返回值包装
  * @author bingchunmoli
  */
 @Data
