@@ -8,9 +8,12 @@
 
 请求参数: emoji (emoji表情Unicode字符)
 
-请求示例:
-https://api.bingchunmoli.com/emoji/alise?emoji=😄
-
+请求示例(fetch):
+```javascript
+fetch('https://api.bingchunmoli.com/emoji/alise?emoji=😄')
+    .then(res=>res.json())
+    .then(res=>console.log(res))
+```
 成功返回示例:
 
 ```json
