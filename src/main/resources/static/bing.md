@@ -1,11 +1,3 @@
-<!--
- * @Author: 冰彦糖
- * @Date: 2020-11-17 22:53:59
- * @LastEditTime: 2021-10-9 23:06:21
- * @LastEditors: 修改以Json形式返回
- * @Description: In User Settings Edit
--->
-
 ## Bing今日美图(默认原画)
 
 1. Bing今日美图
@@ -14,8 +6,12 @@
 
 请求参数: 无
 
-请求示例:  
-https://api.bingchunmoli.com/bing/all
+请求示例(fetch):
+```javascript
+fetch('https://api.bingchunmoli.com/bing/all')
+    .then(res=>res.json())
+    .then(res=>console.log(res))
+```
 
 成功返回示例:
 > [https://api.bingchunmoli.com/bing/all](https://api.bingchunmoli.com/bing/all)

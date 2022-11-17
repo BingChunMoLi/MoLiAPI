@@ -1,6 +1,12 @@
 ## 当前公网Ip查询
 
-1. 当前公网Ip查询 请求实例: https://api.bingchunmoli.com/ip
+1. 当前公网Ip查询 
+请求示例:
+```javascript
+fetch('https://api.bingchunmoli.com/ip')
+    .then(res=>res.json())
+    .then(res=>console.log(res))
+```
 
 请求方法: Get
 
