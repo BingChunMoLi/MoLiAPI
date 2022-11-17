@@ -2,14 +2,12 @@ package com.bingchunmoli.api.init;
 
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.MailMessage;
-import com.bingchunmoli.api.bean.enums.ProfileEnum;
 import com.bingchunmoli.api.even.MailMessageEven;
 import com.bingchunmoli.api.img.task.ImgTask;
 import com.bingchunmoli.api.shici.service.ShiCiService;
 import com.bingchunmoli.api.yiyan.service.YiYanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,8 +32,7 @@ public class RedisCommandLineRunner implements CommandLineRunner {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ImgTask imgTask;
     private final ApplicationEventPublisher applicationEventPublisher;
-    @Value("${spring.profiles.active}")
-    String profile;
+
     @Override
     public void run(String... args) {
         Long yiYanLen = redisTemplate.opsForList().size(ApiConstant.YI_YAN);
@@ -46,9 +43,7 @@ public class RedisCommandLineRunner implements CommandLineRunner {
         if (shiCiLen == null || shiCiLen == 0) {
             redisTemplate.opsForList().leftPushAll(ApiConstant.SHI_CI, shiCiService.list().toArray());
         }
-        if (! ProfileEnum.DEV.getProfile().equalsIgnoreCase(profile)) {
-            imgTask.saveImg();
-        }
+        imgTask.saveImg();
         applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("系统初始化完成").body("系统初始化完成, 初始化当前时间:" + LocalDateTime.now()).build()));
     }
 }

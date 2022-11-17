@@ -23,10 +23,12 @@
         <docker-plugin.version>1.4.9</docker-plugin.version>
         <aspectjweaver.version>1.9.9.1</aspectjweaver.version>
         <hutool.version>5.8.9</hutool.version>
-        <zxing.version>3.5.0</zxing.version>
+        <zxing.version>3.5.1</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.1.214</h2.version>
-        <ip-info.version>2.1.7</ip-info.version>
+        <ip-info.version>2.2.0</ip-info.version>
+        <spring-doc.version>1.6.12</spring-doc.version>
+        <knife4j.version>3.0.3</knife4j.version>
     </properties>
 
     <dependencies>
@@ -113,6 +115,16 @@
             <groupId>com.jthinking.common</groupId>
             <artifactId>ip-info</artifactId>
             <version>${ip-info.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${spring-doc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-springdoc-ui</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 

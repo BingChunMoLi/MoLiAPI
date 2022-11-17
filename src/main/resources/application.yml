@@ -19,12 +19,6 @@ spring:
       pool-name: moliApi
   redis:
     database: 1
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        max-wait: -1
-        min-idle: 0
     connect-timeout: 3000
     timeout: 3000
   application:
