@@ -3,6 +3,7 @@ package com.bingchunmoli.api.shici.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @since 2020-11-11
  */
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = false)
 public class ShiCi implements Serializable {
 
