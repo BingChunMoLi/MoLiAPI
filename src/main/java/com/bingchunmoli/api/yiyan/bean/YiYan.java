@@ -2,9 +2,11 @@ package com.bingchunmoli.api.yiyan.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
  * @since 2020-11-11
  */
 @Data
+@Builder
 @TableName("yi_yan")
 @EqualsAndHashCode(callSuper = false)
 //@ApiModel(value = "Yiyan对象", description = "一言")
@@ -26,6 +29,7 @@ public class YiYan implements Serializable {
 
     private String uuid;
 
+    @NotNull
     private String hitokoto;
 
     private String type;
