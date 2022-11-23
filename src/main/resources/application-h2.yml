@@ -49,9 +49,11 @@ moli:
     weatherUri:
     weatherGeoUri:
     serverSauceKey:
-    pcPath:
-    mobilePath:
-    path1080:
+    pcPath: ${moli.path}img/mobile/
+    mobilePath: ${moli.path}img/pc/
+    path1080: ${moli.path}img/1080/
+    uploadTempPath: ${moli.path}upload/
+    uploadTempSecret: 123456 #一定要修改的上传密码
 logging:
   level:
     com.bingchunmoli: info
