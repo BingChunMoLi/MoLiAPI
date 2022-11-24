@@ -1,11 +1,24 @@
 package com.bingchunmoli.api.init;
 
+import com.bingchunmoli.api.bean.ApiConstant;
+import com.bingchunmoli.api.bean.Init;
+import com.bingchunmoli.api.bean.enums.DriveType;
+import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.utils.InitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author MoLi
@@ -14,13 +27,74 @@ import org.springframework.stereotype.Service;
 @Order(1)
 @Service
 @RequiredArgsConstructor
-public class InitOtherSchemaServiceImpl implements InitService {
+public class InitOtherSchemaServiceImpl implements InitSqlService {
 
     private final InitUtil initUtil;
     private final JdbcTemplate jdbcTemplate;
+    public Init init;
 
     @Override
-    public void init() {
-        initUtil.buildInit("other");
+    public void doInit() {
+        init = initUtil.buildInit("other");
+
+        initSchema();
     }
+
+    @Override
+    public boolean check() {
+        init = initUtil.buildInit(ApiConstant.SHI_CI);
+        if (init.driveType().getType() == DriveType.MYSQL.getType()) {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'bing_image';", rs -> {
+                while (rs.next()) {
+                    return true;
+                }
+                return false;
+            }));
+        } else if (DriveType.H2.getType() == init.driveType().getType()) {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES", rs -> {
+                while (rs.next()) {
+                    if ("bing_image".equals(rs.getString(1))) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
+        }
+        return true;
+    }
+
+    @Override
+    public void initSchema() {
+        String sql = "";
+        try {
+            Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toURI());
+            sql = Files.readString(path, StandardCharsets.UTF_8);
+        } catch (IOException | URISyntaxException e) {
+            throw new ApiInitException(e);
+        }
+        jdbcTemplate.execute(sql);
+    }
+
+    @Override
+    public void initDataBySql() {
+        Path path = null;
+        try {
+            path = Paths.get(ResourceUtils.getURL(init.activeDataPath()).toURI());
+        } catch (FileNotFoundException | URISyntaxException e) {
+            throw new ApiInitException(e);
+        }
+        initDataBySql(path);
+    }
+
+    @Override
+    public void initDataBySql(Path path) {
+        String sql = null;
+        try {
+            sql = Files.readString(path, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new ApiInitException(e);
+        }
+        jdbcTemplate.execute(sql);
+    }
+
 }
