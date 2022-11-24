@@ -95,11 +95,9 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
 
     @Async
     void saveCache(BingImageVO cnBingImageVO, BingImageVO enBingImageVO, BingImage bingImage) {
-        if (redisUtil.isEnable()) {
-            redisUtil.setObject(BingEnum.CN_BING.getKey(), cnBingImageVO, 1, TimeUnit.DAYS);
-            redisUtil.setObject(BingEnum.EN_BING.getKey(), enBingImageVO, 1, TimeUnit.DAYS);
-            redisUtil.setObject(BingEnum.ALL_BING.getKey(), bingImage, 1, TimeUnit.DAYS);
-        }
+        redisUtil.setObject(BingEnum.CN_BING.getKey(), cnBingImageVO, 1, TimeUnit.DAYS);
+        redisUtil.setObject(BingEnum.EN_BING.getKey(), enBingImageVO, 1, TimeUnit.DAYS);
+        redisUtil.setObject(BingEnum.ALL_BING.getKey(), bingImage, 1, TimeUnit.DAYS);
     }
 
 }
