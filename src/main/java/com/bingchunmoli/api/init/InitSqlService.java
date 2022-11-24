@@ -1,8 +1,16 @@
 package com.bingchunmoli.api.init;
 
+import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.exception.ApiInitException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.ResourceUtils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author MoLi
@@ -42,10 +50,20 @@ public interface InitSqlService extends InitService{
      */
     void initDataBySql();
 
-    /**
-     * 读取数据从sql
-     * @return 数据列表
-     */
-    void initDataBySql(Path path);
 
+
+    static void initDatabaseBySqlPath(JdbcTemplate jdbcTemplate, String activeSqlPath) {
+        String sql = "";
+        try {
+            Path path = Paths.get(ResourceUtils.getURL(activeSqlPath).toURI());
+            if (path.toFile().exists()) {
+                sql = Files.readString(path, StandardCharsets.UTF_8);
+            }
+        } catch (IOException | URISyntaxException e) {
+            throw new ApiInitException(e);
+        }
+        if (StrUtil.isNotBlank(sql)) {
+            jdbcTemplate.execute(sql);
+        }
+    }
 }

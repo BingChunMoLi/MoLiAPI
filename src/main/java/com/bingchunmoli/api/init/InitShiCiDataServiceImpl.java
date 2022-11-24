@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
 import com.bingchunmoli.api.bean.enums.DriveType;
-import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import com.bingchunmoli.api.shici.service.ShiCiService;
 import com.bingchunmoli.api.utils.InitUtil;
@@ -19,7 +18,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -85,6 +83,17 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
     }
 
     @Override
+    public void initDataBySql() {
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath());
+    }
+
+    @Override
+    public void initSchema() {
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
+    }
+
+
+    @Override
     public List<ShiCi> readAll() {
         return readAllDataByFile();
     }
@@ -108,38 +117,4 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
         }
         return list;
     }
-
-    @Override
-    public void initDataBySql() {
-        Path path = null;
-        try {
-            path = Paths.get(ResourceUtils.getURL(init.activeDataPath()).toURI());
-        } catch (FileNotFoundException | URISyntaxException e) {
-            throw new ApiInitException(e);
-        }
-        initDataBySql(path);
-    }
-
-    @Override
-    public void initDataBySql(Path path) {
-        String sql = null;
-        try {
-            sql = Files.readString(path, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new ApiInitException(e);
-        }
-        jdbcTemplate.execute(sql);
-    }
-
-    @Override
-    public void initSchema() {
-        String sql = "";
-        try {Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toURI());
-            sql = Files.readString(path, StandardCharsets.UTF_8);
-        } catch (IOException | URISyntaxException e) {
-            throw new ApiInitException(e);
-        }
-        jdbcTemplate.execute(sql);
-    }
-
 }
