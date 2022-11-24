@@ -51,7 +51,11 @@ public interface InitSqlService extends InitService{
     void initDataBySql();
 
 
-
+    /**
+     * 读取sql文件并执行(初始化动作)
+     * @param jdbcTemplate jdbcTemplate
+     * @param activeSqlPath sql文件路径
+     */
     static void initDatabaseBySqlPath(JdbcTemplate jdbcTemplate, String activeSqlPath) {
         String sql = "";
         try {
