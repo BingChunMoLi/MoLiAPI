@@ -1,7 +1,6 @@
 package com.bingchunmoli.api.utils;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.ScanOptions;
@@ -21,23 +20,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class StringRedisUtil {
     private final StringRedisTemplate redisTemplate;
-    /**
-     * Login username of the redis server.
-     */
-    private static boolean isEnable;
 
-    @Value("${spring.redis.enable}")
-    public void setIsEnable(boolean isEnable) {
-        StringRedisUtil.isEnable = isEnable;
-    }
-
-    public boolean isEnable(){
-        return isEnable;
-    }
-
-    public boolean isNotEnable(){
-        return !isEnable;
-    }
 
     /**
      * 删除key
