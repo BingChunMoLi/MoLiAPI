@@ -26,9 +26,6 @@ public class IpInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (redisUtil.isNotEnable()) {
-            return true;
-        }
         String requestURI = request.getRequestURI();
         String clientIP = ServletUtil.getClientIP(request);
         String key = "filter:" + requestURI + ":" + clientIP + ":" + request.getRequestedSessionId();

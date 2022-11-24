@@ -1,12 +1,15 @@
 package com.bingchunmoli.api.init;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
+import com.bingchunmoli.api.bean.enums.DriveType;
 import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import com.bingchunmoli.api.shici.service.ShiCiService;
 import com.bingchunmoli.api.utils.InitUtil;
 import com.bingchunmoli.api.utils.RedisUtil;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,34 +39,49 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
     private final JdbcTemplate jdbcTemplate;
     private final InitUtil initUtil;
     private final ShiCiService shiCiService;
+    @Getter
     private Init init;
 
     @Override
     public void doInit() {
         List<ShiCi> shiCis = Collections.emptyList();
-        if (init.driveType().getType() == 0) {
+        if (init.driveType().getType() == DriveType.NONE.getType()) {
              shiCis = readAll();
         } else {
             initSchema();
             initDataBySql();
             shiCis = shiCiService.list();
         }
-        if (init.cacheEnable()) {
+        if (CollectionUtil.isNotEmpty(shiCis)) {
             redisUtil.setList(ApiConstant.SHI_CI, shiCis);
-        } else {
-            throw new ApiInitException("暂不支持无数据库,无缓存的情况下初始化");
+        }else {
+            if (log.isWarnEnabled()) {
+                log.warn("诗词数据为空");
+            }
         }
     }
 
     @Override
     public boolean check() {
-        init = initUtil.buildInit();
-        return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'shi_ci';", rs -> {
-            while (rs.next()) {
-                return true;
-            }
-            return false;
-        }));
+        init = initUtil.buildInit(ApiConstant.SHI_CI);
+        if (init.driveType().getType() == DriveType.MYSQL.getType()) {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'shi_ci';", rs -> {
+                while (rs.next()) {
+                    return true;
+                }
+                return false;
+            }));
+        } else if (DriveType.H2.getType() == init.driveType().getType()) {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES", rs -> {
+                while (rs.next()) {
+                    if ("shi_ci".equals(rs.getString(1))) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
+        }
+        return true;
     }
 
     @Override
@@ -116,29 +134,10 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
     @Override
     public void initSchema() {
         String sql = "";
-        try {
-            Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toString());
+        try {Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toURI());
             sql = Files.readString(path, StandardCharsets.UTF_8);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new ApiInitException(e);
-        }
-        if (sql.isBlank()) {
-            sql = """
-                    -- api.shi_ci definition
-                    CREATE TABLE `shi_ci`
-                    (
-                        `id`          int NOT NULL AUTO_INCREMENT,
-                        `content`     varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `origin`      varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `author`      varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci  DEFAULT NULL,
-                        `category`    varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `deleted`     int                                                     DEFAULT '0' ,
-                        `create_time` datetime                                                DEFAULT NULL,
-                        `update_time` datetime                                                DEFAULT NULL,
-                        `version`     int                                                     DEFAULT NULL,
-                        PRIMARY KEY (`id`) USING BTREE
-                    ) ENGINE = InnoDB AUTO_INCREMENT = 4001 DEFAULT CHARSET = utf8 ROW_FORMAT = DYNAMIC;
-                     """;
         }
         jdbcTemplate.execute(sql);
     }

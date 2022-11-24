@@ -20,17 +20,19 @@ public class InitUtil {
     private final RedisUtil redisUtil;
     private final JdbcTemplate jdbcTemplate;
 
-    public Init buildInit() {
+    public Init buildInit(String plantForm) {
+        String activePlantFrom = plantForm.toLowerCase();
+        DriveType driveType = null;
         try {
-            if (jdbcTemplate.getDataSource().getConnection().getMetaData().getDriverName().toUpperCase().contains(DriveType.MYSQL.getDriveName())) {
-                return new Init(DriveType.MYSQL, redisUtil.isEnable(), ApiConstant.YI_YAN_SCHEMA_PATH_MYSQL, ApiConstant.YI_YAN_DATA_PATH_MYSQL);
-            }else {
-                return new Init(DriveType.H2, redisUtil.isEnable(), ApiConstant.YI_YAN_SCHEMA_PATH_H2, ApiConstant.YI_YAN_DATA_PATH_H2);
-            }
+            driveType = jdbcTemplate.getDataSource().getConnection().getMetaData().getDriverName().toUpperCase().contains(DriveType.MYSQL.getDriveName()) ? DriveType.MYSQL : DriveType.H2;
         } catch (SQLException e) {
             log.warn("初始化时没有数据库", e);
-            return new Init(DriveType.NONE, redisUtil.isEnable(), null, null);
+            String activeDataFilePath = plantForm.equals(ApiConstant.YI_YAN) ? ApiConstant.YI_YAN_DATA_PATH : ApiConstant.SHI_CI_DATA_PATH;
+            return new Init(DriveType.NONE,activeDataFilePath, null, null);
         }
+        String activeSchemaPath = ApiConstant.SCHEMA_PATH_PREFIX + driveType.getDriveName().toLowerCase() + "-" + activePlantFrom + ApiConstant.SQL_PATH_SUFFIX;
+        String activeDataPath = ApiConstant.DATA_PATH_PREFIX + driveType.getDriveName().toLowerCase() + "-" + activePlantFrom + ApiConstant.SQL_PATH_SUFFIX;
+        return new Init(driveType, null, activeSchemaPath, activeDataPath);
     }
 
 }

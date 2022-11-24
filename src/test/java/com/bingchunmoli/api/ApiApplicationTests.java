@@ -2,7 +2,6 @@ package com.bingchunmoli.api;
 
 import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ class ApiApplicationTests {
     private ApiConfig apiConfig;
 
     @BeforeEach
-    void before(){
+    void before() {
         if (log.isDebugEnabled()) {
             log.debug("apiKeyProperties: {}", apiConfig);
         }
@@ -30,7 +29,7 @@ class ApiApplicationTests {
     @Value("${moli.path}")
     private String initPath;
 
-    @BeforeAll
+    @BeforeEach
     void init() throws IOException {
         Path path = Paths.get(initPath);
         if (!path.toFile().exists()) {

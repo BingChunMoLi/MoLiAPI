@@ -1,12 +1,15 @@
 package com.bingchunmoli.api.init;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
+import com.bingchunmoli.api.bean.enums.DriveType;
 import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.utils.InitUtil;
 import com.bingchunmoli.api.utils.RedisUtil;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.service.YiYanService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,6 +39,7 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     private final JdbcTemplate jdbcTemplate;
     private final InitUtil initUtil;
     private final YiYanService yiYanService;
+    @Getter
     private Init init;
 
     @Override
@@ -46,24 +50,38 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
         }else {
             initSchema();
             initDataBySql();
-            yiYanService.list();
+            yiYans = yiYanService.list();
         }
-        if (init.cacheEnable()) {
+        if (CollectionUtil.isNotEmpty(yiYans)) {
             redisUtil.setList(ApiConstant.YI_YAN, yiYans);
         }else {
-            throw new ApiInitException("暂不支持无数据库,无缓存的情况下初始化");
+            if (log.isWarnEnabled()) {
+                log.warn("一言数据为空");
+            }
         }
     }
 
     @Override
     public boolean check() {
-        init = initUtil.buildInit();
-        return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'yi_yan';", rs -> {
-            while (rs.next()) {
-                return true;
-            }
-            return false;
-        }));
+        init = initUtil.buildInit(ApiConstant.YI_YAN);
+        if (init.driveType().getType() == DriveType.MYSQL.getType()) {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'yi_yan';", rs -> {
+                while (rs.next()) {
+                    return true;
+                }
+                return false;
+            }));
+        } else if (DriveType.H2.getType() == init.driveType().getType()) {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES", rs -> {
+                while (rs.next()) {;
+                    if ("yi_yan".equals(rs.getString(1))) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
+        }
+        return true;
     }
 
     @Override
@@ -117,33 +135,10 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     public void initSchema() {
         String sql = "";
         try {
-            Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toString());
+            Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toURI());
             sql = Files.readString(path, StandardCharsets.UTF_8);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new ApiInitException(e);
-        }
-        if (sql.isBlank()) {
-            sql = """
-                    CREATE TABLE `yi_yan` (
-                                              `id` int NOT NULL,
-                                              `uuid` char(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `hitokoto` char(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `type` char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `from` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `from_who` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `creator` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `creator_uid` int DEFAULT NULL,
-                                              `reviewer` int DEFAULT NULL,
-                                              `commit_from` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `created_at` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                              `length` int DEFAULT NULL,
-                                              `deleted` int DEFAULT '0',
-                                              `create_time` datetime DEFAULT NULL,
-                                              `update_time` datetime DEFAULT NULL,
-                                              `version` int DEFAULT NULL,
-                                              PRIMARY KEY (`id`) USING BTREE
-                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
-                                """;
         }
         jdbcTemplate.execute(sql);
     }
