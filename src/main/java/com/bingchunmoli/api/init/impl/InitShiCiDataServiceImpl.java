@@ -1,13 +1,15 @@
-package com.bingchunmoli.api.init;
+package com.bingchunmoli.api.init.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
 import com.bingchunmoli.api.bean.enums.DriveType;
+import com.bingchunmoli.api.init.InitDataService;
+import com.bingchunmoli.api.init.InitSqlService;
+import com.bingchunmoli.api.shici.bean.ShiCi;
+import com.bingchunmoli.api.shici.service.ShiCiService;
 import com.bingchunmoli.api.utils.InitUtil;
 import com.bingchunmoli.api.utils.RedisUtil;
-import com.bingchunmoli.api.yiyan.bean.YiYan;
-import com.bingchunmoli.api.yiyan.service.YiYanService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,38 +34,38 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
+public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
     private final RedisUtil redisUtil;
     private final JdbcTemplate jdbcTemplate;
     private final InitUtil initUtil;
-    private final YiYanService yiYanService;
+    private final ShiCiService shiCiService;
     @Getter
     private Init init;
 
     @Override
     public void doInit() {
-        List<YiYan> yiYans = Collections.emptyList();
-        if (init.driveType().getType() == 0) {
-            yiYans = readAll();
-        }else {
+        List<ShiCi> shiCis = Collections.emptyList();
+        if (init.driveType().getType() == DriveType.NONE.getType()) {
+             shiCis = readAll();
+        } else {
             initSchema();
             initDataBySql();
-            yiYans = yiYanService.list();
+            shiCis = shiCiService.list();
         }
-        if (CollectionUtil.isNotEmpty(yiYans)) {
-            redisUtil.setList(ApiConstant.YI_YAN, yiYans);
+        if (CollectionUtil.isNotEmpty(shiCis)) {
+            redisUtil.setList(ApiConstant.SHI_CI, shiCis);
         }else {
             if (log.isWarnEnabled()) {
-                log.warn("一言数据为空");
+                log.warn("诗词数据为空");
             }
         }
     }
 
     @Override
     public boolean check() {
-        init = initUtil.buildInit(ApiConstant.YI_YAN);
+        init = initUtil.buildInit(ApiConstant.SHI_CI);
         if (init.driveType().getType() == DriveType.MYSQL.getType()) {
-            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'yi_yan';", rs -> {
+            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'shi_ci';", rs -> {
                 while (rs.next()) {
                     return true;
                 }
@@ -71,8 +73,8 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
             }));
         } else if (DriveType.H2.getType() == init.driveType().getType()) {
             return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES", rs -> {
-                while (rs.next()) {;
-                    if ("yi_yan".equals(rs.getString(1))) {
+                while (rs.next()) {
+                    if ("shi_ci".equals(rs.getString(1))) {
                         return true;
                     }
                 }
@@ -83,22 +85,23 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     }
 
     @Override
-    public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
-    }
-
-    @Override
     public void initDataBySql() {
         InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath());
     }
 
     @Override
-    public List<YiYan> readAll() {
+    public void initSchema() {
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
+    }
+
+
+    @Override
+    public List<ShiCi> readAll() {
         return readAllDataByFile();
     }
 
     @Override
-    public List<YiYan> readAllDataByFile() {
+    public List<ShiCi> readAllDataByFile() {
         try {
             return readAllDataByFile(Paths.get(ResourceUtils.getURL(ApiConstant.YI_YAN_DATA_PATH).toURI()));
         } catch (URISyntaxException | FileNotFoundException e) {
@@ -107,10 +110,10 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     }
 
     @Override
-    public List<YiYan> readAllDataByFile(Path path) {
-        List<YiYan> list = new ArrayList<>();
+    public List<ShiCi> readAllDataByFile(Path path) {
+        List<ShiCi> list = new ArrayList<>();
         try (Stream<String> stream = Files.lines(path)) {
-            stream.forEach(v -> list.add(YiYan.builder().hitokoto(v).build()));
+            stream.forEach(v -> list.add(ShiCi.builder().content(v).build()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

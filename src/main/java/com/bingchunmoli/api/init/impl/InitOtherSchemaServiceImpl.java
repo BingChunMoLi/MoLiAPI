@@ -1,8 +1,9 @@
-package com.bingchunmoli.api.init;
+package com.bingchunmoli.api.init.impl;
 
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
 import com.bingchunmoli.api.bean.enums.DriveType;
+import com.bingchunmoli.api.init.InitSqlService;
 import com.bingchunmoli.api.utils.InitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
