@@ -3,22 +3,12 @@ package com.bingchunmoli.api.init;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
 import com.bingchunmoli.api.bean.enums.DriveType;
-import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.utils.InitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * @author MoLi
@@ -65,36 +55,13 @@ public class InitOtherSchemaServiceImpl implements InitSqlService {
 
     @Override
     public void initSchema() {
-        String sql = "";
-        try {
-            Path path = Paths.get(ResourceUtils.getURL(init.activeSchemaPath()).toURI());
-            sql = Files.readString(path, StandardCharsets.UTF_8);
-        } catch (IOException | URISyntaxException e) {
-            throw new ApiInitException(e);
-        }
-        jdbcTemplate.execute(sql);
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
     }
 
     @Override
     public void initDataBySql() {
-        Path path = null;
-        try {
-            path = Paths.get(ResourceUtils.getURL(init.activeDataPath()).toURI());
-        } catch (FileNotFoundException | URISyntaxException e) {
-            throw new ApiInitException(e);
-        }
-        initDataBySql(path);
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath());
     }
 
-    @Override
-    public void initDataBySql(Path path) {
-        String sql = null;
-        try {
-            sql = Files.readString(path, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new ApiInitException(e);
-        }
-        jdbcTemplate.execute(sql);
-    }
 
 }
