@@ -26,19 +26,6 @@ public class InitTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    void test(){
-        Boolean query = jdbcTemplate.query("SHOW TABLES LIKE 'yi_yan';", rs -> {
-            while (rs.next()) {
-                String string = rs.getString(1);
-                log.info("test: {}", string);
-                return true;
-            }
-            return false;
-        });
-        System.out.println(query);
-    }
-
-    @Test
     void test2() throws IOException, URISyntaxException, SQLException {
         String location = "classpath:db/schema-mysql-yiyan.sql";
         URL url = ResourceUtils.getURL(location);
@@ -53,6 +40,7 @@ public class InitTest {
     }
     @Autowired
     private Map<String, InitService> initServiceMap;
+
     @Test
     void context(){
         for (InitService service:initServiceMap.values()) {

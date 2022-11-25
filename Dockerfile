@@ -1,5 +1,5 @@
 # 基础镜像
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 # 作者信息
 MAINTAINER  BingChunMoLi <bingchunmoli@foxmail.com>

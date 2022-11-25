@@ -2,6 +2,7 @@ package com.bingchunmoli.api.host.parse;
 
 import com.bingchunmoli.api.host.bean.Host;
 import com.bingchunmoli.api.host.service.HostService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,9 @@ public class HostParseTest {
 
     @Autowired
     private HostService hostService;
+
     @Test
+    @Disabled
     void HostParseFromFile(){
         try {
             List<Host> list = HostParse.parseFromFile("D:\\hosts.local", "local");
@@ -23,7 +26,9 @@ public class HostParseTest {
             e.printStackTrace();
         }
     }
+
     @Test
+    @Disabled
     void HostParseFromFileAD(){
         try {
             List<Host> list = HostParse.parseFromFile("D:\\hosts.ad", "myAd");

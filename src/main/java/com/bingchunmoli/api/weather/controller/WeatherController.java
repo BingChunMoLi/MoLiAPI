@@ -26,7 +26,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("weather")
-@ConditionalOnProperty(prefix = "moli.api-config", name = {"weather-key", "weather-uri", "weather-geo-uri"})
+@ConditionalOnProperty(prefix = "moli.api-config", name = {"weatherKey"})
 public class WeatherController {
 
     private final WeatherService weatherService;
