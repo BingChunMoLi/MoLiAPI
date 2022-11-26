@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -44,7 +43,7 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
 
     @Override
     public void doInit() {
-        List<ShiCi> shiCis = Collections.emptyList();
+        List<ShiCi> shiCis;
         if (init.driveType().getType() == DriveType.NONE.getType()) {
              shiCis = readAll();
         } else {
@@ -64,24 +63,7 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
     @Override
     public boolean check() {
         init = initUtil.buildInit(ApiConstant.SHI_CI);
-        if (init.driveType().getType() == DriveType.MYSQL.getType()) {
-            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'shi_ci';", rs -> {
-                while (rs.next()) {
-                    return true;
-                }
-                return false;
-            }));
-        } else if (DriveType.H2.getType() == init.driveType().getType()) {
-            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES", rs -> {
-                while (rs.next()) {
-                    if ("shi_ci".equals(rs.getString(1))) {
-                        return true;
-                    }
-                }
-                return false;
-            }));
-        }
-        return true;
+        return InitSqlService.checkTableIsExist(init.driveType(), jdbcTemplate, ApiConstant.SHI_CI_TABLE_NAME);
     }
 
     @Override
