@@ -3,7 +3,6 @@ package com.bingchunmoli.api.init.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
-import com.bingchunmoli.api.bean.enums.DriveType;
 import com.bingchunmoli.api.init.InitDataService;
 import com.bingchunmoli.api.init.InitSqlService;
 import com.bingchunmoli.api.utils.InitUtil;
@@ -64,24 +63,7 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     @Override
     public boolean check() {
         init = initUtil.buildInit(ApiConstant.YI_YAN);
-        if (init.driveType().getType() == DriveType.MYSQL.getType()) {
-            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'yi_yan';", rs -> {
-                while (rs.next()) {
-                    return true;
-                }
-                return false;
-            }));
-        } else if (DriveType.H2.getType() == init.driveType().getType()) {
-            return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES", rs -> {
-                while (rs.next()) {;
-                    if ("yi_yan".equals(rs.getString(1))) {
-                        return true;
-                    }
-                }
-                return false;
-            }));
-        }
-        return true;
+        return InitSqlService.checkTableIsExist(init.driveType(), jdbcTemplate, ApiConstant.YI_YAN_TABLE_NAME);
     }
 
     @Override
