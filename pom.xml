@@ -21,7 +21,7 @@
         <swagger.version>3.0.0</swagger.version>
         <knife4j.version>3.0.3</knife4j.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <aspectjweaver.version>1.9.9.1</aspectjweaver.version>
+        <aspectjweaver.version>1.9.19</aspectjweaver.version>
         <hutool.version>5.8.10</hutool.version>
         <zxing.version>3.5.1</zxing.version>
         <emoji.version>5.1.1</emoji.version>
