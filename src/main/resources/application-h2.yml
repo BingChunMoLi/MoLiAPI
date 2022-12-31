@@ -14,11 +14,12 @@ spring:
     default-encoding: UTF-8
     protocol: smtps
     defaultTo:
-  redis:
-    database: 1
-    password:
-    port: 6379
-    host: localhost
+  data:
+    redis:
+      password:
+      port: 6379
+      host: localhost
+      database: 1
 management:
   #  endpoints:
   #    web:

@@ -3,12 +3,12 @@ package com.bingchunmoli.api.init;
 import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.bean.enums.DriveType;
 import com.bingchunmoli.api.exception.ApiInitException;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.ResourceUtils;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;

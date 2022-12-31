@@ -17,14 +17,15 @@ spring:
     hikari:
       connection-test-query: SELECT 1
       pool-name: moliApi
-  redis:
-    database: 1
-    connect-timeout: 3000
-    timeout: 3000
   application:
     name: MoLiApi
   profiles:
-    active: h2
+    active: dev
+  data:
+    redis:
+      database: 1
+      connect-timeout: 3000
+      timeout: 3000
 mybatis-plus:
   configuration:
     cache-enabled: true

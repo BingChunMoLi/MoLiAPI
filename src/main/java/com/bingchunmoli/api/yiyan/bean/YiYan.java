@@ -1,12 +1,15 @@
 package com.bingchunmoli.api.yiyan.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.bingchunmoli.api.bean.ApiConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -17,11 +20,12 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
-@TableName("yi_yan")
+@TableName(ApiConstant.YI_YAN_TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
-//@ApiModel(value = "Yiyan对象", description = "一言")
+@Schema(name = "一言", description = "一言")
 public class YiYan implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO) //主键自增 数据库中需要设置主键自增
