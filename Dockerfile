@@ -1,11 +1,11 @@
 # 基础镜像
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 # 作者信息
 MAINTAINER  BingChunMoLi <bingchunmoli@foxmail.com>
 
 # 添加一个存储空间
-VOLUME /api
+VOLUME ~/.api/
 
 # 暴露8090端口
 EXPOSE 8090
@@ -14,7 +14,7 @@ EXPOSE 8090
 ARG JAR_FILE
 
 # 往容器中添加jar包
-ADD /target/${JAR_FILE} /api/app.jar
+ADD /target/${JAR_FILE} ~/.api/app.jar
 
 # 启动镜像自动运行程序
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","/api/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","~/.api/app.jar"]

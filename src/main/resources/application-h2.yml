@@ -5,16 +5,6 @@ spring:
     url: jdbc:h2:file:~/.api/api.db;MODE=MySQL;AUTO_SERVER=TRUE;DATABASE_TO_LOWER=TRUE;database_to_upper=false;
     username: root
     password: root
-  sql:
-    init:
-      schema-locations: classpath:db/schema-h2.sql
-      data-locations: classpath:/db/data-h2.sql
-      username: root
-      password: root
-      encoding: UTF-8
-      platform: h2
-      mode: ALWAYS
-      continue-on-error: true
   mail:
     enable: false
     host:
@@ -24,12 +14,12 @@ spring:
     default-encoding: UTF-8
     protocol: smtps
     defaultTo:
-  redis:
-    enable: false
-    database: 1
-    password:
-    port: 6379
-    host: localhost
+  data:
+    redis:
+      password:
+      port: 6379
+      host: localhost
+      database: 1
 management:
   #  endpoints:
   #    web:
@@ -49,9 +39,11 @@ moli:
     weatherUri:
     weatherGeoUri:
     serverSauceKey:
-    pcPath:
-    mobilePath:
-    path1080:
+    pcPath: ${moli.path}img/mobile/
+    mobilePath: ${moli.path}img/pc/
+    path1080: ${moli.path}img/1080/
+    uploadTempPath: ${moli.path}upload/
+    uploadTempSecret: 123456 #一定要修改的上传密码
 logging:
   level:
     com.bingchunmoli: info

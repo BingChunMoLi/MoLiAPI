@@ -1,7 +1,6 @@
 package com.bingchunmoli.api.utils;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,27 +18,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisUtil {
     private final RedisTemplate redisTemplate;
-    private static boolean isEnable;
-
-    @Value("${spring.redis.enable}")
-    public void setIsEnable(boolean isEnable) {
-        RedisUtil.isEnable = isEnable;
-    }
-    /**
-     * 是否配置了redis的用户名去判断是否启用redis
-     * @return 开启状态，true为username不为null表示开启
-     */
-    public boolean isEnable(){
-        return isEnable;
-    }
-
-    /**
-     * 是否配置了redis的用户名去判断是否启用redis
-     * @return 开启状态，true为username为null表示不开启
-     */
-    public boolean isNotEnable(){
-        return !isEnable;
-    }
 
     /**
      * 缓存基本的对象，Integer、String、实体类等

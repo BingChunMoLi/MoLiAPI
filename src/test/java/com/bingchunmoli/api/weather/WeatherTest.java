@@ -23,7 +23,7 @@ public class WeatherTest {
     private WeatherService weatherService;
 
     @AfterEach
-    void afterAll(){
+    void afterEach(){
 
     }
 
@@ -35,6 +35,9 @@ public class WeatherTest {
 
     @Test
     void serviceTest() throws UnsupportedEncodingException, JsonProcessingException {
+        if (weatherController == null) {
+            return;
+        }
         IPInfo ipInfo = IPInfoUtils.getIpInfo("");
         String address = weatherService.getWeatherByNow(ipInfo.getLng() + "," + ipInfo.getLat());
         log.info("addressResult: {}", address);

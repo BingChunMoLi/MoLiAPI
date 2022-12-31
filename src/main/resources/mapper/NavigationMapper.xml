@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bingchunmoli.api.navigation.mapper.NavigationMapper">
+
+    <resultMap id="navigation" type="com.bingchunmoli.api.navigation.bean.Navigation">
+        <id column="id" property="id"/>
+        <result column="title" property="title" />
+        <result column="url" property="url" />
+        <result column="icon" property="icon" />
+        <result column="des" property="des" />
+        <result column="tenant" property="tenant" />
+        <collection property="tagList">
+            <id column="id" property="id"/>
+            <result column="tag_name" property="tagName"/>
+            <result column="is_open" property="isOpen"/>
+            <result column="is_private" property="isPrivate"/>
+            <result column="pwd" property="pwd"/>
+        </collection>
+    </resultMap>
+
+    <select id="getNavigationsList" resultMap="navigation">
+        select navigation.id, title, des, `url`, icon, tenant, tag_name, is_open, is_private, pwd
+        from navigation
+                 left join navigation_tag on navigation.id = navigation_tag.navigation_id
+                 left join tag on tag.id = navigation_tag.tag_id
+        where navigation.tenant = #{tenant}
+    </select>
+</mapper>

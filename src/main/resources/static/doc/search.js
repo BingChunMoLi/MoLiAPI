@@ -242,6 +242,12 @@ api[0].list[8].list.push({
     url: 'https://api.bingchunmoli.com/temp/clipboard',
     desc: '临时剪贴板',
 });
+api[0].list[8].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/temp/clipboard',
+    desc: '获取临时剪贴板的内容',
+});
 api[0].list.push({
     alias: 'QrCodeController',
     order: '10',

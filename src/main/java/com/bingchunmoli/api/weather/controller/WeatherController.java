@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -26,7 +26,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("weather")
-@ConditionalOnProperty(prefix = "moli.api-config", name = {"weather-key", "weather-uri", "weather-geo-uri"})
+@ConditionalOnProperty(prefix = "moli.api-config", name = {"weatherKey"})
 public class WeatherController {
 
     private final WeatherService weatherService;
