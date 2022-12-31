@@ -1,15 +1,16 @@
 package com.bingchunmoli.api.interceptor;
 
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.bingchunmoli.api.utils.RedisUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,12 +26,9 @@ public class IpInterceptor implements HandlerInterceptor {
 
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (redisUtil.isNotEnable()) {
-            return true;
-        }
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         String requestURI = request.getRequestURI();
-        String clientIP = ServletUtil.getClientIP(request);
+        String clientIP = JakartaServletUtil.getClientIP(request);
         String key = "filter:" + requestURI + ":" + clientIP + ":" + request.getRequestedSessionId();
         Integer value = redisUtil.getObject(key);
         if (value != null && value > 10) {

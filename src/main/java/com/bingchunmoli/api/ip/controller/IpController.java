@@ -1,12 +1,11 @@
 package com.bingchunmoli.api.ip.controller;
 
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.jthinking.common.util.ip.IPInfo;
 import com.jthinking.common.util.ip.IPInfoUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 来源IP
@@ -22,7 +21,7 @@ public class IpController {
      */
     @GetMapping("ip")
     public String ip(HttpServletRequest request) {
-        return ServletUtil.getClientIP(request, (String[]) null);
+        return JakartaServletUtil.getClientIP(request, (String[]) null);
     }
 
     /**

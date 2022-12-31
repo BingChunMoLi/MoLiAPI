@@ -34,9 +34,6 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Override
     public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
-        if (stringRedisUtil.isNotEnable()) {
-            return "redis未启用，不支持此功能";
-        }
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteget(location)) {
             // 按经维度查询 或者 id查询
             return getWeatherByDayCommon(day, location);
@@ -47,9 +44,6 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Override
     public String getWeatherByNow(String address) throws UnsupportedEncodingException, JsonProcessingException {
-        if (stringRedisUtil.isNotEnable()) {
-            return "redis未启用，不支持此功能";
-        }
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         return Optional.ofNullable(redisCache).orElse(doGetWeatherByNow(redisCacheKey, address));

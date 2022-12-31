@@ -24,9 +24,6 @@ public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements
 
     @Override
     public YiYan findRandomYiYan() {
-        if (redisUtil.isNotEnable()) {
-            return yiYanMapper.findRandom();
-        }
         Long len = redisTemplate.opsForList().size(ApiConstant.YI_YAN);
         if (len == null || len == 0) {
             return yiYanMapper.findRandom();
@@ -36,9 +33,6 @@ public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements
 
     @Override
     public YiYan getYiYan(Integer id) {
-        if (redisUtil.isNotEnable()) {
-            return this.getById(id);
-        }
         YiYan yiYan = (YiYan) redisTemplate.opsForList().index(ApiConstant.YI_YAN, id);
         if (yiYan == null) {
             return this.getById(id);

@@ -1,0 +1,31 @@
+version: 3.8
+services:
+  moliapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    depends_on:
+      - mysql
+      - redis
+    links:
+      - mysql
+      - redis
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ~/.api/mysql/data/:/var/lib/mysql
+      - ~/.api/mysql/conf/:/etc/mysql
+      - ~/.api/mysql/log/:/var/log/mysql
+    ports:
+      - "3306:3006"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"

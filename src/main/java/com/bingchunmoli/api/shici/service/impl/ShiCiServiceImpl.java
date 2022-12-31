@@ -31,9 +31,6 @@ public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements
 
     @Override
     public ShiCi findRandomShiCi() {
-        if (redisUtil.isNotEnable()) {
-            return shiCiMapper.findRandom();
-        }
         Long len = redisTemplate.opsForList().size(ApiConstant.SHI_CI);
         log.debug("redis中数据长度为" + len);
         if (len == null || len == 0) {
@@ -45,9 +42,6 @@ public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements
 
     @Override
     public ShiCi getShiCi(Integer id) {
-        if (redisUtil.isNotEnable()) {
-            return this.getById(id);
-        }
         ShiCi shiCi = (ShiCi) redisTemplate.opsForList().index(ApiConstant.SHI_CI, id);
         if (shiCi == null) {
             return this.getById(id);
