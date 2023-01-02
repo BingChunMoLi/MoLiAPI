@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <mybatis-plus.version>3.5.3</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <swagger.version>3.0.0</swagger.version>
         <knife4j.version>3.0.3</knife4j.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
