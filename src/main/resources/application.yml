@@ -11,6 +11,10 @@ server:
       enabled: true
       pattern: "%t %a %r %s (%D ms)"
 spring:
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
