@@ -146,21 +146,11 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${docker-plugin.version}</version>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>default</id>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
                 <configuration>
                     <repository>${project.artifactId}</repository>
                     <tag>latest</tag>
                     <tag>${project.version}</tag>
                     <buildArgs>
-<!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
                         <JAR_FILE>${project.artifactId}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
