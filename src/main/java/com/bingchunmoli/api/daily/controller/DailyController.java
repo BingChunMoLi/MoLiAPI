@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DailyController {
 
-    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://cloud.tencent.com/act/integralmall?from=13925", "https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
+    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
 
     /**
      * 获取每日签到网址列表
