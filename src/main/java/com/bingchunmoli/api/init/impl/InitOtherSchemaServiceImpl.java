@@ -1,12 +1,12 @@
 package com.bingchunmoli.api.init.impl;
 
-import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.bean.Init;
 import com.bingchunmoli.api.bean.enums.DriveType;
 import com.bingchunmoli.api.init.InitSqlService;
 import com.bingchunmoli.api.utils.InitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -23,17 +23,17 @@ public class InitOtherSchemaServiceImpl implements InitSqlService {
     private final InitUtil initUtil;
     private final JdbcTemplate jdbcTemplate;
     public Init init;
+    @Value("spring.profiles.active")
+    private String profile;
 
     @Override
     public void doInit() {
-        init = initUtil.buildInit("other");
-
         initSchema();
     }
 
     @Override
     public boolean check() {
-        init = initUtil.buildInit(ApiConstant.SHI_CI);
+        init = initUtil.buildInit("other", profile);
         if (init.driveType().getType() == DriveType.MYSQL.getType()) {
             return Boolean.TRUE.equals(jdbcTemplate.query("SHOW TABLES LIKE 'bing_image';", rs -> {
                 while (rs.next()) {
@@ -56,12 +56,12 @@ public class InitOtherSchemaServiceImpl implements InitSqlService {
 
     @Override
     public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath(), profile);
     }
 
     @Override
     public void initDataBySql() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath());
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath(), profile);
     }
 
 

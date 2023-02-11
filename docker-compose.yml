@@ -1,4 +1,4 @@
-version: 3.8
+version: "3.8"
 services:
   moliapi:
     build:
@@ -6,6 +6,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8090:8090"
+    volumes:
+      - ~/.api/upload/:/root/.api/upload/
+      - ~/.api/image/:/root/.api/image/
     depends_on:
       - mysql
       - redis
@@ -16,12 +19,13 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: api
     volumes:
       - ~/.api/mysql/data/:/var/lib/mysql
-      - ~/.api/mysql/conf/:/etc/mysql
       - ~/.api/mysql/log/:/var/log/mysql
+      - ./src/main/resources/db:/docker-entrypoint-initdb.d/
     ports:
-      - "3306:3006"
+      - "3306:3306"
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_general_ci
@@ -29,3 +33,5 @@ services:
     image: redis
     ports:
       - "6379:6379"
+    volumes:
+      - ~/.api/redis/conf/:/etc/redis/

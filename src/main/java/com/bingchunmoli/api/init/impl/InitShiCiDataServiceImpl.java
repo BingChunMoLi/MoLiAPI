@@ -13,6 +13,7 @@ import com.bingchunmoli.api.utils.RedisUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
@@ -38,6 +39,8 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
     private final JdbcTemplate jdbcTemplate;
     private final InitUtil initUtil;
     private final ShiCiService shiCiService;
+    @Value("spring.profiles.active")
+    private String profile;
     @Getter
     private Init init;
 
@@ -62,18 +65,18 @@ public class InitShiCiDataServiceImpl implements InitDataService<ShiCi> {
 
     @Override
     public boolean check() {
-        init = initUtil.buildInit(ApiConstant.SHI_CI);
+        init = initUtil.buildInit(ApiConstant.SHI_CI, profile);
         return InitSqlService.checkTableIsExist(init.driveType(), jdbcTemplate, ApiConstant.SHI_CI_TABLE_NAME);
     }
 
     @Override
     public void initDataBySql() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath());
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath(), profile);
     }
 
     @Override
     public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath(), profile);
     }
 
 

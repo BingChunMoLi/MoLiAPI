@@ -12,6 +12,7 @@ import com.bingchunmoli.api.yiyan.service.YiYanService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
@@ -38,12 +39,14 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     private final JdbcTemplate jdbcTemplate;
     private final InitUtil initUtil;
     private final YiYanService yiYanService;
+    @Value("spring.profiles.active")
+    private String profile;
     @Getter
     private Init init;
 
     @Override
     public void doInit() {
-        List<YiYan> yiYans = Collections.emptyList();
+        List<YiYan> yiYans;
         if (init.driveType().getType() == 0) {
             yiYans = readAll();
         }else {
@@ -62,18 +65,20 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
 
     @Override
     public boolean check() {
-        init = initUtil.buildInit(ApiConstant.YI_YAN);
+        init = initUtil.buildInit(ApiConstant.YI_YAN, profile);
+        //TODO 数据库名称作为可配置项
+        InitSqlService.checkDataBaseIsExist(init.driveType(), jdbcTemplate, "api");
         return InitSqlService.checkTableIsExist(init.driveType(), jdbcTemplate, ApiConstant.YI_YAN_TABLE_NAME);
     }
 
     @Override
     public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath());
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath(), profile);
     }
 
     @Override
     public void initDataBySql() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath());
+        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath(), profile);
     }
 
     @Override

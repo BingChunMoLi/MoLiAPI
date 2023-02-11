@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author BingChunMoLi
  */
 @EnableAsync
-@EnableRetry
+@EnableRetry(proxyTargetClass = false)
 @EnableCaching
 @EnableScheduling
 @EnableAspectJAutoProxy
