@@ -1,24 +1,15 @@
 package com.bingchunmoli.api.init;
 
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.bean.enums.DriveType;
-import com.bingchunmoli.api.bean.enums.ProfileEnum;
 import com.bingchunmoli.api.exception.ApiInitException;
+import com.bingchunmoli.api.utils.ResourceDatabasePopulatorUtil;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.ResourceUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javax.sql.DataSource;
 
 /**
  * @author MoLi
@@ -88,31 +79,12 @@ public interface InitSqlService extends InitService{
 
     /**
      * 读取sql文件并执行(初始化动作)
-     *
-     * @param jdbcTemplate  jdbcTemplate
+     * @param dataSource 数据源
+     * @param resourceLoader 资源加载器
      * @param activeSqlPath sql文件路径
-     * @param profile 环境
      */
-    static void initDatabaseBySqlPath(final JdbcTemplate jdbcTemplate, final String activeSqlPath, String profile) {
-        String sql = "";
-        if (ProfileEnum.DEV.getProfile().equals(profile)) {
-            try {
-                Path path = Paths.get(ResourceUtils.getURL(activeSqlPath).toURI());
-                if (path.toFile().exists()) {
-                    sql = Files.readString(path, StandardCharsets.UTF_8);
-                }
-            } catch (IOException | URISyntaxException e) {
-                throw new ApiInitException(e);
-            }
-        }else {
-            InputStream inputStream = InitSqlService.class.getClassLoader().getResourceAsStream(activeSqlPath);
-            BufferedReader reader = IoUtil.getReader(inputStream, StandardCharsets.UTF_8);
-            sql = IoUtil.read(reader);
-        }
-
-        if (StrUtil.isNotBlank(sql)) {
-            jdbcTemplate.execute(sql);
-        }
+    static void initDatabaseBySqlPath(final DataSource dataSource, final ResourceLoader resourceLoader, final String activeSqlPath) {
+        ResourceDatabasePopulatorUtil.executeSqlByClassPathFile(dataSource, resourceLoader, activeSqlPath);
     }
 
     static boolean checkTableIsExist(final @NotNull DriveType driveType, @NotNull final JdbcTemplate jdbcTemplate, @NotNull final String tableName) {

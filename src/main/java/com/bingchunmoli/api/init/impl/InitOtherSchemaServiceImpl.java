@@ -7,23 +7,27 @@ import com.bingchunmoli.api.utils.InitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.sql.DataSource;
 
 /**
  * @author MoLi
  */
 @Slf4j
-@Order(1)
 @Service
 @RequiredArgsConstructor
 public class InitOtherSchemaServiceImpl implements InitSqlService {
 
     private final InitUtil initUtil;
     private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
+    private final ResourceLoader resourceLoader;
+
     public Init init;
-    @Value("spring.profiles.active")
+    @Value("${spring.profiles.active}")
     private String profile;
 
     @Override
@@ -56,12 +60,12 @@ public class InitOtherSchemaServiceImpl implements InitSqlService {
 
     @Override
     public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath(), profile);
+        InitSqlService.initDatabaseBySqlPath(dataSource, resourceLoader, init.activeSchemaPath());
     }
 
     @Override
     public void initDataBySql() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath(), profile);
+        InitSqlService.initDatabaseBySqlPath(dataSource, resourceLoader, init.activeDataPath());
     }
 
 

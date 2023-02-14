@@ -13,10 +13,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -24,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,7 +40,10 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
     private final JdbcTemplate jdbcTemplate;
     private final InitUtil initUtil;
     private final YiYanService yiYanService;
-    @Value("spring.profiles.active")
+    private final DataSource dataSource;
+    private final ResourceLoader resourceLoader;
+
+    @Value("${spring.profiles.active}")
     private String profile;
     @Getter
     private Init init;
@@ -73,12 +77,12 @@ public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
 
     @Override
     public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeSchemaPath(), profile);
+        InitSqlService.initDatabaseBySqlPath(dataSource, resourceLoader, init.activeSchemaPath());
     }
 
     @Override
     public void initDataBySql() {
-        InitSqlService.initDatabaseBySqlPath(jdbcTemplate, init.activeDataPath(), profile);
+        InitSqlService.initDatabaseBySqlPath(dataSource, resourceLoader, init.activeDataPath());
     }
 
     @Override

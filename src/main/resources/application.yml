@@ -24,7 +24,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: docker-componse
+    active: dev
   data:
     redis:
       database: 1
