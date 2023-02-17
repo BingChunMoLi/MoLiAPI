@@ -1,112 +1,69 @@
 package com.bingchunmoli.api.init.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
-import com.bingchunmoli.api.bean.ApiConstant;
-import com.bingchunmoli.api.bean.Init;
-import com.bingchunmoli.api.init.InitDataService;
-import com.bingchunmoli.api.init.InitSqlService;
-import com.bingchunmoli.api.utils.InitUtil;
-import com.bingchunmoli.api.utils.RedisUtil;
+import cn.hutool.core.util.StrUtil;
+import com.bingchunmoli.api.exception.ApiInitException;
+import com.bingchunmoli.api.init.InitService;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.service.YiYanService;
-import lombok.Getter;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
-import javax.sql.DataSource;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
-/**
- * @author MoLi
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InitYiYanDataServiceImpl implements InitDataService<YiYan> {
-    private final RedisUtil redisUtil;
-    private final JdbcTemplate jdbcTemplate;
-    private final InitUtil initUtil;
-    private final YiYanService yiYanService;
-    private final DataSource dataSource;
-    private final ResourceLoader resourceLoader;
-
-    @Value("${spring.profiles.active}")
-    private String profile;
-    @Getter
-    private Init init;
+public class InitYiYanDataServiceImpl implements InitService {
+    private ObjectMapper objectMapper;
+    private YiYanService yiYanService;
+    @Value("${moli.init.yiYanJsonPath}")
+    private String yiYanJsonPath;
 
     @Override
-    public void doInit() {
-        List<YiYan> yiYans;
-        if (init.driveType().getType() == 0) {
-            yiYans = readAll();
-        }else {
-            initSchema();
-            initDataBySql();
-            yiYans = yiYanService.list();
+    public void init() {
+        if (StrUtil.isEmpty(yiYanJsonPath)) {
+            log.info("没有配置yiYanJsonPath, 跳过初始化一言json文件");
+            return;
         }
-        if (CollectionUtil.isNotEmpty(yiYans)) {
-            redisUtil.setList(ApiConstant.YI_YAN, yiYans);
-        }else {
-            if (log.isWarnEnabled()) {
-                log.warn("一言数据为空");
+        Path path = Paths.get(URI.create(yiYanJsonPath));
+        File[] files = path.toFile().listFiles();
+        if (files == null) {
+            log.error("没有可以初始化的一言json数据");
+            return;
+        }
+        for (File file: files) {
+            MappingJsonFactory factory = new MappingJsonFactory();
+            try (JsonParser parser = factory.createParser(file)) {
+                JsonToken token = parser.nextToken();
+                if (token != JsonToken.START_ARRAY) {
+                    return;
+                }
+                token = parser.nextToken();
+                List<YiYan> list = new ArrayList<>(300);
+                while (token != JsonToken.END_ARRAY) {
+                    JsonNode x = parser.readValueAsTree();
+                    YiYan yiYan = objectMapper.treeToValue(x, YiYan.class);
+                    list.add(yiYan);
+                    token = parser.nextToken();
+                }
+                yiYanService.saveBatch(list);
+            } catch (IOException e) {
+                throw new ApiInitException(e);
             }
         }
     }
 
-    @Override
-    public boolean check() {
-        init = initUtil.buildInit(ApiConstant.YI_YAN, profile);
-        //TODO 数据库名称作为可配置项
-        InitSqlService.checkDataBaseIsExist(init.driveType(), jdbcTemplate, "api");
-        return InitSqlService.checkTableIsExist(init.driveType(), jdbcTemplate, ApiConstant.YI_YAN_TABLE_NAME);
-    }
-
-    @Override
-    public void initSchema() {
-        InitSqlService.initDatabaseBySqlPath(dataSource, resourceLoader, init.activeSchemaPath());
-    }
-
-    @Override
-    public void initDataBySql() {
-        InitSqlService.initDatabaseBySqlPath(dataSource, resourceLoader, init.activeDataPath());
-    }
-
-    @Override
-    public List<YiYan> readAll() {
-        return readAllDataByFile();
-    }
-
-    @Override
-    public List<YiYan> readAllDataByFile() {
-        try {
-            return readAllDataByFile(Paths.get(ResourceUtils.getURL(ApiConstant.YI_YAN_DATA_PATH).toURI()));
-        } catch (URISyntaxException | FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<YiYan> readAllDataByFile(Path path) {
-        List<YiYan> list = new ArrayList<>();
-        try (Stream<String> stream = Files.lines(path)) {
-            stream.forEach(v -> list.add(YiYan.builder().hitokoto(v).build()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return list;
-    }
 }

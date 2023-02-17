@@ -38,6 +38,9 @@ moli:
     pcPath: ${moli.path}img/pc #pc随机图的图片路径
     mobilePath: ${moli.path}img/mobile #mobile随机图的图片路径
     path1080: ${moli.path}img/1080 #1080接口随机图的图片路径
+  init:
+    sqlPath:
+    yiYanJsonPath:
 logging:
   level:
     com.bingchunmoli: info
