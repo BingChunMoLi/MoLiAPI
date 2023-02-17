@@ -86,7 +86,6 @@ CREATE table if not exists `shi_ci`
     `version`     int                                                     DEFAULT NULL,
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 4001
   DEFAULT CHARSET = utf8
   ROW_FORMAT = DYNAMIC;
 
@@ -94,7 +93,7 @@ CREATE table if not exists `shi_ci`
 -- api.yi_yan definition
 CREATE table if not exists `yi_yan`
 (
-    `id`          int NOT NULL,
+    `id`          int NOT NULL AUTO_INCREMENT,
     `uuid`        char(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
     `hitokoto`    char(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `type`        char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   DEFAULT NULL,
