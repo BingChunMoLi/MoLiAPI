@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -25,10 +26,11 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Order(4)
 @RequiredArgsConstructor
 public class InitYiYanDataServiceImpl implements InitService {
-    private ObjectMapper objectMapper;
-    private YiYanService yiYanService;
+    private final ObjectMapper objectMapper;
+    private final YiYanService yiYanService;
     @Value("${moli.init.yiYanJsonPath}")
     private String yiYanJsonPath;
 
@@ -38,7 +40,7 @@ public class InitYiYanDataServiceImpl implements InitService {
             log.info("没有配置yiYanJsonPath, 跳过初始化一言json文件");
             return;
         }
-        Path path = Paths.get(URI.create(yiYanJsonPath));
+        Path path = Paths.get(yiYanJsonPath);
         File[] files = path.toFile().listFiles();
         if (files == null) {
             log.error("没有可以初始化的一言json数据");

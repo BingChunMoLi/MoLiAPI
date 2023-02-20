@@ -28,7 +28,7 @@ services:
     volumes:
       - ~/.api/mysql/data/:/var/lib/mysql
       - ~/.api/mysql/log/:/var/log/mysql
-      - ./src/main/resources/db:/docker-entrypoint-initdb.d/
+      - ~/.api/init/db/:/docker-entrypoint-initdb.d/
     ports:
       - "3306:3306"
     command:

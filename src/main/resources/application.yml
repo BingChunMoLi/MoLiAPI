@@ -1,12 +1,12 @@
 moli:
   version: @version@
-  path: ${user.home}/.api/
+  path: ${user.home}${file.separator}.api${file.separator}
 server:
   port: 8090
   http2:
     enabled: true
   tomcat:
-    basedir: ${moli.path}/log/tomcat/
+    basedir: ${moli.path}${file.separator}log${file.separator}tomcat${file.separator}
     accesslog:
       enabled: true
       pattern: "%t %a %r %s (%D ms)"
@@ -49,7 +49,7 @@ logging:
     file: utf-8
     console: utf-8
   file:
-    path: ${moli.path}logs/
+    path: ${moli.path}logs${file.separator}
   config: classpath:config/spring-logback.xml
 management:
   endpoints:
