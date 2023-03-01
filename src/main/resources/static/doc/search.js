@@ -224,68 +224,43 @@ api[0].list[7].list.push({
     desc: '获取当前ip的地址',
 });
 api[0].list.push({
-    alias: 'TempFileOrClipboardController',
-    order: '9',
-    link: '临时剪贴板或文件',
-    desc: '临时剪贴板或文件',
-    list: []
-})
-api[0].list[8].list.push({
-    order: '1',
-    deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/temp/file',
-    desc: 'private',
-});
-api[0].list[8].list.push({
-    order: '2',
-    deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/temp/clipboard',
-    desc: '临时剪贴板',
-});
-api[0].list[8].list.push({
-    order: '3',
-    deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/temp/clipboard',
-    desc: '获取临时剪贴板的内容',
-});
-api[0].list.push({
     alias: 'NavigationController',
-    order: '10',
+    order: '9',
     link: '',
     desc: '',
     list: []
 })
-api[0].list[9].list.push({
+api[0].list[8].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/navigation',
     desc: '查询所有导航站',
 });
-api[0].list[9].list.push({
+api[0].list[8].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/navigation',
     desc: '添加导航',
 });
-api[0].list[9].list.push({
+api[0].list[8].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/navigation/{id}',
     desc: '修改导航',
 });
-api[0].list[9].list.push({
+api[0].list[8].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/navigation/{id}',
     desc: '',
 });
-api[0].list[9].list.push({
+api[0].list[8].list.push({
     order: '5',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/navigation/import',
     desc: '',
 });
-api[0].list[9].list.push({
+api[0].list[8].list.push({
     order: '6',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/navigation/export',
@@ -293,18 +268,18 @@ api[0].list[9].list.push({
 });
 api[0].list.push({
     alias: 'QrCodeController',
-    order: '11',
+    order: '10',
     link: '二维码',
     desc: '二维码',
     list: []
 })
-api[0].list[10].list.push({
+api[0].list[9].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/decode',
     desc: '文件解码',
 });
-api[0].list[10].list.push({
+api[0].list[9].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/generate',
@@ -312,18 +287,18 @@ api[0].list[10].list.push({
 });
 api[0].list.push({
     alias: 'ShiCiController',
-    order: '12',
+    order: '11',
     link: '诗词',
     desc: '诗词',
     list: []
 })
-api[0].list[11].list.push({
+api[0].list[10].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/shici/{id}',
     desc: '指定ID诗词',
 });
-api[0].list[11].list.push({
+api[0].list[10].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/shici/random',
@@ -331,42 +306,42 @@ api[0].list[11].list.push({
 });
 api[0].list.push({
     alias: 'QqController',
-    order: '13',
+    order: '12',
     link: 'qq、qz头像',
     desc: 'qq、qz头像',
     list: []
 })
-api[0].list[12].list.push({
+api[0].list[11].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/tencent/qq',
     desc: '返回QQ头像',
 });
-api[0].list[12].list.push({
+api[0].list[11].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/tencent/qz',
     desc: '返回qq空间头像',
 });
-api[0].list[12].list.push({
+api[0].list[11].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/tencent/qq/json',
     desc: '加密形式获取qq头像地址',
 });
-api[0].list[12].list.push({
+api[0].list[11].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/tencent/qz/json',
     desc: 'QQ空间头像json形式',
 });
-api[0].list[12].list.push({
+api[0].list[11].list.push({
     order: '5',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/tencent/qq/json/encrypt',
     desc: '加密的qq头像地址',
 });
-api[0].list[12].list.push({
+api[0].list[11].list.push({
     order: '6',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/tencent/qq/encrypt',
@@ -374,18 +349,18 @@ api[0].list[12].list.push({
 });
 api[0].list.push({
     alias: 'ThunderDownloadProtocolController',
-    order: '14',
+    order: '13',
     link: '迅雷链接转换',
     desc: '迅雷链接转换',
     list: []
 })
-api[0].list[13].list.push({
+api[0].list[12].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/thunder/toRaw',
     desc: '转换迅雷下载协议链接至原始链接',
 });
-api[0].list[13].list.push({
+api[0].list[12].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/thunder/toThunder',
@@ -393,24 +368,24 @@ api[0].list[13].list.push({
 });
 api[0].list.push({
     alias: 'UserAgentController',
-    order: '15',
+    order: '14',
     link: 'useragent',
     desc: 'UserAgent',
     list: []
 })
-api[0].list[14].list.push({
+api[0].list[13].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/ua/userAgentInfo',
     desc: '从请求头中获取user-agent',
 });
-api[0].list[14].list.push({
+api[0].list[13].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/ua/userAgentInfoByParam',
     desc: '从请求参数中获取 userAgent',
 });
-api[0].list[14].list.push({
+api[0].list[13].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/ua/userAgent',
@@ -418,18 +393,18 @@ api[0].list[14].list.push({
 });
 api[0].list.push({
     alias: 'WeatherController',
-    order: '16',
+    order: '15',
     link: '天气',
     desc: '天气',
     list: []
 })
-api[0].list[15].list.push({
+api[0].list[14].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/weather/byDay',
     desc: '按天查询天气',
 });
-api[0].list[15].list.push({
+api[0].list[14].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/weather/now',
@@ -437,18 +412,18 @@ api[0].list[15].list.push({
 });
 api[0].list.push({
     alias: 'YiYanController',
-    order: '17',
+    order: '16',
     link: '一言',
     desc: '一言',
     list: []
 })
-api[0].list[16].list.push({
+api[0].list[15].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/yiyan/{id}',
     desc: '根据ID获取一言',
 });
-api[0].list[16].list.push({
+api[0].list[15].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/yiyan/random',

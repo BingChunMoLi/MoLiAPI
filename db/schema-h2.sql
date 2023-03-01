@@ -1,4 +1,5 @@
-CREATE TABLE `bing_image`
+
+CREATE table if not exists `bing_image`
 (
     `id`                 bigint NOT NULL AUTO_INCREMENT,
     `start_date`         varchar(30)  DEFAULT NULL comment '开始时间',
@@ -23,7 +24,7 @@ CREATE TABLE `bing_image`
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `host`
+CREATE table if not exists `host`
 (
     `id`     int NOT NULL AUTO_INCREMENT,
     `ip`     varchar(30) DEFAULT NULL comment 'ip',
@@ -32,7 +33,7 @@ CREATE TABLE `host`
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `navigation`
+CREATE table if not exists `navigation`
 (
     `id`     int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `title`  varchar(30) comment '标题',
@@ -42,7 +43,7 @@ CREATE TABLE `navigation`
     `tenant` varchar(30) default 'public' not null comment '租户'
 );
 
-create table `tag`
+create table if not exists `tag`
 (
     `id`         int                   not null auto_increment primary key,
     `tag_name`   varchar(20)           not null comment '标签名称',
@@ -52,9 +53,44 @@ create table `tag`
 );
 
 
-create table `navigation_tag`
+create table if not exists `navigation_tag`
 (
     `id`            int not null auto_increment primary key,
     `tag_id`        int not null comment '标签id',
     `navigation_id` int not null comment '导航id'
+);
+
+CREATE table if not exists `shi_ci`
+(
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `content`     varchar(100) DEFAULT NULL,
+    `origin`      varchar(100) DEFAULT NULL,
+    `author`      varchar(10)  DEFAULT NULL,
+    `category`    varchar(100) DEFAULT NULL,
+    `deleted`     int          DEFAULT '0',
+    `create_time` datetime     DEFAULT NULL,
+    `update_time` datetime     DEFAULT NULL,
+    `version`     int          DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE table if not exists `yi_yan`
+(
+    `id`          int NOT NULL,
+    `uuid`        char(40)  DEFAULT NULL,
+    `hitokoto`    char(100) DEFAULT NULL,
+    `type`        char(5)   DEFAULT NULL,
+    `from`        char(50)  DEFAULT NULL,
+    `from_who`    char(20)  DEFAULT NULL,
+    `creator`     char(20)  DEFAULT NULL,
+    `creator_uid` int       DEFAULT NULL,
+    `reviewer`    int       DEFAULT NULL,
+    `commit_from` char(20)  DEFAULT NULL,
+    `created_at`  char(20)  DEFAULT NULL,
+    `length`      int       DEFAULT NULL,
+    `deleted`     int       DEFAULT '0',
+    `create_time` datetime  DEFAULT NULL,
+    `update_time` datetime  DEFAULT NULL,
+    `version`     int       DEFAULT NULL,
+    PRIMARY KEY (`id`)
 );

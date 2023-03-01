@@ -10,8 +10,11 @@ VOLUME ~/.api/
 # 暴露8090端口
 EXPOSE 8090
 
+# 添加变量，如果使用dockerfile-maven-plugin，则会自动替换这里的变量内容
+ARG JAR_FILE
+
 # 往容器中添加jar包
-ADD /target/moliapi.jar ~/.api/app.jar
+ADD /target/${JAR_FILE} ~/.api/app.jar
 
 # 启动镜像自动运行程序
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","~/.api/app.jar"]
