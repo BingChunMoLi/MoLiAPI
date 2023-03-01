@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 自定义错误页面与错误信息处理
@@ -47,7 +48,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Object path = request.getAttribute("javax.servlet.error.request_uri");
         log.error("错误状态码: {}, 错误消息: {}, 错误路径: {}, traceId: {}, 响应状态码: {}", statusCode, message, path, MDC.get(RequestTraceIdInterceptor.TRACE_ID), response.getStatus());
-        if (Arrays.stream(NotSupportHttpCode.values()).filter(v -> v.getValue() == statusCode).findFirst().orElse(null) != null) {
+        if (Arrays.stream(NotSupportHttpCode.values()).filter(v -> Objects.equals(v.getValue(), statusCode)).findFirst().orElse(null) != null) {
             //在不支持友好返回的状态吗中
             log.info("在不支持友好返回的状态吗中");
             BufferedImage img = new BufferedImage(750, 750, BufferedImage.TYPE_INT_RGB);
