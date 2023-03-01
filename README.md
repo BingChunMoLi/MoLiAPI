@@ -41,6 +41,7 @@ java -jar --spring.profiles.active=prod moliapi.jar
 13. 迅雷链接转换
 14. 每日签到网址
 15. 请求地址
+16. 自动更新腾讯CDN证书(定时任务, 暂仅支持单域名,如需多域名请提Iss)
 
 ## 启用所有功能
 1. 添加配置文件(~/.api/目录下) application.yml

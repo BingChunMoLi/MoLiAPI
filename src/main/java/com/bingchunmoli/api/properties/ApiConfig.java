@@ -51,5 +51,16 @@ public class ApiConfig {
      * 上传临时文件的密钥
      */
     private String uploadTempSecret;
-
+    /**
+     * 证书路径(为腾讯CDN自动更新)
+     */
+    private String certificatePath;
+    /**
+     * 私钥路径(为腾讯CDN自动更新)
+     */
+    private String privateKeyPath;
+    /**
+     * 域名
+     */
+    private String domain;
 }
