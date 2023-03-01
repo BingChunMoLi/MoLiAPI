@@ -35,6 +35,10 @@ moli:
     pcPath: ${moli.path}img/pc #pc随机图的图片路径
     mobilePath: ${moli.path}img/mobile #mobile随机图的图片路径
     path1080: ${moli.path}img/1080 #1080接口随机图的图片路径
+    certificatePath: #证书路径
+    privateKeyPath: #私钥路径
+    domain: #更新的域名
+
   init:
     sqlPath: "${moli.path}/init/db/"
     yiYanJsonPath: "${moli.path}/init/data/"

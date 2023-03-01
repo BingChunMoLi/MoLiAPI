@@ -45,7 +45,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!-- TimeBased默认是一天更新一次 -->
             <!--        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">&lt;!&ndash; 按固定窗口大小生成日志 &ndash;&gt;-->
             <!-- 历史日志文件的存放路径和名称 -->
-            <fileNamePattern>~/.api/logs/error/error_%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <fileNamePattern>.api/logs/error/error_%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <!-- 日志文件最大的保存历史 数量-->
             <maxHistory>5000</maxHistory>
             <!-- 必要节点，包含文件名及“%d”转换符，“%d”可以包含一个java.text.SimpleDateFormat指定的时间格式 -->

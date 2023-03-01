@@ -44,6 +44,9 @@ moli:
     path1080: ${moli.path}img/1080/
     uploadTempPath: ${moli.path}upload/
     uploadTempSecret: 123456 #一定要修改的上传密码
+    certificatePath: #证书路径
+    privateKeyPath: #私钥路径
+    domain: #更新的域名
 logging:
   level:
     com.bingchunmoli: info
