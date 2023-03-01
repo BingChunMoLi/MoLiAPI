@@ -47,7 +47,7 @@
             <!-- 历史日志文件的存放路径和名称 -->
             <fileNamePattern>~/.api/logs/error/error_%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <!-- 日志文件最大的保存历史 数量-->
-            <maxHistory>${log.maxHistory}</maxHistory>
+            <maxHistory>5000</maxHistory>
             <!-- 必要节点，包含文件名及“%d”转换符，“%d”可以包含一个java.text.SimpleDateFormat指定的时间格式 -->
             <!--            <FileNamePattern>logs/${APP_Name}.log.%i.zip</FileNamePattern>-->
             <!-- 窗口索引最小值 -->

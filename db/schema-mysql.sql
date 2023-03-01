@@ -1,4 +1,6 @@
-create table `bing_image`
+create database if not EXISTS api;
+use api;
+create table if not exists `bing_image`
 (
     `id`                 bigint not null auto_increment,
     `start_date`         varchar(30) character set utf8mb4 collate utf8mb4_general_ci  default null comment '开始时间',
@@ -28,7 +30,7 @@ create table `bing_image`
 
 -- api.host definition
 
-create table `host`
+create table if not exists `host`
 (
     `id`     int not null auto_increment,
     `ip`     varchar(30) character set utf8mb4 collate utf8mb4_general_ci default null comment 'ip',
@@ -42,9 +44,9 @@ create table `host`
   row_format = dynamic;
 
 
-create table `navigation`
+create table if not exists `navigation`
 (
-    `id`     int not null auto_increment primary key,
+    `id`     int                          not null auto_increment primary key,
     `title`  varchar(30) comment '标题',
     `des`    varchar(300) comment '详细信息',
     `url`    varchar(1000) comment '网址',
@@ -52,7 +54,7 @@ create table `navigation`
     `tenant` varchar(30) default 'public' not null comment '租户'
 );
 
-create table `tag`
+create table if not exists `tag`
 (
     `id`         int                   not null auto_increment primary key,
     `tag_name`   varchar(20)           not null comment '标签名称',
@@ -62,11 +64,53 @@ create table `tag`
 );
 
 
-create table `navigation_tag`
+create table if not exists `navigation_tag`
 (
     `id`            int not null auto_increment primary key,
     `tag_id`        int not null comment '标签id',
     `navigation_id` int not null comment '导航id'
 );
 
+-- api.shi_ci definition
 
+CREATE table if not exists `shi_ci`
+(
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `content`     varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+    `origin`      varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+    `author`      varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci  DEFAULT NULL,
+    `category`    varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+    `deleted`     int                                                     DEFAULT 0,
+    `create_time` datetime                                                DEFAULT NULL,
+    `update_time` datetime                                                DEFAULT NULL,
+    `version`     int                                                     DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  ROW_FORMAT = DYNAMIC;
+
+
+-- api.yi_yan definition
+CREATE table if not exists `yi_yan`
+(
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `uuid`        char(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
+    `hitokoto`    char(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `type`        char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   DEFAULT NULL,
+    `from`        char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
+    `from_who`    char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
+    `creator`     char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
+    `creator_uid` int                                                        DEFAULT NULL,
+    `reviewer`    int                                                        DEFAULT NULL,
+    `commit_from` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
+    `created_at`  char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
+    `length`      int                                                        DEFAULT NULL,
+    `deleted`     int                                                        DEFAULT 0,
+    `create_time` datetime                                                   DEFAULT NULL,
+    `update_time` datetime                                                   DEFAULT NULL,
+    `version`     int                                                        DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  ROW_FORMAT = DYNAMIC;
