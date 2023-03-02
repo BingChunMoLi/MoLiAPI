@@ -24,7 +24,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: dev
+    active: template
   data:
     redis:
       database: 1
