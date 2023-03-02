@@ -1,4 +1,4 @@
-#INIT=runscript from 'classpath:db/schema-h2.sql'
+#INIT=runscript from 'classpath:db/h2.sql'
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -28,10 +28,6 @@ management:
   endpoint:
     health:
       show-details: WHEN_AUTHORIZED
-springfox:
-  documentation:
-    swagger-ui:
-      enabled: false
 
 moli:
   apiConfig:

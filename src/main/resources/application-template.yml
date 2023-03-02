@@ -9,8 +9,9 @@ spring:
       database: 0
       password: #你的密钥
       port: 6379
-      host: #你的redis地址
+      host: localhost #你的redis地址
   mail:
+    enable: false
     host: #邮箱服务器，例如 腾讯企业邮（smtp.exmail.qq.com）
     port: 465
     username: #你的邮箱账号
@@ -35,6 +36,8 @@ moli:
     pcPath: ${moli.path}img/pc #pc随机图的图片路径
     mobilePath: ${moli.path}img/mobile #mobile随机图的图片路径
     path1080: ${moli.path}img/1080 #1080接口随机图的图片路径
+    uploadTempPath:
+    uploadTempSecret:
     certificatePath: #证书路径
     privateKeyPath: #私钥路径
     domain: #更新的域名
