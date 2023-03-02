@@ -47,11 +47,17 @@ public class InitYiYanDataServiceImpl implements InitService {
             return;
         }
         for (File file: files) {
+            if (!file.getName().endsWith(".json")) {
+                break;
+            }
             MappingJsonFactory factory = new MappingJsonFactory();
             try (JsonParser parser = factory.createParser(file)) {
                 JsonToken token = parser.nextToken();
                 if (token != JsonToken.START_ARRAY) {
-                    return;
+                    if (log.isErrorEnabled()) {
+                        log.error("解析出错, file: {}", file);
+                    }
+                    break;
                 }
                 token = parser.nextToken();
                 List<YiYan> list = new ArrayList<>(300);

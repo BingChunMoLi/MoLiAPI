@@ -1,53 +1,85 @@
 {
   "groups": [
     {
-      "name": "moli.api-Config",
+      "name": "moli.api-config",
       "type": "com.bingchunmoli.api.properties.ApiConfig",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     }
   ],
   "properties": [
     {
-      "name": "moli.api-Config.mobile-path",
+      "name": "moli.api-config.certificate-path",
+      "type": "java.lang.String",
+      "description": "证书路径(为腾讯CDN自动更新)",
+      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+    },
+    {
+      "name": "moli.api-config.domain",
+      "type": "java.lang.String",
+      "description": "域名",
+      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+    },
+    {
+      "name": "moli.api-config.mobile-path",
       "type": "java.lang.String",
       "description": "mobile图片路径",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     },
     {
-      "name": "moli.api-Config.pc-path",
+      "name": "moli.api-config.path1080",
+      "type": "java.lang.String",
+      "description": "1080p",
+      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+    },
+    {
+      "name": "moli.api-config.pc-path",
       "type": "java.lang.String",
       "description": "pc图片路径",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     },
     {
-      "name": "moli.api-Config.path1080",
+      "name": "moli.api-config.private-key-path",
       "type": "java.lang.String",
-      "description": "1080p图片路径",
+      "description": "私钥路径(为腾讯CDN自动更新)",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     },
     {
-      "name": "moli.api-Config.server-sauce-key",
+      "name": "moli.api-config.server-sauce-key",
       "type": "java.lang.String",
       "description": "server酱key",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     },
     {
-      "name": "moli.api-Config.weather-geo-uri",
+      "name": "moli.api-config.upload-temp-path",
       "type": "java.lang.String",
-      "description": "和风天气请求地区ApiUri",
+      "description": "上传临时文件的路径",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     },
     {
-      "name": "moli.api-Config.weather-key",
+      "name": "moli.api-config.upload-temp-secret",
+      "type": "java.lang.String",
+      "description": "上传临时文件的密钥",
+      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+    },
+    {
+      "name": "moli.api-config.weather-geo-uri",
+      "type": "java.lang.String",
+      "description": "和风天气请求地区ApiUri",
+      "sourceType": "com.bingchunmoli.api.properties.ApiConfig",
+      "defaultValue": "geoapi.qweather.com"
+    },
+    {
+      "name": "moli.api-config.weather-key",
       "type": "java.lang.String",
       "description": "和风天气key",
       "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
     },
     {
-      "name": "moli.api-Config.weather-uri",
+      "name": "moli.api-config.weather-uri",
       "type": "java.lang.String",
       "description": "和风天气请求uri",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.properties.ApiConfig",
+      "defaultValue": "devapi.qweather.com"
     }
   ],
   "hints": []

@@ -27,7 +27,7 @@ public class UpdateTencentCdnCert {
     private final ApiConfig apiConfig;
 
     @Scheduled(cron = "0 0 0 * * ?")
-    public void getBingImage() throws TencentCloudSDKException {
+    public void updateCert() throws TencentCloudSDKException {
         Credential cred = new ProfileCredentialsProvider().getCredentials();
         CdnClient client = new CdnClient(cred, Strings.EMPTY);
         DescribeDomainsConfigRequest req = new DescribeDomainsConfigRequest();
@@ -45,6 +45,8 @@ public class UpdateTencentCdnCert {
             https.setCertInfo(serverCert);
             request.setHttps(https);
             request.setDomain(domain.getDomain());
+            UpdateDomainConfigResponse response = client.UpdateDomainConfig(request);
+            log.info("updateCert: {}, {}, {}", domain, https, UpdateDomainConfigResponse.toJsonString(response));
         }
     }
 

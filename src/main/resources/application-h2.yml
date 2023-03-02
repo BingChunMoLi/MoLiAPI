@@ -1,4 +1,4 @@
-#INIT=runscript from 'classpath:db/schema-h2.sql'
+#INIT=runscript from 'classpath:db/h2.sql'
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -28,10 +28,6 @@ management:
   endpoint:
     health:
       show-details: WHEN_AUTHORIZED
-springfox:
-  documentation:
-    swagger-ui:
-      enabled: false
 
 moli:
   apiConfig:
@@ -44,6 +40,9 @@ moli:
     path1080: ${moli.path}img/1080/
     uploadTempPath: ${moli.path}upload/
     uploadTempSecret: 123456 #一定要修改的上传密码
+    certificatePath: #证书路径
+    privateKeyPath: #私钥路径
+    domain: #更新的域名
 logging:
   level:
     com.bingchunmoli: info
