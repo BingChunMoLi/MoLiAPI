@@ -41,7 +41,6 @@ moli:
     certificatePath: #证书路径
     privateKeyPath: #私钥路径
     domain: #更新的域名
-
   init:
     sqlPath: "${moli.path}/init/db/"
     yiYanJsonPath: "${moli.path}/init/data/"
