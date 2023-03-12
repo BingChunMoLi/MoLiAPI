@@ -34,8 +34,15 @@ public class UpdateTencentCdnCert {
         DescribeDomainsConfigResponse resp = client.DescribeDomainsConfig(req);
         for (DetailDomain domain : resp.getDomains()) {
             if (!domain.getDomain().endsWith(apiConfig.getDomain())) {
-                break;
+                log.info("排除更新的域名: {}", domain.getDomain());
+                continue;
             }
+            String status = domain.getStatus();
+            if (status.equalsIgnoreCase("rejected") || status.equalsIgnoreCase("closing") || status.equalsIgnoreCase("offline")) {
+                log.info("关闭或状态异常的域名不更新;域名:{}, 状态: {}", domain.getDomain(), domain.getStatus());
+                continue;
+            }
+            log.info("更新证书的域名: {}", domain.getDomain());
             UpdateDomainConfigRequest request = new UpdateDomainConfigRequest();
             Https https = domain.getHttps();
             ServerCert serverCert = new ServerCert();
@@ -46,7 +53,7 @@ public class UpdateTencentCdnCert {
             request.setHttps(https);
             request.setDomain(domain.getDomain());
             UpdateDomainConfigResponse response = client.UpdateDomainConfig(request);
-            log.info("updateCert: {}, {}, {}", domain, https, UpdateDomainConfigResponse.toJsonString(response));
+            log.info("domain: {},updateCertResponse: {}", domain.getDomain(), UpdateDomainConfigResponse.toJsonString(response));
         }
     }
 
