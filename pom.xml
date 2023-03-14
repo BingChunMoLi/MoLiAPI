@@ -29,7 +29,7 @@
         <ip-info.version>2.2.0</ip-info.version>
         <spring-doc.version>1.6.15</spring-doc.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <tencent-cloud-api.version>3.1.704</tencent-cloud-api.version>
+        <tencent-cloud-api.version>3.1.712</tencent-cloud-api.version>
     </properties>
 
     <dependencies>
