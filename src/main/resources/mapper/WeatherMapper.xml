@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingchunmoli.api.weather.mapper.WeatherMapper">
+
+    <resultMap id="BaseResultMap" type="com.bingchunmoli.api.weather.bean.WeatherSub">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="location" column="location" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,location,email
+    </sql>
+</mapper>

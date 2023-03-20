@@ -30,6 +30,10 @@ public class SendMailUtil {
     @Value("${spring.mail.enable}")
     private boolean enable;
 
+    public String getDefaultFrom() {
+        return defaultFrom;
+    }
+
     public SendMailUtil(@Autowired(required = false) JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }

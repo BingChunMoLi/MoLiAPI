@@ -224,47 +224,29 @@ api[0].list[7].list.push({
     desc: '获取当前ip的地址',
 });
 api[0].list.push({
-    alias: 'NavigationController',
+    alias: 'TempFileOrClipboardController',
     order: '9',
-    link: '',
-    desc: '',
+    link: '临时剪贴板或文件',
+    desc: '临时剪贴板或文件',
     list: []
 })
 api[0].list[8].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/navigation',
-    desc: '查询所有导航站',
+    url: 'https://api.bingchunmoli.com/temp/file',
+    desc: 'private',
 });
 api[0].list[8].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/navigation',
-    desc: '添加导航',
+    url: 'https://api.bingchunmoli.com/temp/clipboard',
+    desc: '临时剪贴板',
 });
 api[0].list[8].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/navigation/{id}',
-    desc: '修改导航',
-});
-api[0].list[8].list.push({
-    order: '4',
-    deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/navigation/{id}',
-    desc: '',
-});
-api[0].list[8].list.push({
-    order: '5',
-    deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/navigation/import',
-    desc: '',
-});
-api[0].list[8].list.push({
-    order: '6',
-    deprecated: 'false',
-    url: 'https://api.bingchunmoli.com/navigation/export',
-    desc: '',
+    url: 'https://api.bingchunmoli.com/temp/clipboard',
+    desc: '获取临时剪贴板的内容',
 });
 api[0].list.push({
     alias: 'NavigationController',
