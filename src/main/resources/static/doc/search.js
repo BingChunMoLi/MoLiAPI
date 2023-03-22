@@ -435,6 +435,18 @@ api[0].list[15].list.push({
     url: 'https://api.bingchunmoli.com/weather/now',
     desc: '查找当前天气',
 });
+api[0].list[15].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/weather/sub',
+    desc: '',
+});
+api[0].list[15].list.push({
+    order: '4',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/weather/callback',
+    desc: '',
+});
 api[0].list.push({
     alias: 'YiYanController',
     order: '17',
