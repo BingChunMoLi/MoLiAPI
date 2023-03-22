@@ -4,10 +4,13 @@ package com.bingchunmoli.api.utils;
 import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.bean.MailMessage;
 import com.bingchunmoli.api.even.MailMessageEven;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -88,6 +91,26 @@ public class SendMailUtil {
         simpleMail.setText(body);
         javaMailSender.send(simpleMail);
         return true;
+    }
+
+    /**
+     * 发送html格式的邮件
+     *
+     * @param to      发送人
+     * @param title   标题
+     * @param content 内容
+     */
+    public void sendHtmlMail(String to, String title, String content) throws MessagingException {
+        if (checkEnable()) {
+            return;
+        }
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(defaultFrom);
+        helper.setTo(to);
+        helper.setSubject(title);
+        helper.setText(content, true);
+        javaMailSender.send(message);
     }
 
     public boolean checkEnable(){

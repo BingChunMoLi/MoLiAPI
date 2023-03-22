@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.weather.bean.enums
 
 /**
- * @author admin
+ * @author bingchunmoli
  */
 enum class Code (val code: String, val text: String){
     /**

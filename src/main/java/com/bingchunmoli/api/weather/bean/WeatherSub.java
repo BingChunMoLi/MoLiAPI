@@ -14,6 +14,7 @@ import java.io.Serializable;
 
 /**
  * 天气订阅
+ * @author bingchunmoli
  */
 @Data
 @Builder
@@ -44,8 +45,4 @@ public class WeatherSub implements Serializable {
     @Schema(hidden = true)
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
-    public String getLocation() {
-        return location;
-    }
 }
