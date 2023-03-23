@@ -37,15 +37,19 @@ public class WeatherNotionTask {
     public void notion() {
         List<WeatherSub> list = weatherService.list();
         Map<String, WeatherDailyBean> notifiedLocationMap = getNotifiedLocation(list);
-        notionMessage(notifiedLocationMap, list);
+        try {
+            notionMessage(notifiedLocationMap, list);
+        } catch (JsonProcessingException e) {
+            throw new ApiTaskException(e);
+        }
     }
 
     private void notionMessage(Map<String, WeatherDailyBean> notifiedLocationMap,
-                               List<WeatherSub> list) {
+                               List<WeatherSub> list) throws JsonProcessingException {
         Map<String, List<WeatherSub>> messageMap = list.stream().collect(Collectors.groupingBy(WeatherSub::getLocation));
         for (Map.Entry<String, WeatherDailyBean> entry : notifiedLocationMap.entrySet()) {
             List<WeatherSub> weatherSub = messageMap.get(entry.getKey());
-            String messageStr = coverMessageToHtml(entry.getValue());
+            String messageStr = coverMessageToHtml(entry.getKey(), entry.getValue());
             if (log.isDebugEnabled()) {
                 log.debug("message: {}", messageStr);
             }
@@ -61,7 +65,10 @@ public class WeatherNotionTask {
         }
     }
 
-    private String coverMessageToHtml(WeatherDailyBean dailyBean) {
+    private String coverMessageToHtml(String location, WeatherDailyBean dailyBean) throws JsonProcessingException {
+        WeatherDailyBean.DailyBean today = dailyBean.getDaily().get(0);
+        WeatherDailyBean.DailyBean tomorrow = dailyBean.getDaily().get(1);
+        WeatherDailyBean.DailyBean dayAfterTomorrow = dailyBean.getDaily().get(2);
         return StrUtil.format("""
                         <!DOCTYPE html>
                         <html lang="en">
@@ -71,32 +78,58 @@ public class WeatherNotionTask {
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                 <title>天气不好,记得带伞呦😘😘😘</title>
                             </head>
-                            <body style="height:100vh;">
-                                响应式页面: <a href="{}">响应式页面</a>
-                                <h1>{}: {}</h1>
-                                <h2> 最高气温: {}</h2>
-                                <h2> 最低气温: {}</h2>
-                                <h1>{}: {}</h1>
-                                <h2> 最高气温: {}</h2>
-                                <h2> 最低气温: {}</h2>
-                                <br/>
-                                <br/>
-                                <br/>
+                            <body style="height:100vh;width: 100%;">
+                                    <div style="margin: 0 auto; display: flex;align-items: center;justify-content: center;">
+                                        <td>地区: {}</td>
+                                    </div>
+                                    <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-around; align-items: stretch;">
+                                        <div>
+                                            <div>日期: </div>
+                                            <div>图标:</div>
+                                            <div>最低气温/最高气温: </div>
+                                            <div>天气: </div>
+                                        </div>
+                                        <div>
+                                            <div>{}&nbsp;</div>
+                                            <div>{}</div>
+                                            <div>{}°c/{}°c</div>
+                                            <div>{}</div>
+                                        </div>
+                                        <div>
+                                            <div>{}&nbsp;</div>
+                                            <div>{}</div>
+                                            <div>{}°c/{}°c</div>
+                                            <div>{}</div>
+                                        </div>
+                                        <div>
+                                            <div>{}&nbsp;</div>
+                                            <div>{}</div>
+                                            <div>{}°c/{}°c</div>
+                                            <div>{}</div>
+                                        </div>
+                                </div>
                                 原始信息:
                                 <code>{}</code>
                             </body>
                         </html>
                         """.trim(),
-                dailyBean.getFxLink(),
-                dailyBean.getDaily().get(0).getFxDate(),
-                dailyBean.getDaily().get(0).getTextDay(),
-                dailyBean.getDaily().get(0).getTempMax(),
-                dailyBean.getDaily().get(0).getTempMin(),
-                dailyBean.getDaily().get(1).getFxDate(),
-                dailyBean.getDaily().get(1).getTextDay(),
-                dailyBean.getDaily().get(1).getTempMax(),
-                dailyBean.getDaily().get(1).getTempMin(),
-                dailyBean);
+                location,
+                today.getFxDate(),
+                today.getIconDay(),
+                today.getTempMin(),
+                today.getTempMax(),
+                today.getTextDay(),
+                tomorrow.getFxDate(),
+                tomorrow.getIconDay(),
+                tomorrow.getTempMin(),
+                tomorrow.getTempMax(),
+                tomorrow.getTextDay(),
+                dayAfterTomorrow.getFxDate(),
+                dayAfterTomorrow.getIconDay(),
+                dayAfterTomorrow.getTempMin(),
+                dayAfterTomorrow.getTempMax(),
+                dayAfterTomorrow.getTextDay(),
+                om.writeValueAsString(dailyBean));
     }
 
     private Map<String, WeatherDailyBean> getNotifiedLocation(List<WeatherSub> list) {
