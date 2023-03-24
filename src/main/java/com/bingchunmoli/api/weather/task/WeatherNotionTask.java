@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -65,7 +66,7 @@ public class WeatherNotionTask {
         }
     }
 
-    private String coverMessageToHtml(String location, WeatherDailyBean dailyBean) throws JsonProcessingException {
+    private String coverMessageToHtml(String location, @NotNull WeatherDailyBean dailyBean) throws JsonProcessingException {
         WeatherDailyBean.DailyBean today = dailyBean.getDaily().get(0);
         WeatherDailyBean.DailyBean tomorrow = dailyBean.getDaily().get(1);
         WeatherDailyBean.DailyBean dayAfterTomorrow = dailyBean.getDaily().get(2);
@@ -77,6 +78,7 @@ public class WeatherNotionTask {
                                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                 <title>天气不好,记得带伞呦😘😘😘</title>
+                                <link rel="stylesheet" href="https://obs.bingchunmoli.com/qweather-icons.css">
                             </head>
                             <body style="height:100vh;width: 100%;">
                                     <div style="margin: 0 auto; display: flex;align-items: center;justify-content: center;">
@@ -91,19 +93,19 @@ public class WeatherNotionTask {
                                         </div>
                                         <div>
                                             <div>{}&nbsp;</div>
-                                            <div>{}</div>
+                                            <div><i class="qi-{}"></i></div>
                                             <div>{}°c/{}°c</div>
                                             <div>{}</div>
                                         </div>
                                         <div>
                                             <div>{}&nbsp;</div>
-                                            <div>{}</div>
+                                            <div><i class="qi-{}"></i></div>
                                             <div>{}°c/{}°c</div>
                                             <div>{}</div>
                                         </div>
                                         <div>
                                             <div>{}&nbsp;</div>
-                                            <div>{}</div>
+                                            <div><i class="qi-{}"></i></div>
                                             <div>{}°c/{}°c</div>
                                             <div>{}</div>
                                         </div>
