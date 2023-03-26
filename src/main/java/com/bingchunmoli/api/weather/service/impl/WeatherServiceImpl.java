@@ -6,7 +6,6 @@ import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.properties.ApiConfig;
 import com.bingchunmoli.api.utils.IntegerUtil;
-import com.bingchunmoli.api.utils.RedisUtil;
 import com.bingchunmoli.api.utils.SendMailUtil;
 import com.bingchunmoli.api.utils.StringRedisUtil;
 import com.bingchunmoli.api.weather.bean.WeatherSubscribeParam;
@@ -23,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -46,7 +44,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     private final HttpServletRequest request;
 
     @Override
-    public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
+    public String getWeatherByDay(Integer day, String location) throws JsonProcessingException {
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteget(location)) {
             // 按经维度查询 或者 id查询
             return getWeatherByDayCommon(day, location);
@@ -56,7 +54,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     }
 
     @Override
-    public String getWeatherByNow(String address) throws UnsupportedEncodingException, JsonProcessingException {
+    public String getWeatherByNow(String address) throws JsonProcessingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         return Optional.ofNullable(redisCache).orElse(doGetWeatherByNow(redisCacheKey, address));
@@ -69,7 +67,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
         map.put("location", param.getLocation());
         String jwt = JWTUtil.createToken(map, apiConfig.getWeatherKey().getBytes());
         return sendMailUtil.sendMail(sendMailUtil.getDefaultFrom(), param.getEmail(),
-                "MoLiAPI天气订阅确认", "地址: " + param.getLocation() + "\n https://" + request.getServerName() + "/weather/callback?param=" + jwt + " \n 如果不是本人订阅你无需回应\n 如已订阅, 推订请访问: https://" + request.getServerName() + "weather/unsub?param=" + jwt);
+                "MoLiAPI天气订阅确认", "地址: " + param.getLocation() + "\n https://" + request.getServerName() + "/weather/callback?param=" + jwt + " \n 如果不是本人订阅你无需回应\n 如已订阅, 推订请访问: https://" + request.getServerName() + "/weather/unsub?param=" + jwt);
     }
 
     /**
@@ -78,9 +76,8 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param day      天数
      * @param location 地址
      * @return 天气信息
-     * @throws UnsupportedEncodingException 无法编码异常
      */
-    private String getWeatherByDayCommon(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
+    private String getWeatherByDayCommon(Integer day, String location) throws JsonProcessingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
                 .add(String.valueOf(day)).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
@@ -94,9 +91,8 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param day           天数
      * @param location      地址
      * @return 天气信息
-     * @throws UnsupportedEncodingException 无法编码异常
      */
-    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
+    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws JsonProcessingException {
         String joiner = "https://" +
                 apiConfig.getWeatherUri() +
                 "/v7/weather/" +
@@ -117,9 +113,8 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param redisCacheKey 缓存的key
      * @param location      地址
      * @return 天气
-     * @throws UnsupportedEncodingException url编码异常
      */
-    private String doGetWeatherByNow(String redisCacheKey, String location) throws UnsupportedEncodingException, JsonProcessingException {
+    private String doGetWeatherByNow(String redisCacheKey, String location) throws JsonProcessingException {
         String requestUrl = "https://" +
                 apiConfig.getWeatherUri() +
                 "/v7/weather/now?key=" +
@@ -136,10 +131,9 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      *
      * @param location 地区名称
      * @return 地区Id
-     * @throws UnsupportedEncodingException 不支持的字符编码异常
      * @throws JsonProcessingException      JSON转换异常
      */
-    private String getLocationId(String location) throws UnsupportedEncodingException, JsonProcessingException {
+    private String getLocationId(String location) throws JsonProcessingException {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));
@@ -159,9 +153,8 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param redisCacheKey 缓存的key
      * @param location      地址| 可以是中文地址
      * @return LocationId 根据相关度排序
-     * @throws UnsupportedEncodingException 不支持的字符编码异常
      */
-    private String doGetLocationId(String redisCacheKey, String location) throws UnsupportedEncodingException {
+    private String doGetLocationId(String redisCacheKey, String location) {
         String requestUrl = "https://" +
                 apiConfig.getWeatherGeoUri() +
                 "/v2/city/lookup?key=" +
