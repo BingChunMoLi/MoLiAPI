@@ -439,13 +439,19 @@ api[0].list[15].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://api.bingchunmoli.com/weather/sub',
-    desc: '',
+    desc: '订阅天气通知',
 });
 api[0].list[15].list.push({
     order: '4',
     deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/weather/unSub',
+    desc: '取消订阅天气通知',
+});
+api[0].list[15].list.push({
+    order: '5',
+    deprecated: 'false',
     url: 'https://api.bingchunmoli.com/weather/callback',
-    desc: '',
+    desc: '天气订阅邮件回调',
 });
 api[0].list.push({
     alias: 'YiYanController',

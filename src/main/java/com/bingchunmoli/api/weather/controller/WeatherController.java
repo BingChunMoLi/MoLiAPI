@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.ip.controller.IpController;
@@ -76,7 +77,11 @@ public class WeatherController {
         return weatherService.getWeatherByNow(ipInfo.getLng() + "," + ipInfo.getLat());
     }
 
-
+    /**
+     * 订阅天气通知
+     * @param param email和location 邮件通知地址和订阅天气地址
+     * @return 是否成功
+     */
     @PostMapping("sub")
     public ResultVO<Boolean> subscribe(@Valid @RequestBody WeatherSubscribeParam param) {
         String key = WeatherCacheKey.SUBSCRIBE.getKey() + param.getEmail();
@@ -92,6 +97,31 @@ public class WeatherController {
         return new ResultVO<>(false);
     }
 
+    /**
+     * 取消订阅天气通知
+     * @param param jwt
+     * @return 是否成功
+     */
+    @GetMapping("unSub")
+    public ResultVO<Boolean> unSubscribe(String param){
+        if (JWTUtil.verify(param, apiConfig.getWeatherKey().getBytes())) {
+            JWT jwt = JWTUtil.parseToken(param);
+            JWTPayload payload = jwt.getPayload();
+            JSONObject jsonObject = payload.getClaimsJson();
+            String location = jsonObject.getStr("location");
+            String email = jsonObject.getStr("email");
+            return ResultVO.ok(weatherService.remove(new LambdaQueryWrapper<WeatherSub>()
+                    .eq(WeatherSub::getLocation, location)
+                    .eq(WeatherSub::getEmail, email)));
+        }
+        return ResultVO.ok(false);
+    }
+
+    /**
+     * 天气订阅邮件回调
+     * @param param jwt
+     * @return 是否成功
+     */
     @GetMapping("callback")
     public ResultVO<Boolean> callback(String param) {
         if (JWTUtil.verify(param, apiConfig.getWeatherKey().getBytes())) {

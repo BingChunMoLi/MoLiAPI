@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -43,7 +44,6 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     private final ObjectMapper om;
     private final SendMailUtil sendMailUtil;
     private final HttpServletRequest request;
-    private final RedisUtil redisUtil;
 
     @Override
     public String getWeatherByDay(Integer day, String location) throws UnsupportedEncodingException, JsonProcessingException {
@@ -69,7 +69,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
         map.put("location", param.getLocation());
         String jwt = JWTUtil.createToken(map, apiConfig.getWeatherKey().getBytes());
         return sendMailUtil.sendMail(sendMailUtil.getDefaultFrom(), param.getEmail(),
-                "MoLiAPI天气订阅确认", "地址: " + param.getLocation() + "\n https://" + request.getServerName() + "/weather/callback?param=" + jwt + " \n 如果不是本人订阅你无需回应");
+                "MoLiAPI天气订阅确认", "地址: " + param.getLocation() + "\n https://" + request.getServerName() + "/weather/callback?param=" + jwt + " \n 如果不是本人订阅你无需回应\n 如已订阅, 推订请访问: https://" + request.getServerName() + "weather/unsub?param=" + jwt);
     }
 
     /**
@@ -167,7 +167,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
                 "/v2/city/lookup?key=" +
                 apiConfig.getWeatherKey() +
                 "&location=" +
-                URLEncoder.encode(location, "utf-8");
+                URLEncoder.encode(location, StandardCharsets.UTF_8);
         String res = HttpUtil.get(requestUrl);
         stringRedisUtil.setEx(redisCacheKey, res, 24, TimeUnit.HOURS);
         return res;
