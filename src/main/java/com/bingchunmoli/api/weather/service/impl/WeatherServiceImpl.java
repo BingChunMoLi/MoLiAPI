@@ -3,6 +3,7 @@ package com.bingchunmoli.api.weather.service.impl;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.jwt.JWTUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.properties.ApiConfig;
 import com.bingchunmoli.api.utils.IntegerUtil;
@@ -62,6 +63,11 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
 
     @Override
     public Boolean sendSubscribeMail(WeatherSubscribeParam param) {
+        if (count(new LambdaQueryWrapper<WeatherSub>()
+                .eq(WeatherSub::getEmail, param.getEmail())
+                .eq(WeatherSub::getLocation, param.getLocation())) > 1) {
+            return false;
+        }
         HashMap<String, Object> map = new HashMap<>();
         map.put("email", param.getEmail());
         map.put("location", param.getLocation());

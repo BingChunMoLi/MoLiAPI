@@ -7,6 +7,7 @@ import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.bean.ResultVO;
+import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.ip.controller.IpController;
 import com.bingchunmoli.api.properties.ApiConfig;
@@ -94,7 +95,7 @@ public class WeatherController {
             redisUtil.setObject(key, 1, 15, TimeUnit.MINUTES);
             return ResultVO.ok(true);
         }
-        return new ResultVO<>(false);
+        return new ResultVO<>(CodeEnum.FAILURE, false);
     }
 
     /**
