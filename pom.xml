@@ -27,7 +27,7 @@
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.1.214</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <spring-doc.version>1.6.15</spring-doc.version>
+        <spring-doc.version>1.7.0</spring-doc.version>
         <knife4j.version>3.0.3</knife4j.version>
         <tencent-cloud-api.version>3.1.723</tencent-cloud-api.version>
         <kotlin.version>1.8.10</kotlin.version>
