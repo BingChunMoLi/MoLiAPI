@@ -73,7 +73,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
         map.put("location", param.getLocation());
         String jwt = JWTUtil.createToken(map, apiConfig.getWeatherKey().getBytes());
         return sendMailUtil.sendMail(sendMailUtil.getDefaultFrom(), param.getEmail(),
-                "MoLiAPI天气订阅确认", "地址: " + param.getLocation() + "\n https://" + request.getServerName() + "/weather/callback?param=" + jwt + " \n 如果不是本人订阅你无需回应\n 如已订阅, 推订请访问: https://" + request.getServerName() + "/weather/unsub?param=" + jwt);
+                "MoLiAPI天气订阅确认", "地址: " + param.getLocation() + "\n https://" + request.getServerName() + "/weather/callback?param=" + jwt + " \n 如果不是本人订阅你无需回应\n 如已订阅, <span style='color: red;'>推订</span>请访问: https://" + request.getServerName() + "/weather/unsub?param=" + jwt);
     }
 
     /**
