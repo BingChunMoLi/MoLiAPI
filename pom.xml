@@ -30,7 +30,7 @@
         <spring-doc.version>1.7.0</spring-doc.version>
         <knife4j.version>3.0.3</knife4j.version>
         <tencent-cloud-api.version>3.1.727</tencent-cloud-api.version>
-        <kotlin.version>1.8.10</kotlin.version>
+        <kotlin.version>1.8.20</kotlin.version>
     </properties>
 
     <dependencies>
