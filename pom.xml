@@ -22,7 +22,7 @@
         <knife4j.version>3.0.3</knife4j.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
         <aspectjweaver.version>1.9.19</aspectjweaver.version>
-        <hutool.version>5.8.16</hutool.version>
+        <hutool.version>5.8.18</hutool.version>
         <zxing.version>3.5.1</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.1.214</h2.version>
