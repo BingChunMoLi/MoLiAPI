@@ -61,5 +61,7 @@ public class WeatherVO {
         private String rank;
         @JsonProperty("fxLink")
         private String fxLink;
+
+
     }
 }

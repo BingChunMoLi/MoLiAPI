@@ -94,3 +94,11 @@ CREATE table if not exists `yi_yan`
     `version`     int       DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
+
+create table weather_sub
+(
+    id       int auto_increment primary key ,
+    location varchar(10) not null comment '订阅的城市',
+    email    varchar(30) not null comment '邮箱'
+)
+    comment '天气订阅表';
