@@ -19,7 +19,6 @@
         <java.version>17</java.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <swagger.version>3.0.0</swagger.version>
-        <knife4j.version>3.0.3</knife4j.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
         <aspectjweaver.version>1.9.19</aspectjweaver.version>
         <hutool.version>5.8.15</hutool.version>
@@ -27,7 +26,7 @@
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.1.214</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <knife4j.version>4.0.0</knife4j.version>
+        <knife4j.version>4.1.0</knife4j.version>
         <tencent-cloud-api.version>3.1.712</tencent-cloud-api.version>
         <kotlin.version>1.8.10</kotlin.version>
     </properties>
