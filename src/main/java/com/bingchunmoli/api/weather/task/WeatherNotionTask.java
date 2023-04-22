@@ -78,7 +78,6 @@ public class WeatherNotionTask {
                                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                 <title>天气不好,记得带伞呦😘😘😘</title>
-                                <link rel="stylesheet" href="https://obs.bingchunmoli.com/qweather-icons.css">
                             </head>
                             <body style="height:100vh;width: 100%;">
                                     <div style="margin: 0 auto; display: flex;align-items: center;justify-content: center;">
@@ -93,19 +92,19 @@ public class WeatherNotionTask {
                                         </div>
                                         <div>
                                             <div>{}&nbsp;</div>
-                                            <div><i class="qi-{}"></i></div>
+                                            <div><img src="https://obs.bingchunmoli.com/weather/{}-fill.svg"/></div>
                                             <div>{}°c/{}°c</div>
                                             <div>{}</div>
                                         </div>
                                         <div>
                                             <div>{}&nbsp;</div>
-                                            <div><i class="qi-{}"></i></div>
+                                            <div><img src="https://obs.bingchunmoli.com/weather/{}-fill.svg"/></div>
                                             <div>{}°c/{}°c</div>
                                             <div>{}</div>
                                         </div>
                                         <div>
                                             <div>{}&nbsp;</div>
-                                            <div><i class="qi-{}"></i></div>
+                                            <div><img src="https://obs.bingchunmoli.com/weather/{}-fill.svg"/></div>
                                             <div>{}°c/{}°c</div>
                                             <div>{}</div>
                                         </div>
