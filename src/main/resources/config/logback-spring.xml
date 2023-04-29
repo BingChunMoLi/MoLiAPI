@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-    对于配置文件：如果配置文件 logback-test.xml 和 spring-logback.xml 都不存在，那么 logback 默认地会调用BasicConfigurator，
+    对于配置文件：如果配置文件 logback-test.xml 和 logback-spring.xml 都不存在，那么 logback 默认地会调用BasicConfigurator，
     创建一个最小化配置。最小化配置由一个关联到根 logger 的ConsoleAppender 组成。
     输出用模式为%d{HH:mm:ss.SSS} [%thread] %-5level %logger{200} - %msg%n 的 PatternLayoutEncoder 进行格式化，logger{200} 表示该字段压缩为 200个长度显示
     root logger 默认级别是 DEBUG。

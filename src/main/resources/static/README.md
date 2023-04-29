@@ -5,7 +5,7 @@
 目前仅支持https://api.bingchunmoli.com 并且使用了HSTS, 并且加入了 HSTS Preload List
 
 # smart-doc接口文档
-[https://api.bingchunmoi.com/doc/index.html](https://api.bingchunmoi.com/doc/index.html)
+[https://api.bingchunmoli.com/doc/index.html](https://api.bingchunmoi.com/doc/index.html)
 注: 此网站支持PWA
 
 # eolink在线接口文档

@@ -24,7 +24,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: template
+    active: dev
   data:
     redis:
       database: 1
@@ -50,7 +50,7 @@ logging:
     console: utf-8
   file:
     path: ${moli.path}logs${file.separator}
-  config: classpath:config/spring-logback.xml
+  config: classpath:config/logback-spring.xml
 management:
   endpoints:
     web:

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 天气缓存key
+ * 缓存前缀key
  * @author bingchunmoli
  */
 @Getter
@@ -12,11 +12,21 @@ import lombok.Getter;
 public enum WeatherCacheKey {
 
     /**
-     * 按天查询前缀
+     * 按天查询
      */
     BY_DAY("weather:by_day:"),
+    /**
+     * 地址反解析
+     */
     LOOKUP("weather:lookup:"),
-    BY_NOW("weather:now:");
+    /**
+     * 当前时间
+     */
+    BY_NOW("weather:now:"),
+    /**
+     * 订阅天气通知
+     */
+    SUBSCRIBE("weather:subscribe:");
 
     private final String key;
 

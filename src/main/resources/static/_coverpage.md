@@ -8,5 +8,5 @@
 * 使用第三方SDK: OBSSDK、hitokoto-api
 * 第三方API: Server酱、Bing每日美图
 
-[GitHub](https://github.com/LeagueJhin/api)
+[GitHub](https://github.com/BingChunMoLi/MoLiAPI)
 [Get Started](#quick-start)

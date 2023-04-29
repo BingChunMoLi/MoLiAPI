@@ -1,13 +1,17 @@
 package com.bingchunmoli.api.weather.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.bingchunmoli.api.weather.bean.WeatherSubscribeParam;
+import com.bingchunmoli.api.weather.bean.WeatherSub;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.UnsupportedEncodingException;
 
 /**
+ * 继承天气订阅接口
  * @author bingchunmoli
  */
-public interface WeatherService {
+public interface WeatherService extends IService<WeatherSub> {
     /**
      * 根据天数和地址查询天气
      *
@@ -27,4 +31,11 @@ public interface WeatherService {
      * @throws UnsupportedEncodingException 不支持的URL编码异常
      */
     String getWeatherByNow(String address) throws UnsupportedEncodingException, JsonProcessingException;
+
+    /**
+     * 发送确认订阅邮件
+     * @param param 地址和邮箱
+     * @return 是否发送成功
+     */
+    Boolean sendSubscribeMail(WeatherSubscribeParam param);
 }

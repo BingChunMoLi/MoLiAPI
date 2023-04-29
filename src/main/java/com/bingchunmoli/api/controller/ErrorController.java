@@ -7,9 +7,9 @@ import com.bingchunmoli.api.bean.enums.NotSupportHttpCode;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
@@ -31,10 +31,9 @@ import java.util.Objects;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
-
-    @Autowired
-    ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
 
     /**
      * 友好错误返回页面
