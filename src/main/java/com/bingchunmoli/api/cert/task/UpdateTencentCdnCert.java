@@ -11,6 +11,7 @@ import com.tencentcloudapi.common.provider.ProfileCredentialsProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 public class UpdateTencentCdnCert {
     private final ApiConfig apiConfig;
 
+    @Async
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateCert() throws TencentCloudSDKException {
         Credential cred = new ProfileCredentialsProvider().getCredentials();
@@ -38,7 +40,7 @@ public class UpdateTencentCdnCert {
                 continue;
             }
             String status = domain.getStatus();
-            if (status.equalsIgnoreCase("rejected") || status.equalsIgnoreCase("closing") || status.equalsIgnoreCase("offline")) {
+            if ("rejected".equalsIgnoreCase(status) || "closing".equalsIgnoreCase(status) || "offline".equalsIgnoreCase(status)) {
                 log.info("关闭或状态异常的域名不更新;域名:{}, 状态: {}", domain.getDomain(), domain.getStatus());
                 continue;
             }

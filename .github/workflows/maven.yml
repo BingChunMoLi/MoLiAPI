@@ -38,3 +38,12 @@ jobs:
       with:
         name: Package
         path: staging
+    - uses: actions/checkout@v0.1.4
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key : ${{ secrets.key }}
+        source: "target/moliapi.jar"
+        target: /soft/api/

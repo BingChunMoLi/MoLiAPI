@@ -13,6 +13,7 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +46,8 @@ public class WeatherNotionTask {
         }
     }
 
-    private void notionMessage(Map<String, WeatherDailyBean> notifiedLocationMap,
+    @Async
+    public void notionMessage(Map<String, WeatherDailyBean> notifiedLocationMap,
                                List<WeatherSub> list) throws JsonProcessingException {
         Map<String, List<WeatherSub>> messageMap = list.stream().collect(Collectors.groupingBy(WeatherSub::getLocation));
         for (Map.Entry<String, WeatherDailyBean> entry : notifiedLocationMap.entrySet()) {

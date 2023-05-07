@@ -11,6 +11,10 @@ server:
       enabled: true
       pattern: "%t %a %r %s (%D ms)"
 spring:
+  task:
+    execution:
+      pool:
+        core-size: 10
   servlet:
     multipart:
       max-file-size: -1
