@@ -26,7 +26,7 @@
         <h2.version>2.1.214</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.1.0</knife4j.version>
-        <tencent-cloud-api.version>3.1.750</tencent-cloud-api.version>
+        <tencent-cloud-api.version>3.1.755</tencent-cloud-api.version>
         <kotlin.version>1.8.21</kotlin.version>
     </properties>
 
