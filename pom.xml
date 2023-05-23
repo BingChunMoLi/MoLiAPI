@@ -222,7 +222,7 @@
             <plugin>
                 <groupId>com.github.shalousun</groupId>
                 <artifactId>smart-doc-maven-plugin</artifactId>
-                <version>2.6.8</version>
+                <version>2.6.9</version>
                 <configuration>
                     <configFile>./src/main/resources/smart-doc.json</configFile>
                     <projectName>MoLiApi</projectName>
