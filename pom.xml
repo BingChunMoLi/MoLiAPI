@@ -28,6 +28,7 @@
         <knife4j.version>4.1.0</knife4j.version>
         <tencent-cloud-api.version>3.1.760</tencent-cloud-api.version>
         <kotlin.version>1.8.21</kotlin.version>
+        <httpclient.version>4.5.14</httpclient.version>
     </properties>
 
     <dependencies>
@@ -71,6 +72,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
