@@ -1,21 +1,19 @@
 package com.bingchunmoli.api.bing.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.service.BingService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.transform.Result;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * bing每日美图
@@ -75,8 +73,9 @@ public class BingController {
      * @param day 日
      * @return bing图片
      */
+    @Valid
     @GetMapping("{year}/{month}/{day}")
-    public ResultVO<BingImage> getImageByYearMonthDay(@PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day){
+    public ResultVO<BingImage> getImageByYearMonthDay(@PathVariable @NotNull Integer year, @PathVariable @NotNull Integer month, @PathVariable @NotNull Integer day){
         return ResultVO.ok(bingService.getBingImageByDate(LocalDate.of(year, month, day)));
     }
 
@@ -86,7 +85,7 @@ public class BingController {
      * @return BingImage
      */
     @GetMapping("date")
-    public ResultVO<BingImage> getBingImageByDate(LocalDate date){
+    public ResultVO<BingImage> getBingImageByDate(@Valid @NotNull LocalDate date){
         return ResultVO.ok(bingService.getBingImageByDate(date));
     }
 }

@@ -97,7 +97,8 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     @Override
     public BingImage getBingImageByDate(LocalDate date) {
         return getOne(Wrappers.lambdaQuery(BingImage.builder().build())
-                .eq(BingImage::getCreateTime, date));
+                .gt(BingImage::getCreateTime, date)
+                .last("limit 1"));
     }
 
     @Async
