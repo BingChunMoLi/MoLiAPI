@@ -68,7 +68,7 @@ public class WeatherNotionTask {
         }
     }
 
-    private String coverMessageToHtml(String location, @NotNull WeatherDailyBean dailyBean) throws JsonProcessingException {
+    private String coverMessageToHtml(String location, @NotNull WeatherDailyBean dailyBean) {
         WeatherDailyBean.DailyBean today = dailyBean.getDaily().get(0);
         WeatherDailyBean.DailyBean tomorrow = dailyBean.getDaily().get(1);
         WeatherDailyBean.DailyBean dayAfterTomorrow = dailyBean.getDaily().get(2);
@@ -112,7 +112,6 @@ public class WeatherNotionTask {
                                         </div>
                                 </div>
                                 原始信息:
-                                <code>{}</code>
                             </body>
                         </html>
                         """.trim(),
@@ -131,8 +130,7 @@ public class WeatherNotionTask {
                 dayAfterTomorrow.getIconDay(),
                 dayAfterTomorrow.getTempMin(),
                 dayAfterTomorrow.getTempMax(),
-                dayAfterTomorrow.getTextDay(),
-                om.writeValueAsString(dailyBean));
+                dayAfterTomorrow.getTextDay());
     }
 
     private Map<String, WeatherDailyBean> getNotifiedLocation(List<WeatherSub> list) {
