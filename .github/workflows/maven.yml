@@ -43,7 +43,15 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        passphrase: ${{ secrets.PASSPHRASE }
+        passphrase: ${{ secrets.PASSPHRASE }}
         key : ${{ secrets.KEY }}
         source: "target/moliapi.jar"
         target: /soft/api/
+    - name: restart moliapi
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: sudo systemctl restart api
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        privateKey: ${{ secrets.Key}}
