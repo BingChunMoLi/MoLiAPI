@@ -43,6 +43,6 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key : ${{ secrets.key }}
+        key : ${{ secrets.KEY }}
         source: "target/moliapi.jar"
         target: /soft/api/
