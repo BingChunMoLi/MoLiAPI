@@ -36,6 +36,18 @@ api[0].list[0].list.push({
     url: 'https://api.bingchunmoli.com/bing/random',
     desc: '获取随机一张图的url',
 });
+api[0].list[0].list.push({
+    order: '5',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/bing/{year}/{month}/{day}',
+    desc: '获取指定日期的Bing随机图json',
+});
+api[0].list[0].list.push({
+    order: '6',
+    deprecated: 'false',
+    url: 'https://api.bingchunmoli.com/bing/date',
+    desc: '获取指定日期的bing随机图',
+});
 api[0].list.push({
     alias: 'ErrorController',
     order: '2',

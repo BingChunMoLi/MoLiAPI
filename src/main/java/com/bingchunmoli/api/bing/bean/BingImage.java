@@ -2,6 +2,7 @@ package com.bingchunmoli.api.bing.bean;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  * @author bingchunmoli
  */
 @Data
+@Builder
 @TableName("bing_image")
 @NoArgsConstructor
 @AllArgsConstructor

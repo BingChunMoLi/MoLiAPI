@@ -2,6 +2,7 @@ package com.bingchunmoli.api.bing.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
@@ -91,6 +92,13 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
         }
         saveCache(cnBingImageVO, enBingImageVO, bingImage);
         return bingImage;
+    }
+
+    @Override
+    public BingImage getBingImageByDate(LocalDate date) {
+        return getOne(Wrappers.lambdaQuery(BingImage.builder().build())
+                .gt(BingImage::getCreateTime, date)
+                .last("limit 1"));
     }
 
     @Async

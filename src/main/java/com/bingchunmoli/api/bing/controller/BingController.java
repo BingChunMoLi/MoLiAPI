@@ -5,10 +5,15 @@ import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.service.BingService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
 
 /**
  * bing每日美图
@@ -59,5 +64,28 @@ public class BingController {
     @GetMapping("random")
     public ResultVO<String> getRandomBingImg() {
         return ResultVO.ok(bingService.getRandomImg());
+    }
+
+    /**
+     * 获取指定日期的Bing随机图json
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     * @return bing图片
+     */
+    @Valid
+    @GetMapping("{year}/{month}/{day}")
+    public ResultVO<BingImage> getImageByYearMonthDay(@PathVariable @NotNull Integer year, @PathVariable @NotNull Integer month, @PathVariable @NotNull Integer day){
+        return ResultVO.ok(bingService.getBingImageByDate(LocalDate.of(year, month, day)));
+    }
+
+    /**
+     * 获取指定日期的bing随机图
+     * @param date 日期
+     * @return BingImage
+     */
+    @GetMapping("date")
+    public ResultVO<BingImage> getBingImageByDate(@Valid @NotNull LocalDate date){
+        return ResultVO.ok(bingService.getBingImageByDate(date));
     }
 }

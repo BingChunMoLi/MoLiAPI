@@ -5,6 +5,8 @@ import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 
+import java.time.LocalDate;
+
 /**
  * @author BingChunMoLi
  */
@@ -42,4 +44,11 @@ public interface BingService extends IService<BingImage> {
      * @return bingBingImageVO
      */
     BingImage getBingImageByRemote();
+
+    /**
+     * 根据日期获取bingImage
+     * @param date
+     * @return
+     */
+    BingImage getBingImageByDate(LocalDate date);
 }
