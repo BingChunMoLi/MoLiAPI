@@ -47,6 +47,7 @@ jobs:
         key : ${{ secrets.KEY }}
         source: "target/moliapi.jar"
         target: /soft/api/
+        debug: true
     - name: restart moliapi
       uses: garygrossgarten/github-action-ssh@release
       with:
