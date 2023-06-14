@@ -32,26 +32,9 @@ jobs:
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      uses: advanced-security/maven-dependency-submission-action@v3.0.2
     - run: mkdir staging && cp target/*.jar staging
     - uses: actions/upload-artifact@v3
       with:
         name: Package
         path: staging
-    - name: copy file via ssh password
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        key : ${{ secrets.KEY }}
-        source: "target/moliapi.jar"
-        target: /soft/api/
-    - name: restart moliapi
-      uses: garygrossgarten/github-action-ssh@release
-      with:
-        command: sudo systemctl restart api
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        privateKey: ${{ secrets.Key}}
