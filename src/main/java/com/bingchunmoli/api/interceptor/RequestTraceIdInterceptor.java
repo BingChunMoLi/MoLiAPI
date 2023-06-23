@@ -16,7 +16,7 @@ import java.util.UUID;
  * @author MoLi
  */
 @Slf4j
-@Order(1)
+@Order(Integer.MIN_VALUE)
 @Component
 public class RequestTraceIdInterceptor implements HandlerInterceptor {
 
