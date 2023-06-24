@@ -14,7 +14,7 @@
     <property name="APP_Name" value="api"/>
 
     <!-- key: 标识此timestamp的名字; datePattern: 设置将当前时间（解析配置文件的时间）转换为字符串的模式，遵循java.txt.SimpleDateFormat的格式。 -->
-    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
 
     <!-- 每个logger都关联到logger上下文，默认上下文名称为“default”。但可以使用<contextName>设置成其他名字，用于区分不同应用程序的记录。一旦设置，不能修改。 -->
     <contextName>${APP_Name}</contextName>
@@ -23,7 +23,7 @@
     <!-- 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[X{traceId}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line]
+            <pattern>[%X{traceId}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line]
                 %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
             </pattern>
         </encoder>
