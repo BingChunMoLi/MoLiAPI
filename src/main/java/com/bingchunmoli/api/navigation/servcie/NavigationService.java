@@ -14,7 +14,7 @@ public interface NavigationService extends IService<NavigationPO> {
     /**
      * 查询所有导航
      * @param tenant 租户
-     * @return
+     * @return 所有导航
      */
     List<Navigation> getNavigationsList(String tenant);
 

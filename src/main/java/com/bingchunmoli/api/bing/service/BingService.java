@@ -47,8 +47,8 @@ public interface BingService extends IService<BingImage> {
 
     /**
      * 根据日期获取bingImage
-     * @param date
-     * @return
+     * @param date 日期
+     * @return bing图片
      */
     BingImage getBingImageByDate(LocalDate date);
 }

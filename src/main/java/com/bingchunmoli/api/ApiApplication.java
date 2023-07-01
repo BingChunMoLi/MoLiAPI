@@ -8,10 +8,12 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Indexed;
 
 /**
  * @author BingChunMoLi
  */
+@Indexed
 @EnableAsync
 @EnableRetry(proxyTargetClass = false)
 @EnableCaching
