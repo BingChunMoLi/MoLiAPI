@@ -17,7 +17,9 @@ public class DownloadHttpCatTempTest {
 
     /**
      * 仅用于下载状态码猫图片的代码
-     * @throws IllegalAccessException
+     * @throws IllegalAccessException if the specified object is not an
+     *              instance of the class or interface declaring the underlying
+     *              field (or a subclass or implementor thereof).
      */
     @Test
     @Disabled
