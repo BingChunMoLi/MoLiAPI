@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
+import org.springframework.lang.NonNullApi;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 @ConditionalOnBean(SendMailUtil.class)
 public class MailMessageEvenListener implements ApplicationListener<MailMessageEven> {
     private final SendMailUtil sendMailUtil;
-    @Value("${spring.mail.enable}")
+    @Value("${spring.mail.enable:false}")
     private boolean enable;
     @Async
     @Override

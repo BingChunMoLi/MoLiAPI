@@ -30,7 +30,7 @@ public class SendMailUtil {
     private String defaultFrom;
     @Value("${spring.mail.defaultTo}")
     private String defaultTo;
-    @Value("${spring.mail.enable}")
+    @Value("${spring.mail.enable:false}")
     private boolean enable;
 
     public String getDefaultFrom() {
