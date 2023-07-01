@@ -31,7 +31,7 @@ import java.util.List;
 public class InitYiYanDataServiceImpl implements InitService {
     private final ObjectMapper objectMapper;
     private final YiYanService yiYanService;
-    @Value("${moli.init.yiYanJsonPath}")
+    @Value("${moli.init.yiYanJsonPath:classpath:/data/}")
     private String yiYanJsonPath;
 
     @Override

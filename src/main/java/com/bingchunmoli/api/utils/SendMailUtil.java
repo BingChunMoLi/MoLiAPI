@@ -26,9 +26,9 @@ import java.util.Optional;
 @Component
 public class SendMailUtil {
     private final JavaMailSender javaMailSender;
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.username:mailUsername}")
     private String defaultFrom;
-    @Value("${spring.mail.defaultTo}")
+    @Value("${spring.mail.defaultTo:mailDefaultTo}")
     private String defaultTo;
     @Value("${spring.mail.enable:false}")
     private boolean enable;
