@@ -2,8 +2,8 @@ moli:
   version: @version@
   path: ${user.home}${file.separator}.api${file.separator}
   init:
-    sqlPath: "${moli.path}/init/db/"
-    yiYanJsonPath: "${moli.path}/init/data/"
+    sqlPath: ${moli.path}/init/db
+    yiYanJsonPath: ${moli.path}/init/data/
   apiConfig:
     weatherKey: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
     weatherUri: devapi.qweather.com
@@ -53,6 +53,9 @@ spring:
       database: 1
       connect-timeout: 3000
       timeout: 3000
+      password:
+      port: 6379
+      host: redis
 mybatis-plus:
   configuration:
     cache-enabled: true
@@ -71,8 +74,6 @@ logging:
   charset:
     file: utf-8
     console: utf-8
-  file:
-    path: ${moli.path}logs${file.separator}
   config: classpath:config/logback-spring.xml
 management:
   endpoints:
