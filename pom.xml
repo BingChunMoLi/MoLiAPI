@@ -23,7 +23,7 @@
         <hutool.version>5.8.20</hutool.version>
         <zxing.version>3.5.1</zxing.version>
         <emoji.version>5.1.1</emoji.version>
-        <h2.version>2.1.214</h2.version>
+        <h2.version>2.2.220</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.1.0</knife4j.version>
         <tencent-cloud-api.version>3.1.789</tencent-cloud-api.version>
