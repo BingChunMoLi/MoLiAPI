@@ -21,7 +21,7 @@
         <docker-plugin.version>1.4.13</docker-plugin.version>
         <aspectjweaver.version>1.9.19</aspectjweaver.version>
         <hutool.version>5.8.20</hutool.version>
-        <zxing.version>3.5.1</zxing.version>
+        <zxing.version>3.5.2</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.2.220</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
