@@ -30,7 +30,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RequiredArgsConstructor
 public class ExceptionControllerAdvice {
     private final ApplicationEventPublisher applicationEventPublisher;
-    @Value("${spring.mail.enable}")
+    @Value("${spring.mail.enable:false}")
     private boolean mailEnable;
     private final ObjectMapper om;
 

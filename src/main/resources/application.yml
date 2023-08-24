@@ -1,6 +1,22 @@
 moli:
   version: @version@
   path: ${user.home}${file.separator}.api${file.separator}
+  init:
+    sqlPath: ${moli.path}/init/db
+    yiYanJsonPath: ${moli.path}/init/data/
+  apiConfig:
+    weatherKey: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
+    weatherUri: devapi.qweather.com
+    weatherGeoUri: geoapi.qweather.com
+    serverSauceKey: #server酱通知的key
+    pcPath: ${moli.path}img/pc #pc随机图的图片路径
+    mobilePath: ${moli.path}img/mobile #mobile随机图的图片路径
+    path1080: ${moli.path}img/1080 #1080接口随机图的图片路径
+    uploadTempPath:
+    uploadTempSecret:
+    certificatePath: #证书路径
+    privateKeyPath: #私钥路径
+    domain: #更新的域名
 server:
   port: 8090
   http2:
@@ -20,7 +36,10 @@ spring:
       max-file-size: -1
       max-request-size: -1
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/.api/api.db;MODE=MySQL;AUTO_SERVER=TRUE;DATABASE_TO_LOWER=TRUE;database_to_upper=false;
+    username: root
+    password: root
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-test-query: SELECT 1
@@ -34,6 +53,9 @@ spring:
       database: 1
       connect-timeout: 3000
       timeout: 3000
+      password:
+      port: 6379
+      host: redis
 mybatis-plus:
   configuration:
     cache-enabled: true
@@ -52,8 +74,6 @@ logging:
   charset:
     file: utf-8
     console: utf-8
-  file:
-    path: ${moli.path}logs${file.separator}
   config: classpath:config/logback-spring.xml
 management:
   endpoints:

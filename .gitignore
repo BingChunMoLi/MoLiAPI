@@ -54,3 +54,4 @@ src/test/java/com/bingchunmoli/api/me/
 src/main/resources/mapper/FavMapper.xml
 deploy.bat
 !src/main/resources/application-h2.yml
+!src/main/resources/application-docker_compose.yml

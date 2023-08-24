@@ -16,21 +16,20 @@ import java.util.UUID;
  * @author MoLi
  */
 @Slf4j
-@Order(1)
+@Order(Integer.MIN_VALUE)
 @Component
 public class RequestTraceIdInterceptor implements HandlerInterceptor {
 
     public static final String TRACE_ID = "traceId";
 
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         MDC.put(TRACE_ID, UUID.randomUUID().toString());
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        return true;
     }
 
     @Override
-    public void afterCompletion(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler, Exception ex) throws Exception {
+    public void afterCompletion(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler, Exception ex) {
         MDC.clear();
-        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }

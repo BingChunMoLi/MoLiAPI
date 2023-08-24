@@ -26,9 +26,9 @@ public class BingTask {
     private final BingService bingService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Retryable(value = Exception.class, backoff = @Backoff(delay = 5000L, multiplier = 3))
+    @Retryable(retryFor = Exception.class, backoff = @Backoff(delay = 5000L, multiplier = 3))
     @Scheduled(cron = "0 0 0 * * ?")
-    public void getBingImage() throws JsonProcessingException {
+    public void getBingImage() {
         BingImage bingImageByRemote = bingService.getBingImageByRemote();
         log.info("getBingImage: {}, image: {}", DateUtil.now(), bingImageByRemote);
     }

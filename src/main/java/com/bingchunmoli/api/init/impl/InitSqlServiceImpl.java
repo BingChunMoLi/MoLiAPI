@@ -53,13 +53,13 @@ import java.sql.SQLException;
 public class InitSqlServiceImpl implements InitService {
     private final DataSource dataSource;
     private final JdbcTemplate jdbcTemplate;
-    @Value("${moli.init.sqlPath}")
+    @Value("${moli.init.sqlPath:}")
     private String sqlPath;
 
     @Override
     public void init() {
         if (StrUtil.isNotEmpty(sqlPath)) {
-            Boolean query = jdbcTemplate.query("SHOW TABLES LIKE '%yi_yan%'", ResultSet::next);
+            Boolean query = jdbcTemplate.query("SHOW TABLES", ResultSet::next);
             if (Boolean.TRUE.equals(query)) {
                 //存在yi_yan表跳过初始化
                 return;
