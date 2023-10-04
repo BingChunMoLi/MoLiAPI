@@ -9,8 +9,8 @@
         <result column="icon" property="icon" />
         <result column="des" property="des" />
         <result column="tenant" property="tenant" />
-        <collection property="tagList">
-            <id column="id" property="id"/>
+        <collection property="tagList" ofType="com.bingchunmoli.api.navigation.bean.TagPO">
+            <id column="tag_id" property="id"/>
             <result column="tag_name" property="tagName"/>
             <result column="is_open" property="isOpen"/>
             <result column="is_private" property="isPrivate"/>
@@ -25,4 +25,46 @@
                  left join tag on tag.id = navigation_tag.tag_id
         where navigation.tenant = #{tenant}
     </select>
+
+    <insert id="saveNavigationTags">
+        insert into navigation_tag (id, tag_id, navigation_id) values
+        <foreach collection="tagIdList" open="(" close=")" item="tagId" separator=",">
+            (null, #{tagId}, #{id})
+        </foreach>
+    </insert>
+
+    <insert id="saveBatchTags">
+        insert into tag (id, tag_name, is_open, is_private, pwd) values
+        <foreach collection="list" open="(" close=")" item="tag" separator=",">
+            (null, #{tag.tagName}, #{tag.isOpen}, #{tag.isPrivate}, #{tag.pwd})
+        </foreach>
+    </insert>
+
+    <update id="updateBatchTags">
+        <foreach collection="list" open="(" close=")" item="item" separator=",">
+            update tag
+            <set>
+                <if test="item.tagName != null and item.tagName != ''">
+                    tag_name = #{item.tagName}
+                </if>
+                <if test="item.isOpen != null">
+                    is_open = #{item.isOpen}
+                </if>
+                <if test="item.isPrivate != null">
+                    is_private = #{item.isPrivate}
+                </if>
+                <if test="item.pwd != null and item.pwd != ''">
+                    pwd = #{item.pwd}
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <delete id="removeNavigationTagsByNavigationId">
+        delete
+        from navigation_tag
+        where navigation_id = #{id}
+    </delete>
+
 </mapper>

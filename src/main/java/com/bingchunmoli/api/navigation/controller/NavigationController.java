@@ -27,8 +27,7 @@ public class NavigationController {
      */
     @GetMapping
     public ResultVO<List<Navigation>> getNavigationsList(@RequestHeader(required = false, defaultValue = "public") String tenant){
-        navigationService.list();
-            return ResultVO.ok(navigationService.getNavigationsList(tenant));
+        return ResultVO.ok(navigationService.getNavigationsList(tenant));
     }
 
     /**
