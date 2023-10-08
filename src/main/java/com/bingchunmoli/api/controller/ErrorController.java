@@ -83,7 +83,9 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         Object message = request.getAttribute("javax.servlet.error.message");
         Object path = request.getAttribute("javax.servlet.error.request_uri");
         log.error("错误状态码: {},错误消息: {}, 错误路径: {}, traceId: {}, 响应状态码: {}", statusCode, message, path, MDC.get(RequestTraceIdInterceptor.TRACE_ID), response.getStatus());
-        if (statusCode >= HttpStatus.BAD_REQUEST.value() && statusCode <= HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+        if(statusCode == null){
+            return new ResultVO<>(CodeEnum.FAILURE, message);
+        } else if (statusCode >= HttpStatus.BAD_REQUEST.value() && statusCode <= HttpStatus.INTERNAL_SERVER_ERROR.value()) {
             return new ResultVO<>(CodeEnum.ERROR, message);
         }else if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR.value()){
             return new ResultVO<>(CodeEnum.FAILURE, message);

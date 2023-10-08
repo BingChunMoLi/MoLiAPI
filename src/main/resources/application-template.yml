@@ -3,6 +3,7 @@ spring:
     url: jdbc:mysql:///api?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
     username: root
     password: #密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
       enable: true #请确定是否使用redis
