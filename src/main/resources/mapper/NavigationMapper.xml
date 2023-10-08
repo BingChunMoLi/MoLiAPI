@@ -29,14 +29,14 @@
     <insert id="saveNavigationTags">
         insert into navigation_tag (id, tag_id, navigation_id) values
         <foreach collection="tagIdList" open="(" close=")" item="tagId" separator=",">
-            (null, #{tagId}, #{id})
+            null, #{tagId}, #{id}
         </foreach>
     </insert>
 
-    <insert id="saveBatchTags">
+    <insert id="saveBatchTags" useGeneratedKeys="true" keyProperty="id">
         insert into tag (id, tag_name, is_open, is_private, pwd) values
         <foreach collection="list" open="(" close=")" item="tag" separator=",">
-            (null, #{tag.tagName}, #{tag.isOpen}, #{tag.isPrivate}, #{tag.pwd})
+            null, #{tag.tagName}, #{tag.isOpen}, #{tag.isPrivate}, #{tag.pwd}
         </foreach>
     </insert>
 
