@@ -27,7 +27,7 @@
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.3.0</knife4j.version>
         <tencent-cloud-api.version>3.1.893</tencent-cloud-api.version>
-        <kotlin.version>1.9.20</kotlin.version>
+        <kotlin.version>1.9.21</kotlin.version>
         <httpclient.version>4.5.14</httpclient.version>
     </properties>
 
