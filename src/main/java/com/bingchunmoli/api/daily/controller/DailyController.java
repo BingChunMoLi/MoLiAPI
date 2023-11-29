@@ -71,7 +71,7 @@ public class DailyController {
     @PostMapping("signed")
     public ResultVO<Boolean> signed(@RequestBody List<String> urls){
         if (CollectionUtil.isEmpty(urls)) {
-            return new ResultVO<>(CodeEnum.ERROR, "null");
+            return new ResultVO<>(CodeEnum.ERROR, null);
         }
         HashMap<String, List<String>> collectMap = new HashMap<>();
         //反转map结构
