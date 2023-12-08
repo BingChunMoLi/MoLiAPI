@@ -30,7 +30,7 @@
         <knife4j.version>4.3.0</knife4j.version>
         <tencent-cloud-api.version>3.1.893</tencent-cloud-api.version>
         <kotlin.version>1.9.21</kotlin.version>
-        <httpclient.version>4.5.14</httpclient.version>
+        <firebase-admin.version>9.2.0</firebase-admin.version>
     </properties>
 
     <dependencies>
@@ -90,11 +90,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -171,6 +166,15 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-indexer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>${firebase-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
 
