@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class MailMessage {
+public class MailMessage implements Message{
     /**
      * 来自
      */
