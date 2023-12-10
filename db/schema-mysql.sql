@@ -147,3 +147,15 @@ create table Device
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
+create table push_log
+(
+    id      int auto_increment,
+    type    int           not null comment '1 mail,2 app,3 server',
+    title   varchar(100)  not null,
+    body    varchar(3000) null,
+    receive varchar(60)   not null comment 'device token or topic or toEmail',
+    status  tinyint       default 0 not null comment '0 初始化，1已推送， 2失败',
+    constraint push_log_pk
+        primary key (id)
+)
+    comment '推送日志记录表';

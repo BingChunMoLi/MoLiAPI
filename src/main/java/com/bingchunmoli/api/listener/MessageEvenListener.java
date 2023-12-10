@@ -1,9 +1,11 @@
 package com.bingchunmoli.api.listener;
 
-import com.bingchunmoli.api.bean.Message;
+import com.bingchunmoli.api.push.bean.Message;
 import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.exception.ApiMessageException;
-import com.bingchunmoli.api.utils.push.Push;
+import com.bingchunmoli.api.push.PushLogService;
+import com.bingchunmoli.api.push.bean.Push;
+import com.bingchunmoli.api.push.bean.PushLoggingWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationListener;
@@ -16,15 +18,17 @@ import java.util.Map;
 @Component
 public class MessageEvenListener implements ApplicationListener<MessageEven> {
     private final Collection<Push> pushList;
+    private final PushLogService pushLogService;
 
-    public MessageEvenListener(Map<String, Push> map) {
+    public MessageEvenListener(Map<String, Push> map, PushLogService pushLogService) {
         this.pushList = map.values();
+        this.pushLogService = pushLogService;
     }
 
     @Override
     public void onApplicationEvent(@NotNull MessageEven event) {
         Message message = event.getMessage();
         Push push = pushList.stream().filter(v -> v.support(message)).findFirst().orElseThrow(() -> new ApiMessageException("没有找到合适的推送渠道"));
-        push.send(message);
+        new PushLoggingWrapper(push, pushLogService).send(message);
     }
 }

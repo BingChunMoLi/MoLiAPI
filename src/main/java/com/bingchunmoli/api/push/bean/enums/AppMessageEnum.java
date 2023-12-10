@@ -1,4 +1,4 @@
-package com.bingchunmoli.api.bean.enums;
+package com.bingchunmoli.api.push.bean.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

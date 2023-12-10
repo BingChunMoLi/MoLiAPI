@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.controller.advice;
 
-import com.bingchunmoli.api.bean.MailMessage;
+import com.bingchunmoli.api.push.bean.MailMessage;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.even.MessageEven;
