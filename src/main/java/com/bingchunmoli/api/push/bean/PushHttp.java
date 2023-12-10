@@ -1,7 +1,5 @@
-package com.bingchunmoli.api.utils.push;
+package com.bingchunmoli.api.push.bean;
 
-import com.bingchunmoli.api.bean.Message;
-import com.bingchunmoli.api.utils.push.bean.SendParam;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;

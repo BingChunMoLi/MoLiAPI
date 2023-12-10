@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.init;
 
-import com.bingchunmoli.api.bean.AppMessage;
-import com.bingchunmoli.api.bean.enums.AppMessageEnum;
+import com.bingchunmoli.api.push.bean.AppMessage;
+import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import com.bingchunmoli.api.even.MessageEven;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

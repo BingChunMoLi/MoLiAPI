@@ -1,8 +1,7 @@
-package com.bingchunmoli.api.utils.push;
+package com.bingchunmoli.api.push.bean;
 
 
-import com.bingchunmoli.api.bean.AppMessage;
-import com.bingchunmoli.api.bean.Message;
+import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.bingchunmoli.api.exception.ApiAppMessageException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -34,6 +33,6 @@ public class PushApp implements Push{
 
     @Override
     public boolean support(Message message) {
-        return message instanceof AppMessage;
+        return PushMessageEnum.APP_MESSAGE.equals(message.getType());
     }
 }

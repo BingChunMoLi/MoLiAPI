@@ -1,7 +1,6 @@
-package com.bingchunmoli.api.utils.push;
+package com.bingchunmoli.api.push.bean;
 
-import com.bingchunmoli.api.bean.MailMessage;
-import com.bingchunmoli.api.bean.Message;
+import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.bingchunmoli.api.exception.ApiMessageException;
 import com.bingchunmoli.api.utils.SendMailUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class PushMail implements Push{
 
     @Override
     public boolean support(Message message) {
-        return message instanceof MailMessage;
+        return PushMessageEnum.MAIL_MESSAGE.equals(message.getType());
     }
 
 }

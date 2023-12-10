@@ -13,7 +13,9 @@ public enum DriveType {
     /**
      * 数据库类型
      */
-    NONE(0, "NONE"), MYSQL(1, "MYSQL"), H2(2, "H2");
+    NONE(0, "NONE"),
+    MYSQL(1, "MYSQL"),
+    H2(2, "H2");
 
     private final int type;
     private final String driveName;

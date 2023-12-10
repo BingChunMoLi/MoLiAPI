@@ -1,4 +1,4 @@
-package com.bingchunmoli.api.utils.push.bean;
+package com.bingchunmoli.api.push.bean;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

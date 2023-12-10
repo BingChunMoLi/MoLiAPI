@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.bing.task;
 
 import cn.hutool.core.date.DateUtil;
-import com.bingchunmoli.api.bean.MailMessage;
+import com.bingchunmoli.api.push.bean.MailMessage;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.service.BingService;
 import com.bingchunmoli.api.even.MessageEven;

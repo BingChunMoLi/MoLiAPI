@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.even;
 
-import com.bingchunmoli.api.bean.Message;
+import com.bingchunmoli.api.push.bean.Message;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
