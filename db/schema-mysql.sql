@@ -155,7 +155,9 @@ create table push_log
     body    varchar(3000) null,
     receive varchar(60)   not null comment 'device token or topic or toEmail',
     status  tinyint       default 0 not null comment '0 初始化，1已推送， 2失败',
-    constraint push_log_pk
+    create_time datetime null,
+    update_time datetime default null,
+constraint push_log_pk
         primary key (id)
 )
     comment '推送日志记录表';
