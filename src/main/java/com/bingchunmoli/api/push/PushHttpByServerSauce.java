@@ -1,9 +1,12 @@
-package com.bingchunmoli.api.push.bean;
+package com.bingchunmoli.api.push;
 
-import com.bingchunmoli.api.push.bean.enums.HttpMessageType;
-import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.bingchunmoli.api.exception.ApiMessageException;
 import com.bingchunmoli.api.properties.ApiConfig;
+import com.bingchunmoli.api.push.bean.HttpMessage;
+import com.bingchunmoli.api.push.bean.Message;
+import com.bingchunmoli.api.push.bean.SendParam;
+import com.bingchunmoli.api.push.bean.enums.HttpMessageType;
+import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Service
 @RequiredArgsConstructor
-public class PushHttpByServerSauce extends PushHttp{
+public class PushHttpByServerSauce extends PushHttp {
     private final ApiConfig apiConfig;
     @Override
     public boolean support(Message message) {

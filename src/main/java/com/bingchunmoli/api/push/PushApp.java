@@ -1,6 +1,9 @@
-package com.bingchunmoli.api.push.bean;
+package com.bingchunmoli.api.push;
 
 
+import com.bingchunmoli.api.push.Push;
+import com.bingchunmoli.api.push.bean.AppMessage;
+import com.bingchunmoli.api.push.bean.Message;
 import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.bingchunmoli.api.exception.ApiAppMessageException;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -9,7 +12,7 @@ import com.google.firebase.messaging.Notification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PushApp implements Push{
+public class PushApp implements Push {
 
     @Override
     public String send(Message message) {

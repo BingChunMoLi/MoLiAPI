@@ -1,5 +1,7 @@
-package com.bingchunmoli.api.push.bean;
+package com.bingchunmoli.api.push;
 
+
+import com.bingchunmoli.api.push.bean.Message;
 
 public interface Push {
 

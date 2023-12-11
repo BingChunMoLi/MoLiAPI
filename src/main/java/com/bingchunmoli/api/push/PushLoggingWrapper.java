@@ -1,6 +1,7 @@
-package com.bingchunmoli.api.push.bean;
+package com.bingchunmoli.api.push;
 
-import com.bingchunmoli.api.push.PushLogService;
+import com.bingchunmoli.api.push.bean.Message;
+import com.bingchunmoli.api.push.bean.PushLog;
 import com.bingchunmoli.api.push.bean.enums.PushLogStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

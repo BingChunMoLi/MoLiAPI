@@ -1,5 +1,7 @@
-package com.bingchunmoli.api.push.bean;
+package com.bingchunmoli.api.push;
 
+import com.bingchunmoli.api.push.bean.Message;
+import com.bingchunmoli.api.push.bean.SendParam;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -8,7 +10,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
-public abstract class PushHttp implements Push{
+public abstract class PushHttp implements Push {
 
     protected String secret;
 

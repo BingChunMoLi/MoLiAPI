@@ -3,12 +3,14 @@ package com.bingchunmoli.api.push.bean.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 /**
  * @author moli
  */
 @Getter
 @AllArgsConstructor
-public enum PushMessageEnum {
+public enum PushMessageEnum implements Serializable{
     //邮件消息
     MAIL_MESSAGE(1, "mailMessage"),
     //app消息

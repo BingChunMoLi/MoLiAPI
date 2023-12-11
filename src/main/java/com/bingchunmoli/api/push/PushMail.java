@@ -1,14 +1,16 @@
-package com.bingchunmoli.api.push.bean;
+package com.bingchunmoli.api.push;
 
-import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.bingchunmoli.api.exception.ApiMessageException;
+import com.bingchunmoli.api.push.bean.MailMessage;
+import com.bingchunmoli.api.push.bean.Message;
+import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.bingchunmoli.api.utils.SendMailUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PushMail implements Push{
+public class PushMail implements Push {
     private final SendMailUtil sendMailUtil;
 
     @Override
