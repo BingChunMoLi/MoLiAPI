@@ -2,6 +2,7 @@ package com.bingchunmoli.api.img.task;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.push.bean.AppMessage;
 import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
@@ -30,6 +31,7 @@ public class ImgTask {
     private final ImgService imgService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final DeviceService deviceService;
 
     @Scheduled(cron = "0 0 0 1 * ?")
     public void saveImg() {
@@ -72,7 +74,7 @@ public class ImgTask {
         applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
                 .setTitle("随机图定时任务 更新成功")
                 .setBody(body)
-                .setTopic("api")
+                .setDeviceToken(deviceService.getById(1).getToken())
                 .setAppMessageEnum(AppMessageEnum.TOPIC)));
     }
 }

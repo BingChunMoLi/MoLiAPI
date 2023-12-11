@@ -10,13 +10,13 @@ import lombok.experimental.Accessors;
 public class AppMessage implements Message{
     private AppMessageEnum appMessageEnum;
     private String deviceToken;
-    private String topic = "api";
+    private String topic;
     private String title;
     private String body;
 
     @Override
     public String getReceive() {
-        return getTopic() == null || getTopic().isEmpty() ? getDeviceToken() : getTopic();
+        return getDeviceToken() == null || getDeviceToken().isEmpty() ? getTopic() : getDeviceToken();
     }
 
     @Override

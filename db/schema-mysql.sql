@@ -153,7 +153,7 @@ create table push_log
     type    int           not null comment '1 mail,2 app,3 server',
     title   varchar(100)  not null,
     body    varchar(3000) null,
-    receive varchar(60)   not null comment 'device token or topic or toEmail',
+    receive varchar(300)   not null comment 'device token or topic or toEmail',
     status  tinyint       default 0 not null comment '0 初始化，1已推送， 2失败',
     create_time datetime null,
     update_time datetime default null,
