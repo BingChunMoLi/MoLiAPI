@@ -21,7 +21,7 @@
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <aspectjweaver.version>1.9.20.1</aspectjweaver.version>
+        <aspectjweaver.version>1.9.21</aspectjweaver.version>
         <hutool.version>5.8.23</hutool.version>
         <zxing.version>3.5.2</zxing.version>
         <emoji.version>5.1.1</emoji.version>
