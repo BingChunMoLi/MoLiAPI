@@ -27,7 +27,7 @@
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.2.224</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <knife4j.version>4.3.0</knife4j.version>
+        <knife4j.version>4.4.0</knife4j.version>
         <tencent-cloud-api.version>3.1.893</tencent-cloud-api.version>
         <kotlin.version>1.9.21</kotlin.version>
         <firebase-admin.version>9.2.0</firebase-admin.version>
