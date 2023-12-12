@@ -11,9 +11,11 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "master" ]
+    tags:
+      - "v*"
   pull_request:
     branches: [ "master" ]
-
+    
 jobs:
   build:
 
@@ -34,3 +36,11 @@ jobs:
       with:
         name: Package
         path: staging
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        files: |
+          LICENSE.txt
+          *.jar
