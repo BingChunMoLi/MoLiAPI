@@ -1,5 +1,6 @@
 package com.bingchunmoli.api.controller.advice;
 
+import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.push.bean.MailMessage;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
@@ -33,6 +34,7 @@ public class ExceptionControllerAdvice {
     @Value("${spring.mail.enable:false}")
     private boolean mailEnable;
     private final ObjectMapper om;
+    private final DeviceService deviceService;
 
     @ExceptionHandler
     public ResultVO<String> fileIsEmptyException(ApiFileIsEmptyException e) {
@@ -95,7 +97,7 @@ public class ExceptionControllerAdvice {
         if (mailEnable) {
             MailMessage errMailMessage = null;
             try {
-                errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace())).build();
+                errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace())).to(deviceService.getById(1).getToken()).build();
             } catch (JsonProcessingException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
