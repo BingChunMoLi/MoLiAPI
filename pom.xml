@@ -5,30 +5,32 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.12.0</version>
+    <version>3.13.0</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
     <properties>
-        <java.version>17</java.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
+        <java.version>21</java.version>
+        <mybatis.version>3.5.14</mybatis.version>
+        <mybatis-spring.version>3.0.3</mybatis-spring.version>
+        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <aspectjweaver.version>1.9.20.1</aspectjweaver.version>
-        <hutool.version>5.8.22</hutool.version>
+        <aspectjweaver.version>1.9.21</aspectjweaver.version>
+        <hutool.version>5.8.23</hutool.version>
         <zxing.version>3.5.2</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.2.224</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <knife4j.version>4.3.0</knife4j.version>
-        <tencent-cloud-api.version>3.1.872</tencent-cloud-api.version>
-        <kotlin.version>1.9.10</kotlin.version>
-        <httpclient.version>4.5.14</httpclient.version>
+        <knife4j.version>4.4.0</knife4j.version>
+        <tencent-cloud-api.version>3.1.893</tencent-cloud-api.version>
+        <kotlin.version>1.9.21</kotlin.version>
+        <firebase-admin.version>9.2.0</firebase-admin.version>
     </properties>
 
     <dependencies>
@@ -60,6 +62,26 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis-spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,11 +90,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -149,6 +166,15 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-indexer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>${firebase-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
 

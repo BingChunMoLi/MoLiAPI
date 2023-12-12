@@ -1,11 +1,10 @@
 package com.bingchunmoli.api.bing.task;
 
 import cn.hutool.core.date.DateUtil;
-import com.bingchunmoli.api.bean.MailMessage;
+import com.bingchunmoli.api.push.bean.MailMessage;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.service.BingService;
-import com.bingchunmoli.api.even.MailMessageEven;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.bingchunmoli.api.even.MessageEven;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -36,6 +35,8 @@ public class BingTask {
     @Recover
     public void logBingImageError(Exception e) {
         log.error("获取bing图片异常, data: " + DateUtil.now() + "\n", e);
-        applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("和获取bing图片异常").body(e.toString()).build()));
+            applicationEventPublisher.publishEvent(new MessageEven(this, MailMessage.builder()
+                    .title("和获取bing图片异常")
+                    .body(e.toString()).build()));
     }
 }

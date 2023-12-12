@@ -1,15 +1,17 @@
 package com.bingchunmoli.api.daily.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.bingchunmoli.api.bean.ResultVO;
+import com.bingchunmoli.api.bean.enums.CodeEnum;
+import com.bingchunmoli.api.daily.bean.DailyLog;
+import com.bingchunmoli.api.daily.service.DailyLogService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +24,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DailyController {
 
+    private final DailyLogService dailyLogService;
     Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
 
     /**
@@ -61,6 +64,35 @@ public class DailyController {
         return ResultVO.ok(dailies);
     }
 
+    /**
+     * 签到回调
+     * @return 是否成功
+     */
+    @PostMapping("signed")
+    public ResultVO<Boolean> signed(@RequestBody List<String> urls){
+        if (CollectionUtil.isEmpty(urls)) {
+            return new ResultVO<>(CodeEnum.ERROR, null);
+        }
+        HashMap<String, List<String>> collectMap = new HashMap<>();
+        //反转map结构
+        map.forEach((key, value) -> value.forEach(f -> {
+            List<String> mapOrDefault = collectMap.getOrDefault(f, new ArrayList<>());
+            mapOrDefault.add(key);
+            collectMap.put(f, mapOrDefault);
+        }));
+        ArrayList<DailyLog> list = new ArrayList<>();
+        //循环构建DailyLog
+        urls.forEach(v -> {
+            Collection<String> tenants = map.getOrDefault(v, Collections.singleton(""));
+            String tenant = tenants.stream().filter(k -> k.equalsIgnoreCase("moli")).findFirst().orElse("0");
+            list.add(new DailyLog()
+                    .type(1)
+                    .url(v)
+                    .tenant(tenant.equals("moli") ? 1 : 0)
+                    .createTime(LocalDateTime.now()));
+        });
+        return ResultVO.ok( dailyLogService.saveBatch(list));
+    }
 }
 
 /**

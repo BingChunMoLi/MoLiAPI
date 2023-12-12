@@ -1,9 +1,9 @@
 package com.bingchunmoli.api.controller.advice;
 
-import com.bingchunmoli.api.bean.MailMessage;
+import com.bingchunmoli.api.push.bean.MailMessage;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
-import com.bingchunmoli.api.even.MailMessageEven;
+import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.exception.ApiException;
 import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
@@ -99,7 +99,7 @@ public class ExceptionControllerAdvice {
             } catch (JsonProcessingException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
-            applicationEventPublisher.publishEvent(new MailMessageEven(errMailMessage));
+            applicationEventPublisher.publishEvent(new MessageEven(this, errMailMessage));
         }
         return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
     }

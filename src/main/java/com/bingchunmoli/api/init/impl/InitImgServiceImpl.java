@@ -4,6 +4,7 @@ import com.bingchunmoli.api.img.task.ImgTask;
 import com.bingchunmoli.api.init.InitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @Order(2)
+@Profile("prod")
 @RequiredArgsConstructor
 public class InitImgServiceImpl implements InitService {
     private final ImgTask imgTask;

@@ -2,10 +2,9 @@ package com.bingchunmoli.api.utils;
 
 
 import cn.hutool.core.util.StrUtil;
-import com.bingchunmoli.api.bean.MailMessage;
-import com.bingchunmoli.api.even.MailMessageEven;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,9 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 
 /**
@@ -26,6 +22,7 @@ import java.util.Optional;
 @Component
 public class SendMailUtil {
     private final JavaMailSender javaMailSender;
+    @Getter
     @Value("${spring.mail.username:mailUsername}")
     private String defaultFrom;
     @Value("${spring.mail.defaultTo:mailDefaultTo}")
@@ -33,33 +30,9 @@ public class SendMailUtil {
     @Value("${spring.mail.enable:false}")
     private boolean enable;
 
-    public String getDefaultFrom() {
-        return defaultFrom;
-    }
-
     public SendMailUtil(@Autowired(required = false) JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
-
-
-    /**
-     * 根据事件源发送邮件
-     *
-     * @param mailMessageEven mailMessageEven事件含有MailMessage实体
-     * @return 是否成功
-     */
-    public boolean sendEvenMail(MailMessageEven mailMessageEven) {
-        if (!enable) {
-            return false;
-        }
-        MailMessage message = (MailMessage) mailMessageEven.getSource();
-        Optional<String> fromOptional = Optional.ofNullable(message.getFrom());
-        Optional<String> toOptional = Optional.ofNullable(message.getTo());
-        String from = fromOptional.orElse(defaultFrom);
-        String to = toOptional.orElse(defaultTo);
-        return sendMail(from, to, message.getTitle(), message.getBody() + "\n\n\t\t 触发时间:" + LocalDateTime.ofInstant(Instant.ofEpochMilli(mailMessageEven.getTimestamp()), ZoneId.systemDefault()));
-    }
-
 
     /**
      * 发送默认defaultFrom和默认defaultTo
@@ -85,8 +58,8 @@ public class SendMailUtil {
             return false;
         }
         SimpleMailMessage simpleMail = new SimpleMailMessage();
-        simpleMail.setFrom(from);
-        simpleMail.setTo(to);
+        simpleMail.setFrom(Optional.ofNullable(from).orElse(defaultFrom));
+        simpleMail.setTo(Optional.ofNullable(to).orElse(defaultTo));
         simpleMail.setSubject(title);
         simpleMail.setText(body);
         javaMailSender.send(simpleMail);

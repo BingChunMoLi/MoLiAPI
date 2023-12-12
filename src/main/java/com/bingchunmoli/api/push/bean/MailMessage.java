@@ -1,5 +1,6 @@
-package com.bingchunmoli.api.bean;
+package com.bingchunmoli.api.push.bean;
 
+import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class MailMessage {
+public class MailMessage implements Message{
     /**
      * 来自
      */
@@ -27,4 +28,13 @@ public class MailMessage {
      */
     private String body;
 
+    @Override
+    public String getReceive() {
+        return to;
+    }
+
+    @Override
+    public PushMessageEnum getType() {
+        return PushMessageEnum.MAIL_MESSAGE;
+    }
 }

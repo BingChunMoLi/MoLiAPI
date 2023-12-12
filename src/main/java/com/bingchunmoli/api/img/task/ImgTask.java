@@ -2,9 +2,11 @@ package com.bingchunmoli.api.img.task;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ApiConstant;
-import com.bingchunmoli.api.bean.MailMessage;
-import com.bingchunmoli.api.even.MailMessageEven;
+import com.bingchunmoli.api.push.bean.AppMessage;
+import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
+import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.img.service.ImgService;
 import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class ImgTask {
     private final ImgService imgService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final DeviceService deviceService;
 
     @Scheduled(cron = "0 0 0 1 * ?")
     public void saveImg() {
@@ -38,8 +41,11 @@ public class ImgTask {
             try {
                 pcPath = imgService.getImgListByFileSystem(apiConfig.getPcPath());
             } catch (IOException e) {
-                e.printStackTrace();
-                applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("pc定时任务失败").body("异常信息:  " + e.getMessage() + "").build()));
+                applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
+                        .setTitle("pc定时任务失败")
+                        .setBody("异常信息:  " + e.getMessage())
+                        .setTopic("api")
+                        .setAppMessageEnum(AppMessageEnum.TOPIC)));
             }
             if (CollectionUtil.isNotEmpty(pcPath)) {
                 redisTemplate.opsForList().trim(ApiConstant.PC_IMG, -2, -1);
@@ -50,14 +56,25 @@ public class ImgTask {
             try {
                 mobilePath = imgService.getImgListByFileSystem(apiConfig.getMobilePath());
             } catch (IOException e) {
-                e.printStackTrace();
-                applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("mobile定时任务失败").body("异常信息:  " + e.getMessage() + "").build()));
+                applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
+                        .setTitle("mobile定时任务失败")
+                        .setBody("异常信息:  " + e.getMessage())
+                        .setTopic("api")
+                        .setAppMessageEnum(AppMessageEnum.TOPIC)));
             }
             if (CollectionUtil.isNotEmpty(mobilePath)) {
                 redisTemplate.opsForList().trim(ApiConstant.MOBILE_IMG, -1, -2);
                 redisTemplate.opsForList().leftPushAll(ApiConstant.MOBILE_IMG, mobilePath.stream().map(Path::toString).toArray());
             }
         }
-        applicationEventPublisher.publishEvent(new MailMessageEven(MailMessage.builder().title("随机图定时任务 更新成功").body("更新PC图片:" + pcPath.size() + "  更新移动图片:" + mobilePath.size()).build()));
+        String body = "更新PC图片:" +
+                (pcPath == null ? 0 : pcPath.size()) +
+                "  更新移动图片:" +
+                (mobilePath == null ? 0 : mobilePath.size());
+        applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
+                .setTitle("随机图定时任务 更新成功")
+                .setBody(body)
+                .setDeviceToken(deviceService.getById(1).getToken())
+                .setAppMessageEnum(AppMessageEnum.TOPIC)));
     }
 }

@@ -86,7 +86,7 @@ CREATE table if not exists `shi_ci`
     `version`     int                                                     DEFAULT NULL,
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
+  DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC;
 
 
@@ -117,8 +117,47 @@ CREATE table if not exists `yi_yan`
 
 create table weather_sub
 (
-    id       int auto_increment primary key ,
+    id       int auto_increment primary key,
     location varchar(10) not null comment '订阅的城市',
     email    varchar(30) not null comment '邮箱'
 )
     comment '天气订阅表';
+
+CREATE TABLE api.daily_log
+(
+    id          BIGINT auto_increment      NOT NULL,
+    url         varchar(700)               NOT NULL COMMENT '签到的url',
+    tenant      TINYINT UNSIGNED DEFAULT 0 NOT NULL COMMENT '租户 1, moli',
+    create_time DATETIME                   NOT NULL COMMENT '创建时间',
+    `type`      TINYINT UNSIGNED           NOT NULL COMMENT '类型 1 网址 2 other',
+    CONSTRAINT daily_log_PK PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+
+create table Device
+(
+    id         int auto_increment
+        primary key,
+    token      varchar(300) null,
+    name       varchar(10)  null comment '设备名称',
+    model      varchar(30)  null comment '设备型号',
+    android_id varchar(60)  null comment '安卓Id'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+
+create table push_log
+(
+    id      int auto_increment,
+    type    int           not null comment '1 mail,2 app,3 server',
+    title   varchar(100)  not null,
+    body    varchar(3000) null,
+    receive varchar(300)   not null comment 'device token or topic or toEmail',
+    status  tinyint       default 0 not null comment '0 初始化，1已推送， 2失败',
+    create_time datetime null,
+    update_time datetime default null,
+constraint push_log_pk
+        primary key (id)
+)
+    comment '推送日志记录表';
