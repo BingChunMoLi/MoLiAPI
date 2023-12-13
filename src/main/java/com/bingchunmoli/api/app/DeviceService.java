@@ -7,5 +7,5 @@ import com.bingchunmoli.api.app.bean.DeviceVO;
 * @author MoLi
 */
 public interface DeviceService extends IService<DeviceVO> {
-
+    String getDefaultToken();
 }

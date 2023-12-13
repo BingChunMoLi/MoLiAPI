@@ -32,8 +32,7 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - ~/.api/upload/:/root/.api/upload/
-      - ~/.api/image/:/root/.api/image/
+      - ~/.api/:/root/.api/
     depends_on:
       - mysql
       - redis

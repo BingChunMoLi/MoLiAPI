@@ -1,16 +1,22 @@
 package com.bingchunmoli.api.daily.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.daily.bean.DailyLog;
 import com.bingchunmoli.api.daily.service.DailyLogService;
+import com.bingchunmoli.api.even.MessageEven;
+import com.bingchunmoli.api.push.bean.AppMessage;
+import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,6 +31,8 @@ import java.util.stream.Stream;
 public class DailyController {
 
     private final DailyLogService dailyLogService;
+    private final DeviceService deviceService;
+    private final ApplicationEventPublisher applicationEventPublisher;
     Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
 
     /**
@@ -91,7 +99,12 @@ public class DailyController {
                     .tenant(tenant.equals("moli") ? 1 : 0)
                     .createTime(LocalDateTime.now()));
         });
-        return ResultVO.ok( dailyLogService.saveBatch(list));
+        applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
+                .setTitle("签到成功")
+                .setBody(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .setAppMessageEnum(AppMessageEnum.DEVICE_ID)
+                .setDeviceToken(deviceService.getDefaultToken())));
+        return ResultVO.ok(dailyLogService.saveBatch(list));
     }
 }
 
