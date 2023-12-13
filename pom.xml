@@ -21,7 +21,6 @@
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <aspectjweaver.version>1.9.21</aspectjweaver.version>
         <hutool.version>5.8.23</hutool.version>
         <zxing.version>3.5.2</zxing.version>
         <emoji.version>5.1.1</emoji.version>
@@ -92,6 +91,10 @@
             <artifactId>aspectjrt</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
@@ -100,11 +103,6 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>${zxing.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectjweaver.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
