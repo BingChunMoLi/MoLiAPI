@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <mybatis.version>3.5.14</mybatis.version>
+        <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
