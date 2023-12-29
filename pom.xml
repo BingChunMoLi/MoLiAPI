@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.13.0</version>
+    <version>3.14.0</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
             <exclusions>
                 <exclusion>
