@@ -1,9 +1,0 @@
-{
-  "outPath": "src\\main\\resources\\static\\doc",
-  "allInOne": true,
-  "coverOld": true,
-  "serverUrl": "https://api.bingchunmoli.com",
-  "responseBodyAdvice": {
-    "className": "com.bingchunmoli.api.bean.ResultVO"
-  }
-}

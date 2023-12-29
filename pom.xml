@@ -5,31 +5,30 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.13.0</version>
+    <version>3.14.0</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
     <properties>
         <java.version>21</java.version>
-        <mybatis.version>3.5.14</mybatis.version>
+        <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <aspectjweaver.version>1.9.21</aspectjweaver.version>
-        <hutool.version>5.8.23</hutool.version>
+        <hutool.version>5.8.24</hutool.version>
         <zxing.version>3.5.2</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.2.224</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.4.0</knife4j.version>
         <tencent-cloud-api.version>3.1.893</tencent-cloud-api.version>
-        <kotlin.version>1.9.21</kotlin.version>
+        <kotlin.version>1.9.22</kotlin.version>
         <firebase-admin.version>9.2.0</firebase-admin.version>
     </properties>
 
@@ -60,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
             <exclusions>
                 <exclusion>
@@ -88,8 +87,8 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -100,11 +99,6 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>${zxing.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectjweaver.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -171,10 +165,6 @@
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
             <version>${firebase-admin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
 
@@ -250,24 +240,6 @@
                         <JAR_FILE>${project.artifactId}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.shalousun</groupId>
-                <artifactId>smart-doc-maven-plugin</artifactId>
-                <version>2.7.7</version>
-                <configuration>
-                    <configFile>./src/main/resources/smart-doc.json</configFile>
-                    <projectName>MoLiApi</projectName>
-                    <includes>com.bingchunmoli</includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>html</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 一言，诗词，随机图初始化 仅限prod环境
@@ -27,8 +28,12 @@ public class ApiCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         InitService initFcmServiceImpl = initServiceMap.remove("initFcmServiceImpl");
+        InitService initSqlServiceImpl = initServiceMap.remove("initSqlServiceImpl");
         LinkedHashMap<String, InitService> initServiceLinkedHashMap = new LinkedHashMap<>(initServiceMap);
-        initServiceLinkedHashMap.putFirst("initFcmServiceImpl", initFcmServiceImpl);
+        Optional.ofNullable(initFcmServiceImpl)
+                .map(v -> initServiceLinkedHashMap.putFirst("initFcmServiceImpl", v));
+        Optional.ofNullable(initSqlServiceImpl)
+                .map(v -> initServiceLinkedHashMap.putFirst("initSqlServiceImpl", initSqlServiceImpl));
         for (InitService service : initServiceLinkedHashMap.values()) {
             service.init();
         }

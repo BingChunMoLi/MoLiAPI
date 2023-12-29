@@ -2,7 +2,6 @@ package com.bingchunmoli.api.yiyan.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.bean.ApiConstant;
-import com.bingchunmoli.api.utils.RedisUtil;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.mapper.YiYanMapper;
 import com.bingchunmoli.api.yiyan.service.YiYanService;
@@ -20,7 +19,6 @@ import java.util.Random;
 public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements YiYanService {
     private final YiYanMapper yiYanMapper;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final RedisUtil redisUtil;
 
     @Override
     public YiYan findRandomYiYan() {

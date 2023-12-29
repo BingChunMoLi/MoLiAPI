@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DeviceVO> implements DeviceService{
 
+    @Override
+    public String getDefaultToken() {
+        return getById(1).getToken();
+    }
 }
 
 

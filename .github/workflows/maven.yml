@@ -15,7 +15,7 @@ on:
       - "v*"
   pull_request:
     branches: [ "master" ]
-    
+
 jobs:
   build:
 

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import java.util.List;
 public class InitYiYanDataServiceImpl implements InitService {
     private final ObjectMapper objectMapper;
     private final YiYanService yiYanService;
-    @Value("${moli.init.yiYanJsonPath:classpath:/data/}")
+    @Value("${moli.init.yiYanJsonPath:/init/data}")
     private String yiYanJsonPath;
 
     @Override
