@@ -41,4 +41,9 @@ public class InitFcmServiceImpl implements InitService {
         }
         FirebaseApp.initializeApp(options);
     }
+
+    @Override
+    public Integer getOrder() {
+        return 10;
+    }
 }

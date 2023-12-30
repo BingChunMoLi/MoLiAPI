@@ -6,7 +6,6 @@ import com.bingchunmoli.api.init.InitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -23,7 +22,6 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Service
-@Order(3)
 @RequiredArgsConstructor
 public class InitSqlServiceImpl implements InitService {
     private final DataSource dataSource;
@@ -55,6 +53,11 @@ public class InitSqlServiceImpl implements InitService {
             }
             new ResourceDatabasePopulator(new ClassPathResource(sqlPath + File.separator + driverName + ".sql")).execute(dataSource);
         }
+    }
+
+    @Override
+    public Integer getOrder() {
+        return 5;
     }
 
 }

@@ -5,7 +5,6 @@ import com.bingchunmoli.api.init.InitService;
 import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,7 +20,6 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Order(1)
 @RequiredArgsConstructor
 public final class InitFileServiceImpl implements InitService {
     private final ApiConfig apiConfig;
@@ -42,5 +40,10 @@ public final class InitFileServiceImpl implements InitService {
                 }
             }
         });
+    }
+
+    @Override
+    public Integer getOrder() {
+        return 1;
     }
 }

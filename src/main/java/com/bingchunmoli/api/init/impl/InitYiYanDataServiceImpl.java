@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -25,7 +24,6 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Order(4)
 @RequiredArgsConstructor
 public class InitYiYanDataServiceImpl implements InitService {
     private final ObjectMapper objectMapper;
@@ -71,6 +69,11 @@ public class InitYiYanDataServiceImpl implements InitService {
                 throw new ApiInitException(e);
             }
         }
+    }
+
+    @Override
+    public Integer getOrder() {
+        return 100;
     }
 
 }

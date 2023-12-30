@@ -10,12 +10,12 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * 一言，诗词，随机图初始化 仅限prod环境
+ * 一言，诗词，随机图初始化
  * @author BingChunMoLi
  */
 @Slf4j
@@ -27,14 +27,8 @@ public class ApiCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        InitService initFcmServiceImpl = initServiceMap.remove("initFcmServiceImpl");
-        InitService initSqlServiceImpl = initServiceMap.remove("initSqlServiceImpl");
-        LinkedHashMap<String, InitService> initServiceLinkedHashMap = new LinkedHashMap<>(initServiceMap);
-        Optional.ofNullable(initFcmServiceImpl)
-                .map(v -> initServiceLinkedHashMap.putFirst("initFcmServiceImpl", v));
-        Optional.ofNullable(initSqlServiceImpl)
-                .map(v -> initServiceLinkedHashMap.putFirst("initSqlServiceImpl", initSqlServiceImpl));
-        for (InitService service : initServiceLinkedHashMap.values()) {
+        Collection<InitService> initServices = initServiceMap.values().stream().sorted(Comparator.comparingInt(InitService::getOrder)).toList();
+        for (InitService service : initServices) {
             service.init();
         }
         applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage().setAppMessageEnum(AppMessageEnum.TOPIC).setTopic("api").setTitle("系统初始化完成").setBody("系统初始化完成, 初始化当前时间:" + LocalDateTime.now())));
