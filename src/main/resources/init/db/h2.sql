@@ -143,6 +143,57 @@ create table if not exists push_log
 )
     comment '推送日志记录表';
 
+CREATE TABLE if not exists netease_music_song (
+    id int auto_increment NOT NULL,
+    third_id bigint null,
+    name varchar(50) NOT NULL,
+    CONSTRAINT netease_music_music_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci
+    COMMENT='歌曲';
+
+CREATE TABLE IF NOT EXISTS netease_music_playlist (
+    id int auto_increment NOT NULL,
+    third_id bigint null,
+    name varchar(100) NOT NULL COMMENT '名称',
+    user_id varchar(100) NOT NULL COMMENT '用户Id',
+    description varchar(500) NOT NULL,
+    create_time TIMESTAMP NULL,
+    update_time TIMESTAMP NULL,
+    CONSTRAINT netease_music_playlist_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci
+    COMMENT='歌单';
+
+CREATE TABLE if not exists netease_music_user (
+    id int auto_increment NOT NULL,
+    third_id bigint NULL,
+    avatar_url varchar(500) NULL,
+    city int NULL,
+    birthday bigint NULL,
+    nickname varchar(100) NULL,
+    background_img varchar(500) NULL,
+    CONSTRAINT netease_music_user_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE if not exists netease_music_song_user (
+    id int auto_increment NOT NULL,
+    user_id int NULL,
+    song_id int NULL,
+    CONSTRAINT netease_music_song_user_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci;
+
+
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (2, '4e71bc61-9f2e-49e1-a62f-d4b8ad9716c6', '面对就好，去经历就好。', 'a', '花伞菌', null, 'umbrella', 0, 0, 'web', '1468605909', 11, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (3, '8ea19537-2bae-4f64-8296-b8f1eed8006a', '将愿望倾入不愿忘却的回忆中……', 'a', 'ef-a tale of memories', null, 'lqsasa', 0, 0, 'web', '1468605909', 15, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;

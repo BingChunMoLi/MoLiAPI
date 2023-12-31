@@ -1,6 +1,6 @@
 create database if not EXISTS api;
 use api;
-create table if not exists `bing_image`
+CREATE TABLE IF NOT EXISTS `bing_image`
 (
     `id`                 bigint not null auto_increment,
     `start_date`         varchar(30) character set utf8mb4 collate utf8mb4_general_ci  default null comment '开始时间',
@@ -30,7 +30,7 @@ create table if not exists `bing_image`
 
 -- api.host definition
 
-create table if not exists `host`
+CREATE TABLE IF NOT EXISTS `host`
 (
     `id`     int not null auto_increment,
     `ip`     varchar(30) character set utf8mb4 collate utf8mb4_general_ci default null comment 'ip',
@@ -44,7 +44,7 @@ create table if not exists `host`
   row_format = dynamic;
 
 
-create table if not exists `navigation`
+CREATE TABLE IF NOT EXISTS `navigation`
 (
     `id`     int                          not null auto_increment primary key,
     `title`  varchar(30) comment '标题',
@@ -54,7 +54,7 @@ create table if not exists `navigation`
     `tenant` varchar(30) default 'public' not null comment '租户'
 );
 
-create table if not exists `tag`
+CREATE TABLE IF NOT EXISTS `tag`
 (
     `id`         int                   not null auto_increment primary key,
     `tag_name`   varchar(20)           not null comment '标签名称',
@@ -64,7 +64,7 @@ create table if not exists `tag`
 );
 
 
-create table if not exists `navigation_tag`
+CREATE TABLE IF NOT EXISTS `navigation_tag`
 (
     `id`            int not null auto_increment primary key,
     `tag_id`        int not null comment '标签id',
@@ -73,7 +73,7 @@ create table if not exists `navigation_tag`
 
 -- api.shi_ci definition
 
-CREATE table if not exists `shi_ci`
+CREATE TABLE IF NOT EXISTS `shi_ci`
 (
     `id`          int NOT NULL AUTO_INCREMENT,
     `content`     varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
@@ -91,7 +91,7 @@ CREATE table if not exists `shi_ci`
 
 
 -- api.yi_yan definition
-CREATE table if not exists `yi_yan`
+CREATE TABLE IF NOT EXISTS `yi_yan`
 (
     `id`          int NOT NULL AUTO_INCREMENT,
     `uuid`        char(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL,
@@ -115,7 +115,7 @@ CREATE table if not exists `yi_yan`
   COLLATE = utf8mb4_general_ci
   ROW_FORMAT = DYNAMIC;
 
-create table weather_sub
+CREATE TABLE IF NOT EXISTS weather_sub
 (
     id       int auto_increment primary key,
     location varchar(10) not null comment '订阅的城市',
@@ -123,7 +123,7 @@ create table weather_sub
 )
     comment '天气订阅表';
 
-CREATE TABLE api.daily_log
+CREATE TABLE IF NOT EXISTS api.daily_log
 (
     id          BIGINT auto_increment      NOT NULL,
     url         varchar(700)               NOT NULL COMMENT '签到的url',
@@ -135,7 +135,7 @@ CREATE TABLE api.daily_log
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
-create table Device
+CREATE TABLE IF NOT EXISTS Device
 (
     id         int auto_increment
         primary key,
@@ -147,7 +147,7 @@ create table Device
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
-create table push_log
+CREATE TABLE IF NOT EXISTS push_log
 (
     id      int auto_increment,
     type    int           not null comment '1 mail,2 app,3 server',
@@ -161,6 +161,54 @@ create table push_log
         primary key (id)
 )
     comment '推送日志记录表';
+
+CREATE TABLE IF NOT EXISTS netease_music_song (
+    id int auto_increment NOT NULL,
+    name varchar(50) NOT NULL,
+    CONSTRAINT netease_music_music_PK PRIMARY KEY (id)
+)   ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci
+    COMMENT='歌曲';
+
+CREATE TABLE IF NOT EXISTS netease_music_playlist (
+     id int auto_increment NOT NULL,
+     name varchar(100) NOT NULL COMMENT '名称',
+     user_id varchar(100) NOT NULL COMMENT '用户Id',
+     description varchar(500) NOT NULL,
+     create_time TIMESTAMP NULL,
+     update_time TIMESTAMP NULL,
+     CONSTRAINT netease_music_playlist_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci
+    COMMENT='歌单';
+
+CREATE TABLE if not exists netease_music_user (
+    id int auto_increment NOT NULL,
+    third_id bigint NULL,
+    avatar_url varchar(500) NULL,
+    city int NULL,
+    birthday bigint NULL,
+    nickname varchar(100) NULL,
+    background_img varchar(500) NULL,
+    CONSTRAINT netease_music_user_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE if not exists netease_music_song_user (
+     id int auto_increment NOT NULL,
+     user_id int NULL,
+     song_id int NULL,
+     CONSTRAINT netease_music_song_user_PK PRIMARY KEY (id)
+)
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_general_ci;
+
 
 INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null);
 INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (2, '4e71bc61-9f2e-49e1-a62f-d4b8ad9716c6', '面对就好，去经历就好。', 'a', '花伞菌', null, 'umbrella', 0, 0, 'web', '1468605909', 11, 0, null, null, null);
