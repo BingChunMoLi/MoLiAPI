@@ -1,38 +1,152 @@
 package com.bingchunmoli.api.netease;
 
-import lombok.NoArgsConstructor;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicAlbum;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicPlaylist;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicSong;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicUser;
+import com.bingchunmoli.api.properties.ApiConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class MusicService {
+    private final ObjectMapper om;
+    private final ApiConfig apiConfig;
+    private final NeteaseMusicPlaylistService playlistService;
+    private final NeteaseMusicAlbumServiceImpl albumService;
+    private final NeteaseMusicSongService songService;
+    private final NeteaseMusicUserService userService;
 
     private final String urlHost = "https://music.163.com";
     private final HttpHost baseHost = HttpHost.create(urlHost);
-    public String getPlayListInfo(String id, String cookie){
+
+    /**
+     * 根据id获取歌单
+     * @param id 歌单id
+     * @param cookie cookie
+     * @return 歌单实体
+     */
+    public PlayListBO getPlayListInfo(String id, String cookie){
         Collection<BasicHeader> defaultHeader = List.of(new BasicHeader("cookie", cookie));
         try (CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultHeaders(defaultHeader)
                 .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                .setDefaultRequestConfig(RequestConfig.custom()
+                        .setCookieSpec(CookieSpecs.STANDARD).build())
                 .build()){
             HttpRequest request = new HttpGet( "/api/playlist/detail?id=" + id);
             return httpClient.execute(baseHost, request, res -> {
                 String string = EntityUtils.toString(res.getEntity());
                 EntityUtils.consume(res.getEntity());
-                return string;
+                return om.readValue(string, PlayListBO.class);
             });
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 保存歌单到数据库
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void savePlayList() {
+        if (apiConfig.getPlayListId() == null || apiConfig.getPlayListId().isEmpty()) {
+            log.info("playListId is empty ignore");
+            return;
+        }
+        for (String id: apiConfig.getPlayListId()) {
+            PlayListBO playListInfo = getPlayListInfo(id, apiConfig.getCookies());
+            if (playListInfo.getCode() != 200) {
+                log.info("playList get err");
+                return;
+            }
+            PlayListBO.ResultDTO playList = playListInfo.getResult();
+            PlayListBO.ResultDTO.CreatorDTO creator = playList.getCreator();
+            NeteaseMusicUser playListUser = NeteaseMusicUser.builder()
+                    .thirdId(creator.getUserId().longValue())
+                    .avatarUrl(creator.getAvatarUrl())
+                    .city(creator.getCity())
+                    .birthday(creator.getBirthday())
+                    .nickname(creator.getNickname())
+                    .backgroundImg(creator.getBackgroundUrl()).build();
+            Integer playUserId = userService.saveOrUpdateByThirdId(playListUser);
+            NeteaseMusicPlaylist musicPlaylist = NeteaseMusicPlaylist.builder()
+                    .thirdId(playList.getId())
+                    .userId(String.valueOf(playUserId))
+                    .name(playList.getName())
+                    .description(String.valueOf(playList.getDescription()))
+                    .createTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(playList.getCreateTime()), ZoneId.systemDefault()))
+                    .updateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(playList.getUpdateTime()), ZoneId.systemDefault())).build();
+            playlistService.saveIsExist(musicPlaylist);
+            List<PlayListBO.ResultDTO.TracksDTO> tracks = playList.getTracks();
+            if (tracks == null || tracks.isEmpty()) {
+                return;
+            }
+            Integer trackCount = playList.getTrackCount();
+            log.info("test, trackCount: {}, tracksSize: {}", trackCount, tracks.size());
+            List<NeteaseMusicSong> songs = new ArrayList<>(tracks.size());
+            for (PlayListBO.ResultDTO.TracksDTO track : tracks) {
+                PlayListBO.ResultDTO.TracksDTO.AlbumDTO album = track.getAlbum();
+                NeteaseMusicAlbum musicAlbum = NeteaseMusicAlbum.builder()
+                        .thirdId(album.getId().longValue())
+                        .name(album.getName())
+                        .picUrl(album.getPicUrl())
+                        .type(album.getType())
+                        .publishTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(album.getPublishTime()), ZoneId.systemDefault())).build();
+                NeteaseMusicAlbum dbAlbum = albumService.getOne(new LambdaQueryWrapper<NeteaseMusicAlbum>()
+                        .eq(NeteaseMusicAlbum::getThirdId, musicAlbum.getThirdId()));
+                if (dbAlbum == null) {
+                    albumService.save(musicAlbum);
+                }
+                List<PlayListBO.ResultDTO.TracksDTO.ArtistsDTO> artists = track.getArtists();
+                List<NeteaseMusicUser> musicUserList = new ArrayList<>(artists.size());
+                for (PlayListBO.ResultDTO.TracksDTO.ArtistsDTO artist : artists) {
+                    NeteaseMusicUser musicUser = NeteaseMusicUser.builder()
+                            .thirdId(artist.getId().longValue())
+                            .nickname(artist.getName())
+                            .backgroundImg(artist.getPicUrl())
+                            .build();
+                    musicUserList.add(musicUser);
+                }
+                NeteaseMusicSong song = NeteaseMusicSong.builder()
+                        .name(track.getName())
+                        .id(track.getId())
+                        .albumId(musicAlbum.getId())
+                        .artists(musicUserList)
+                        .build();
+                songs.add(song);
+            }
+            songService.saveBatchAndChild(songs);
+
+
+            try {
+                TimeUnit.MINUTES.sleep(5);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

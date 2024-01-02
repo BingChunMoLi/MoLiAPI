@@ -8,4 +8,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface NeteaseMusicPlaylistService extends IService<NeteaseMusicPlaylist> {
 
+    Integer saveIsExist(NeteaseMusicPlaylist playlist);
 }

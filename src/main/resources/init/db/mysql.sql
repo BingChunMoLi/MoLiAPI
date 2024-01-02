@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `navigation_tag`
     `navigation_id` int not null comment '导航id'
 );
 
--- api.shi_ci definition
+-- shi_ci definition
 
 CREATE TABLE IF NOT EXISTS `shi_ci`
 (
@@ -200,14 +200,29 @@ CREATE TABLE if not exists netease_music_user (
     COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE if not exists netease_music_song_user (
-     id int auto_increment NOT NULL,
-     user_id int NULL,
-     song_id int NULL,
-     CONSTRAINT netease_music_song_user_PK PRIMARY KEY (id)
+    id int auto_increment NOT NULL,
+    user_id int NULL,
+    song_id int NULL,
+    CONSTRAINT netease_music_song_user_PK PRIMARY KEY (id)
 )
     ENGINE=InnoDB
     DEFAULT CHARSET=utf8mb4
     COLLATE=utf8mb4_general_ci;
+
+
+create table if not exists netease_music_album
+(
+    id           int auto_increment,
+    third_id     bigint       null comment '第三方平台id',
+    name         varchar(200)  null comment '专辑名称',
+    pic_url      varchar(500) null comment '专辑图片',
+    type         varchar(20)  null comment '类型',
+    publish_time timestamp    null comment '发布时间',
+    user_id      int          null,
+    constraint netease_music_album_pk
+        primary key (id)
+)
+    comment '专辑';
 
 
 INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null);
@@ -310,103 +325,103 @@ INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, cre
 INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (128, 'bf8cd453-e6f9-4dc4-af2f-24b60f74f29a', '呐，我们好像是，被宇宙和地球拆散的恋人似的。', 'a', '星之声', null, 'yeyifangg', 0, 0, 'web', '1468605910', 22, 0, null, null, null);
 INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (129, '86e6245a-2559-4dda-8602-d4c2b3b1d8f0', '一天吐槽太多次的话，梗也是会用完的。', 'a', '我的脑内恋爱选项', null, 'hsk', 0, 0, 'web', '1468605910', 18, 0, null, null, null);
 INSERT INTO api.yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (131, '0e7926fc-f73f-44b8-ad09-0430a8f47764', '心，可是很重的。', 'a', '哈尔的移动城堡', null, 'fujiyta', 0, 0, 'web', '1468605910', 8, 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (1, '天阶夜色凉如水，卧看牵牛织女星。', '秋夕', '杜牧', '古诗文-天气-星星', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (2, '乃知兵者是凶器，圣人不得已而用之。', '战城南', '李白', '古诗文-人生-战争', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (3, '冬夜夜寒觉夜长，沉吟久坐坐北堂。', '夜坐吟', '李白', '古诗文-四季-冬天', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (4, '欲寻芳草去，惜与故人违。', '留别王侍御维 / 留别王维', '孟浩然', '古诗文-抒情-友情', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (5, '半夜呼儿趁晓耕，羸牛无力渐艰行。', '农家', '颜仁郁', '古诗文-人物-儿童', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (6, '自闻颖师弹，起坐在一旁。', '听颖师弹琴', '韩愈', '古诗文-人物-老师', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (7, '鹭窥芦箔水，鸟啄纸钱风。', '寒食郊行书事', '范成大', '古诗文-动物-写鸟', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (8, '昨梦西湖，老扁舟身世。', '拜星月慢·林钟羽姜石帚以盆莲数十置中庭宴客其中', '吴文英', '古诗文-山水-西湖', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (9, '啼莺舞燕，小桥流水飞红。', '天净沙·春', '白朴', '古诗文-生活-写桥', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (10, '两岸荔枝红，万家烟雨中。', '菩萨蛮·子规啼破城楼月', '李师中', '古诗文-食物-荔枝', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (11, '最是一年春好处，绝胜烟柳满皇都。', '早春呈水部张十八员外 / 初春小雨 / 早春', '韩愈', '古诗文-四季-春天', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (12, '儿童急走追黄蝶，飞入菜花无处寻。', '宿新市徐公店', '杨万里', '古诗文-人物-儿童', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (13, '可怜九月初三夜，露似真珠月似弓。', '暮江吟', '白居易', '古诗文-天气-月亮', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (14, '偶应非熊兆，尊为帝者师。', '题太公钓渭图', '刘基', '古诗文-人物-老师', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (15, '野火烧不尽，春风吹又生。', '草 / 赋得古原草送别', '白居易', '古诗文-天气-写风', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (16, '唤起封姨清晚景，更将荔子荐新圆。', '浣溪沙·中秋坐上十八客', '张孝祥', '古诗文-食物-荔枝', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (17, '记取西湖西畔，正暮山好处，空翠烟霏。', '八声甘州·寄参寥子', '苏轼', '古诗文-山水-西湖', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (18, '北风吹雪四更初，嘉瑞天教及岁除。', '除夜雪', '陆游', '古诗文-节日-春节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (19, '惟有今宵，皓彩皆同普。', '醉落魄·丙寅中秋', '郭应祥', '古诗文-节日-中秋节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (20, '别来半岁音书绝，一寸离肠千万结。', '应天长·别来半岁音书绝', '韦庄', '古诗文-抒情-爱情', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (21, '黯与山僧别，低头礼白云。', '秋浦歌十七首', '李白', '古诗文-抒情-离别', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (22, '人间万事，毫发常重泰山轻。', '水调歌头·壬子三山被召陈端仁给事饮饯席上作', '辛弃疾', '古诗文-山水-泰山', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (23, '出师未捷身先死，长使英雄泪满襟。', '蜀相', '杜甫', '古诗文-抒情-伤感', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (24, '窗间梅熟落蒂，墙下笋成出林。', '喜晴', '范成大', '古诗文-植物-梅花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (25, '哀哀父母，生我劳瘁。', '蓼莪', '佚名', '古诗文-人物-父亲', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (26, '昨夜星辰昨夜风，画楼西畔桂堂东。', '无题·昨夜星辰昨夜风', '李商隐', '古诗文-天气-星星', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (27, '山际见来烟，竹中窥落日。', '山中杂诗', '吴均', '古诗文-天气-太阳', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (28, '蛾眉淡了教谁画？瘦岩岩羞戴石榴花。', '大德歌·夏', '关汉卿', '古诗文-四季-夏天', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (29, '故乡今夜思千里，霜鬓明朝又一年。', '除夜作', '高适', '古诗文-抒情-思乡', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (30, '岱宗夫如何？齐鲁青未了。', '望岳', '杜甫', '古诗文-山水-泰山', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (31, '三年遇寒食，尽在洛阳城。', '洛桥寒食日作十韵', '白居易', '古诗文-节日-寒食节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (32, '昨夜江边春水生，艨艟巨舰一毛轻。', '活水亭观书有感二首·其二', '朱熹', '古诗文-四季-春天', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (33, '春还草阁梅先动，月满虚庭雪未消。', '元夕二首', '王守仁', '古诗文-植物-梅花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (34, '是无猫邪，是不会蓄猫也。', '世无良猫', '乐钧', '古诗文-动物-写猫', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (35, '少妇今春意，良人昨夜情。', '杂诗三首·其三', '沈佺期', '古诗文-人物-女子', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (36, '无情最是台城柳，依旧烟笼十里堤。', '台城', '韦庄', '古诗文-抒情-怀古', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (37, '痴儿不知父子礼，叫怒索饭啼门东。', '百忧集行', '杜甫', '古诗文-人物-父亲', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (38, '黄鹤一去不复返，白云千载空悠悠。', '黄鹤楼 / 登黄鹤楼', '崔颢', '古诗文-天气-写云', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (39, '初惊河汉落，半洒云天里。', '望庐山瀑布水二首', '李白', '古诗文-山水-瀑布', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (40, '细草微风岸，危樯独夜舟。', '旅夜书怀', '杜甫', '古诗文-抒情-孤独', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (41, '夫死战场子在腹，妾身虽存如昼烛。', '征妇怨', '张籍', '古诗文-抒情-伤感', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (42, '小溪清水平如镜，一叶飞来浪细生。', '秋行', '徐玑', '古诗文-植物-叶子', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (43, '白下有山皆绕郭，清明无客不思家。', '清明呈馆中诸公', '高启', '古诗文-节日-清明节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (44, '惆怅南朝事，长江独至今。', '秋日登吴公台上寺远眺', '刘长卿', '古诗文-山水-长江', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (45, '但愿人长久，千里共婵娟。', '水调歌头·丙辰中秋', '苏轼', '古诗文-节日-中秋节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (46, '台高不尽看枫叶，院净何须坐菊花。', '九日登高台寺', '沈辂', '古诗文-植物-菊花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (47, '莫嫌举世无知己，未有庸人不忌才。', '三闾祠', '查慎行', '古诗文-人生-励志', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (48, '今夜送归灯火冷，河塘，堕泪羊公却姓杨。', '南乡子·和杨元素时移守密州', '苏轼', '古诗文-抒情-离别', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (49, '借问酒家何处有？牧童遥指杏花村。', '清明', '杜牧', '古诗文-节日-清明节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (50, '儿童散学归来早，忙趁东风放纸鸢。', '村居', '高鼎', '古诗文-人物-儿童', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (51, '香炉初上日，瀑水喷成虹。', '彭蠡湖中望庐山', '孟浩然', '古诗文-山水-瀑布', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (52, '山上层层桃李花，云间烟火是人家。', '竹枝词九首·其九', '刘禹锡', '古诗文-植物-桃花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (53, '去年元夜时，花市灯如昼。', '生查子·元夕', '欧阳修', '古诗文-节日-元宵节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (54, '共看明月应垂泪，一夜乡心五处同。', '望月有感', '白居易', '古诗文-抒情-思乡', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (55, '岸雨过城头，黄鹂上戍楼。', '武威春暮闻宇文判官西使还已到晋昌', '岑参', '古诗文-天气-写雨', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (56, '棠梨叶落胭脂色，荞麦花开白雪香。', '村行·马穿山径菊初黄', '王禹偁', '古诗文-生活-乡村', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (57, '风雨端阳生晦冥，汨罗无处吊英灵。', '已酉端午', '贝琼', '古诗文-节日-端午节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (58, '屈子冤魂终古在，楚乡遗俗至今留。', '午日观竞渡', '边贡', '古诗文-节日-端午节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (59, '寒日萧萧上琐窗，梧桐应恨夜来霜。', '鹧鸪天·寒日萧萧上琐窗', '李清照', '古诗文-天气-太阳', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (60, '世间珍果更无加，玉雪肌肤罩绛纱。', '咏荔枝', '丘浚', '古诗文-食物-荔枝', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (61, '东风有恨致玄都，吹破枝头玉，夜月梨花也相妒。', '小桃红·咏桃', '周文质', '古诗文-植物-梨花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (62, '谢亭离别处，风景每生愁。', '谢公亭·盖谢脁范云之所游', '李白', '古诗文-抒情-离别', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (63, '中秋月。月到中秋偏皎洁。', '中秋月·中秋月', '徐有贞', '古诗文-天气-月亮', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (64, '留连光景惜朱颜，黄昏独倚阑。', '阮郎归·呈郑王十二弟', '李煜', '古诗文-人生-青春', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (65, '读书不觉已春深，一寸光阴一寸金。', '白鹿洞二首·其一', '王贞白', '古诗文-人生-读书', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (66, '报答春光知有处，应须美酒送生涯。', '江畔独步寻花七绝句', '杜甫', '古诗文-抒情-感恩', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (67, '朔风如解意，容易莫摧残。', '梅花', '崔道融', '古诗文-四季-冬天', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (68, '随风潜入夜，润物细无声。', '春夜喜雨', '杜甫', '古诗文-人物-老师', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (69, '小酌酒巡销永夜，大开口笑送残年。', '雪夜小饮赠梦得', '白居易', '古诗文-食物-写酒', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (70, '雨打梨花深闭门，忘了青春，误了青春。', '一剪梅·雨打梨花深闭门', '唐寅', '古诗文-植物-梨花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (71, '绿衣监使守宫门，一闭上阳多少春。', '上阳白发人', '白居易', '古诗文-抒情-闺怨', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (72, '俯瞰黄河小，高悬白雪清。', '咏贺兰山', '胡秉正', '古诗文-山水-黄河', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (73, '孤花片叶，断送清秋节。', '清平乐·孤花片叶', '纳兰性德', '古诗文-抒情-离别', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (74, '曲终漏尽严具陈，月没星稀天下旦。', '鸡鸣歌', '佚名', '古诗文-天气-星星', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (75, '今夜不知何处宿，平沙万里绝人烟。', '碛中作', '岑参', '古诗文-生活-边塞', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (76, '美人卷珠帘，深坐颦蛾眉。', '怨情', '李白', '古诗文-人物-女子', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (77, '慈母手中线，游子身上衣。', '游子吟 / 迎母漂上作', '孟郊', '古诗文-人物-母亲', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (78, '竹色溪下绿，荷花镜里香。', '别储邕之剡中', '李白', '古诗文-植物-荷花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (79, '庭前落尽梧桐，水边开彻芙蓉。', '天净沙·秋', '朱庭玉', '古诗文-植物-荷花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (80, '对望中天地，洞然如刷。', '满江红·中秋夜潮', '史达祖', '古诗文-节日-中秋节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (81, '桃李务青春，谁能贯白日。', '长歌行', '李白', '古诗文-人生-青春', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (82, '东风吹落战尘沙，梦想西湖处士家；', '观梅有感', '刘因', '古诗文-人生-梦想', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (83, '先生名利比尘灰，绿竹青松手自栽。', '咏归堂隐鳞洞', '王汝舟', '古诗文-植物-竹子', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (84, '出入君怀袖，动摇微风发。', '怨歌行', '班婕妤', '古诗文-抒情-爱情', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (85, '斑竹枝，斑竹枝，泪痕点点寄相思。', '潇湘神·斑竹枝', '刘禹锡', '古诗文-抒情-思念', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (86, '醉卧沙场君莫笑，古来征战几人回？', '凉州词二首·其一', '王翰', '古诗文-生活-边塞', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (87, '凭仗丹青重省识，盈盈，一片伤心画不成。', '南乡子·为亡妇题照', '纳兰性德', '古诗文-抒情-悼亡', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (88, '春山烟欲收，天淡星稀小。', '生查子·春山烟欲收', '牛希济', '古诗文-天气-星星', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (89, '朔风吹散三更雪，倩魂犹恋桃花月。', '菩萨蛮·朔风吹散三更雪', '纳兰性德', '古诗文-抒情-思念', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (90, '井放辘轳闲浸酒，笼开鹦鹉报煎茶。', '夏日题老将林亭', '张蠙', '古诗文-食物-写茶', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (91, '乌啼鹊噪昏乔木，清明寒食谁家哭。', '寒食野望吟', '白居易', '古诗文-节日-清明节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (92, '吟怀未许老重阳，霜雪无端入鬓长。', '九日吴山宴集值雨次韵', '序灯', '古诗文-节日-重阳节', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (93, '白日放歌须纵酒，青春作伴好还乡。', '闻官军收河南河北', '杜甫', '古诗文-人生-青春', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (94, '青山朝别暮还见，嘶马出门思旧乡。', '送陈章甫', '李颀', '古诗文-抒情-思念', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (95, '行多有病住无粮，万里还乡未到乡。', '逢病军人', '卢纶', '古诗文-生活-边塞', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (96, '雪中何以赠君别，惟有青青松树枝。', '天山雪歌送萧治归京', '岑参', '古诗文-四季-冬天', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (97, '无边落木萧萧下，不尽长江滚滚来。', '登高', '杜甫', '古诗文-山水-长江', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (98, '江南几度梅花发，人在天涯鬓已斑。', '鹧鸪天·雪照山城玉指寒', '刘著', '古诗文-植物-梅花', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (99, '耕夫召募爱楼船，春草青青万项田；', '闾门即事', '张继', '古诗文-生活-田园', 0, null, null, null);
-INSERT INTO api.shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (100, '盛年不重来，一日难再晨。', '杂诗·人生无根蒂', '陶渊明', '古诗文-人生-青春', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (1, '天阶夜色凉如水，卧看牵牛织女星。', '秋夕', '杜牧', '古诗文-天气-星星', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (2, '乃知兵者是凶器，圣人不得已而用之。', '战城南', '李白', '古诗文-人生-战争', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (3, '冬夜夜寒觉夜长，沉吟久坐坐北堂。', '夜坐吟', '李白', '古诗文-四季-冬天', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (4, '欲寻芳草去，惜与故人违。', '留别王侍御维 / 留别王维', '孟浩然', '古诗文-抒情-友情', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (5, '半夜呼儿趁晓耕，羸牛无力渐艰行。', '农家', '颜仁郁', '古诗文-人物-儿童', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (6, '自闻颖师弹，起坐在一旁。', '听颖师弹琴', '韩愈', '古诗文-人物-老师', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (7, '鹭窥芦箔水，鸟啄纸钱风。', '寒食郊行书事', '范成大', '古诗文-动物-写鸟', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (8, '昨梦西湖，老扁舟身世。', '拜星月慢·林钟羽姜石帚以盆莲数十置中庭宴客其中', '吴文英', '古诗文-山水-西湖', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (9, '啼莺舞燕，小桥流水飞红。', '天净沙·春', '白朴', '古诗文-生活-写桥', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (10, '两岸荔枝红，万家烟雨中。', '菩萨蛮·子规啼破城楼月', '李师中', '古诗文-食物-荔枝', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (11, '最是一年春好处，绝胜烟柳满皇都。', '早春呈水部张十八员外 / 初春小雨 / 早春', '韩愈', '古诗文-四季-春天', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (12, '儿童急走追黄蝶，飞入菜花无处寻。', '宿新市徐公店', '杨万里', '古诗文-人物-儿童', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (13, '可怜九月初三夜，露似真珠月似弓。', '暮江吟', '白居易', '古诗文-天气-月亮', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (14, '偶应非熊兆，尊为帝者师。', '题太公钓渭图', '刘基', '古诗文-人物-老师', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (15, '野火烧不尽，春风吹又生。', '草 / 赋得古原草送别', '白居易', '古诗文-天气-写风', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (16, '唤起封姨清晚景，更将荔子荐新圆。', '浣溪沙·中秋坐上十八客', '张孝祥', '古诗文-食物-荔枝', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (17, '记取西湖西畔，正暮山好处，空翠烟霏。', '八声甘州·寄参寥子', '苏轼', '古诗文-山水-西湖', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (18, '北风吹雪四更初，嘉瑞天教及岁除。', '除夜雪', '陆游', '古诗文-节日-春节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (19, '惟有今宵，皓彩皆同普。', '醉落魄·丙寅中秋', '郭应祥', '古诗文-节日-中秋节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (20, '别来半岁音书绝，一寸离肠千万结。', '应天长·别来半岁音书绝', '韦庄', '古诗文-抒情-爱情', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (21, '黯与山僧别，低头礼白云。', '秋浦歌十七首', '李白', '古诗文-抒情-离别', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (22, '人间万事，毫发常重泰山轻。', '水调歌头·壬子三山被召陈端仁给事饮饯席上作', '辛弃疾', '古诗文-山水-泰山', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (23, '出师未捷身先死，长使英雄泪满襟。', '蜀相', '杜甫', '古诗文-抒情-伤感', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (24, '窗间梅熟落蒂，墙下笋成出林。', '喜晴', '范成大', '古诗文-植物-梅花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (25, '哀哀父母，生我劳瘁。', '蓼莪', '佚名', '古诗文-人物-父亲', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (26, '昨夜星辰昨夜风，画楼西畔桂堂东。', '无题·昨夜星辰昨夜风', '李商隐', '古诗文-天气-星星', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (27, '山际见来烟，竹中窥落日。', '山中杂诗', '吴均', '古诗文-天气-太阳', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (28, '蛾眉淡了教谁画？瘦岩岩羞戴石榴花。', '大德歌·夏', '关汉卿', '古诗文-四季-夏天', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (29, '故乡今夜思千里，霜鬓明朝又一年。', '除夜作', '高适', '古诗文-抒情-思乡', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (30, '岱宗夫如何？齐鲁青未了。', '望岳', '杜甫', '古诗文-山水-泰山', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (31, '三年遇寒食，尽在洛阳城。', '洛桥寒食日作十韵', '白居易', '古诗文-节日-寒食节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (32, '昨夜江边春水生，艨艟巨舰一毛轻。', '活水亭观书有感二首·其二', '朱熹', '古诗文-四季-春天', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (33, '春还草阁梅先动，月满虚庭雪未消。', '元夕二首', '王守仁', '古诗文-植物-梅花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (34, '是无猫邪，是不会蓄猫也。', '世无良猫', '乐钧', '古诗文-动物-写猫', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (35, '少妇今春意，良人昨夜情。', '杂诗三首·其三', '沈佺期', '古诗文-人物-女子', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (36, '无情最是台城柳，依旧烟笼十里堤。', '台城', '韦庄', '古诗文-抒情-怀古', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (37, '痴儿不知父子礼，叫怒索饭啼门东。', '百忧集行', '杜甫', '古诗文-人物-父亲', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (38, '黄鹤一去不复返，白云千载空悠悠。', '黄鹤楼 / 登黄鹤楼', '崔颢', '古诗文-天气-写云', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (39, '初惊河汉落，半洒云天里。', '望庐山瀑布水二首', '李白', '古诗文-山水-瀑布', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (40, '细草微风岸，危樯独夜舟。', '旅夜书怀', '杜甫', '古诗文-抒情-孤独', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (41, '夫死战场子在腹，妾身虽存如昼烛。', '征妇怨', '张籍', '古诗文-抒情-伤感', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (42, '小溪清水平如镜，一叶飞来浪细生。', '秋行', '徐玑', '古诗文-植物-叶子', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (43, '白下有山皆绕郭，清明无客不思家。', '清明呈馆中诸公', '高启', '古诗文-节日-清明节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (44, '惆怅南朝事，长江独至今。', '秋日登吴公台上寺远眺', '刘长卿', '古诗文-山水-长江', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (45, '但愿人长久，千里共婵娟。', '水调歌头·丙辰中秋', '苏轼', '古诗文-节日-中秋节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (46, '台高不尽看枫叶，院净何须坐菊花。', '九日登高台寺', '沈辂', '古诗文-植物-菊花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (47, '莫嫌举世无知己，未有庸人不忌才。', '三闾祠', '查慎行', '古诗文-人生-励志', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (48, '今夜送归灯火冷，河塘，堕泪羊公却姓杨。', '南乡子·和杨元素时移守密州', '苏轼', '古诗文-抒情-离别', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (49, '借问酒家何处有？牧童遥指杏花村。', '清明', '杜牧', '古诗文-节日-清明节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (50, '儿童散学归来早，忙趁东风放纸鸢。', '村居', '高鼎', '古诗文-人物-儿童', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (51, '香炉初上日，瀑水喷成虹。', '彭蠡湖中望庐山', '孟浩然', '古诗文-山水-瀑布', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (52, '山上层层桃李花，云间烟火是人家。', '竹枝词九首·其九', '刘禹锡', '古诗文-植物-桃花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (53, '去年元夜时，花市灯如昼。', '生查子·元夕', '欧阳修', '古诗文-节日-元宵节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (54, '共看明月应垂泪，一夜乡心五处同。', '望月有感', '白居易', '古诗文-抒情-思乡', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (55, '岸雨过城头，黄鹂上戍楼。', '武威春暮闻宇文判官西使还已到晋昌', '岑参', '古诗文-天气-写雨', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (56, '棠梨叶落胭脂色，荞麦花开白雪香。', '村行·马穿山径菊初黄', '王禹偁', '古诗文-生活-乡村', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (57, '风雨端阳生晦冥，汨罗无处吊英灵。', '已酉端午', '贝琼', '古诗文-节日-端午节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (58, '屈子冤魂终古在，楚乡遗俗至今留。', '午日观竞渡', '边贡', '古诗文-节日-端午节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (59, '寒日萧萧上琐窗，梧桐应恨夜来霜。', '鹧鸪天·寒日萧萧上琐窗', '李清照', '古诗文-天气-太阳', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (60, '世间珍果更无加，玉雪肌肤罩绛纱。', '咏荔枝', '丘浚', '古诗文-食物-荔枝', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (61, '东风有恨致玄都，吹破枝头玉，夜月梨花也相妒。', '小桃红·咏桃', '周文质', '古诗文-植物-梨花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (62, '谢亭离别处，风景每生愁。', '谢公亭·盖谢脁范云之所游', '李白', '古诗文-抒情-离别', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (63, '中秋月。月到中秋偏皎洁。', '中秋月·中秋月', '徐有贞', '古诗文-天气-月亮', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (64, '留连光景惜朱颜，黄昏独倚阑。', '阮郎归·呈郑王十二弟', '李煜', '古诗文-人生-青春', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (65, '读书不觉已春深，一寸光阴一寸金。', '白鹿洞二首·其一', '王贞白', '古诗文-人生-读书', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (66, '报答春光知有处，应须美酒送生涯。', '江畔独步寻花七绝句', '杜甫', '古诗文-抒情-感恩', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (67, '朔风如解意，容易莫摧残。', '梅花', '崔道融', '古诗文-四季-冬天', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (68, '随风潜入夜，润物细无声。', '春夜喜雨', '杜甫', '古诗文-人物-老师', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (69, '小酌酒巡销永夜，大开口笑送残年。', '雪夜小饮赠梦得', '白居易', '古诗文-食物-写酒', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (70, '雨打梨花深闭门，忘了青春，误了青春。', '一剪梅·雨打梨花深闭门', '唐寅', '古诗文-植物-梨花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (71, '绿衣监使守宫门，一闭上阳多少春。', '上阳白发人', '白居易', '古诗文-抒情-闺怨', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (72, '俯瞰黄河小，高悬白雪清。', '咏贺兰山', '胡秉正', '古诗文-山水-黄河', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (73, '孤花片叶，断送清秋节。', '清平乐·孤花片叶', '纳兰性德', '古诗文-抒情-离别', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (74, '曲终漏尽严具陈，月没星稀天下旦。', '鸡鸣歌', '佚名', '古诗文-天气-星星', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (75, '今夜不知何处宿，平沙万里绝人烟。', '碛中作', '岑参', '古诗文-生活-边塞', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (76, '美人卷珠帘，深坐颦蛾眉。', '怨情', '李白', '古诗文-人物-女子', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (77, '慈母手中线，游子身上衣。', '游子吟 / 迎母漂上作', '孟郊', '古诗文-人物-母亲', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (78, '竹色溪下绿，荷花镜里香。', '别储邕之剡中', '李白', '古诗文-植物-荷花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (79, '庭前落尽梧桐，水边开彻芙蓉。', '天净沙·秋', '朱庭玉', '古诗文-植物-荷花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (80, '对望中天地，洞然如刷。', '满江红·中秋夜潮', '史达祖', '古诗文-节日-中秋节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (81, '桃李务青春，谁能贯白日。', '长歌行', '李白', '古诗文-人生-青春', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (82, '东风吹落战尘沙，梦想西湖处士家；', '观梅有感', '刘因', '古诗文-人生-梦想', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (83, '先生名利比尘灰，绿竹青松手自栽。', '咏归堂隐鳞洞', '王汝舟', '古诗文-植物-竹子', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (84, '出入君怀袖，动摇微风发。', '怨歌行', '班婕妤', '古诗文-抒情-爱情', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (85, '斑竹枝，斑竹枝，泪痕点点寄相思。', '潇湘神·斑竹枝', '刘禹锡', '古诗文-抒情-思念', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (86, '醉卧沙场君莫笑，古来征战几人回？', '凉州词二首·其一', '王翰', '古诗文-生活-边塞', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (87, '凭仗丹青重省识，盈盈，一片伤心画不成。', '南乡子·为亡妇题照', '纳兰性德', '古诗文-抒情-悼亡', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (88, '春山烟欲收，天淡星稀小。', '生查子·春山烟欲收', '牛希济', '古诗文-天气-星星', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (89, '朔风吹散三更雪，倩魂犹恋桃花月。', '菩萨蛮·朔风吹散三更雪', '纳兰性德', '古诗文-抒情-思念', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (90, '井放辘轳闲浸酒，笼开鹦鹉报煎茶。', '夏日题老将林亭', '张蠙', '古诗文-食物-写茶', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (91, '乌啼鹊噪昏乔木，清明寒食谁家哭。', '寒食野望吟', '白居易', '古诗文-节日-清明节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (92, '吟怀未许老重阳，霜雪无端入鬓长。', '九日吴山宴集值雨次韵', '序灯', '古诗文-节日-重阳节', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (93, '白日放歌须纵酒，青春作伴好还乡。', '闻官军收河南河北', '杜甫', '古诗文-人生-青春', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (94, '青山朝别暮还见，嘶马出门思旧乡。', '送陈章甫', '李颀', '古诗文-抒情-思念', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (95, '行多有病住无粮，万里还乡未到乡。', '逢病军人', '卢纶', '古诗文-生活-边塞', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (96, '雪中何以赠君别，惟有青青松树枝。', '天山雪歌送萧治归京', '岑参', '古诗文-四季-冬天', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (97, '无边落木萧萧下，不尽长江滚滚来。', '登高', '杜甫', '古诗文-山水-长江', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (98, '江南几度梅花发，人在天涯鬓已斑。', '鹧鸪天·雪照山城玉指寒', '刘著', '古诗文-植物-梅花', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (99, '耕夫召募爱楼船，春草青青万项田；', '闾门即事', '张继', '古诗文-生活-田园', 0, null, null, null);
+INSERT INTO shi_ci (id, content, origin, author, category, deleted, create_time, update_time, version) VALUES (100, '盛年不重来，一日难再晨。', '杂诗·人生无根蒂', '陶渊明', '古诗文-人生-青春', 0, null, null, null);

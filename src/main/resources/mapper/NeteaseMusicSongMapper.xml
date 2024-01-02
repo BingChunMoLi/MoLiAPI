@@ -12,4 +12,10 @@
     <sql id="Base_Column_List">
         id,name
     </sql>
+    <insert id="saveSongUser">
+        insert into netease_music_song_user(user_id, song_id) values
+            <foreach collection="userIds" item="item" close=")" separator="," open="(">
+                ${item}, ${songId}
+            </foreach>
+    </insert>
 </mapper>

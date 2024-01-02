@@ -19,4 +19,11 @@
         city,birthday,nickname,
         background_img
     </sql>
+    <select id="getIdByBirthId" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicUser">
+        select <include refid="Base_Column_List" />
+            from netease_music_user where third_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            ${item}
+        </foreach>
+    </select>
 </mapper>

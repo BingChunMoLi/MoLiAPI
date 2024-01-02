@@ -4,15 +4,19 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * 用户
  */
-@TableName(value ="netease_music_user")
+
 @Data
+@Builder
+@TableName(value ="netease_music_user")
 public class NeteaseMusicUser implements Serializable {
     /**
      *
@@ -56,6 +60,7 @@ public class NeteaseMusicUser implements Serializable {
     @TableField(value = "background_img")
     private String backgroundImg;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

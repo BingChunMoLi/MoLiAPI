@@ -1,7 +1,5 @@
 package com.bingchunmoli.api.netease;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +13,7 @@ public class MusicController {
 
     @GetMapping("playlist")
     public PlayListBO getPlayListInfo(String id, String cookie){
-        String playListInfo = musicService.getPlayListInfo(id, cookie);
-        System.out.println(playListInfo);
-        try {
-            return new ObjectMapper().readValue(playListInfo, PlayListBO.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return musicService.getPlayListInfo(id, cookie);
     }
 
 }
