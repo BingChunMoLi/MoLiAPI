@@ -1,42 +1,43 @@
 create schema if not EXISTS api;
 use api;
-CREATE table if not exists `bing_image`
+CREATE TABLE IF NOT EXISTS `bing_image`
 (
-    `id`                 bigint NOT NULL AUTO_INCREMENT,
-    `start_date`         varchar(30)  DEFAULT NULL comment '开始时间',
-    `start_date_en`      varchar(30)  DEFAULT NULL comment '国际版开始时间',
-    `full_start_date`    varchar(30)  DEFAULT NULL comment '开始时间完全版',
-    `full_start_date_en` varchar(30)  DEFAULT NULL comment '国际版开始时间完全版',
-    `end_date`           varchar(30)  DEFAULT NULL comment '结束时间',
-    `url`                varchar(150) DEFAULT NULL comment '图片地址',
-    `url_en`             varchar(150) DEFAULT NULL comment '国际版图片地址',
-    `url_base`           varchar(70)  DEFAULT NULL comment '图片地址基础不带清晰度',
-    `url_base_en`        varchar(70)  DEFAULT NULL comment '国际版图片地址基础不带清晰度',
-    `copyright`          varchar(200) DEFAULT NULL comment '版权信息',
-    `copyright_en`       varchar(200) DEFAULT NULL comment '国际版版权信息',
-    `copyright_link`     varchar(200) DEFAULT NULL comment '版权信息链接',
-    `copyright_link_en`  varchar(200) DEFAULT NULL comment '国际版版权信息链接',
-    `headline_en`        varchar(100) DEFAULT NULL comment '',
-    `create_time`        datetime     DEFAULT NULL comment '创建时间',
-    `obs_url_cn`         varchar(120) DEFAULT NULL comment '中国版obs地址,已废弃',
-    `obs_url_en`         varchar(120) DEFAULT NULL comment '国际版obs地址,已废弃',
-    `url_uhd`            varchar(255) DEFAULT NULL comment '原图地址',
-    `url_uhd_en`         varchar(255) DEFAULT NULL comment '国际版原图地址',
-    PRIMARY KEY (`id`)
+    `id`                 bigint not null auto_increment,
+    `start_date`         varchar(30)  default null comment '开始时间',
+    `start_date_en`      varchar(30)  default null comment '国际版开始时间',
+    `full_start_date`    varchar(30)  default null comment '开始时间完全版',
+    `full_start_date_en` varchar(30)  default null comment '国际版开始时间完全版',
+    `end_date`           varchar(30)  default null comment '结束时间',
+    `url`                varchar(150) default null comment '图片地址',
+    `url_en`             varchar(150) default null comment '国际版图片地址',
+    `url_base`           varchar(70)  default null comment '图片地址基础不带清晰度',
+    `url_base_en`        varchar(70)  default null comment '国际版图片地址基础不带清晰度',
+    `copyright`          varchar(200) default null comment '版权信息',
+    `copyright_en`       varchar(200) default null comment '国际版版权信息',
+    `copyright_link`     varchar(300) default null comment '版权信息链接',
+    `copyright_link_en`  varchar(300) default null comment '国际版版权信息链接',
+    `headline_en`        varchar(100) default null comment '',
+    `create_time`        datetime     default null comment '创建时间',
+    `obs_url_cn`         varchar(120) default null comment '中国版obs地址,已废弃',
+    `obs_url_en`         varchar(120) default null comment '国际版obs地址,已废弃',
+    `url_uhd`            varchar(255) default null comment '原图地址',
+    `url_uhd_en`         varchar(255) default null comment '国际版原图地址',
+    primary key (`id`)
 );
 
-CREATE table if not exists `host`
+CREATE TABLE IF NOT EXISTS `host`
 (
-    `id`     int NOT NULL AUTO_INCREMENT,
-    `ip`     varchar(30) DEFAULT NULL comment 'ip',
-    `domain` varchar(60) DEFAULT NULL comment '域名',
-    `source` varchar(30) DEFAULT NULL comment '来源',
-    PRIMARY KEY (`id`)
+    `id`     int not null auto_increment,
+    `ip`     varchar(30) default null comment 'ip',
+    `domain` varchar(60) default null comment '域名',
+    `source` varchar(30) default null comment '来源',
+    primary key (`id`),
+    unique key `host_id_uindex` (`id`)
 );
 
-CREATE table if not exists `navigation`
+CREATE TABLE IF NOT EXISTS `navigation`
 (
-    `id`     int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id`     int                          not null auto_increment primary key,
     `title`  varchar(30) comment '标题',
     `des`    varchar(300) comment '详细信息',
     `url`    varchar(1000) comment '网址',
@@ -44,7 +45,7 @@ CREATE table if not exists `navigation`
     `tenant` varchar(30) default 'public' not null comment '租户'
 );
 
-create table if not exists `tag`
+CREATE TABLE IF NOT EXISTS `tag`
 (
     `id`         int                   not null auto_increment primary key,
     `tag_name`   varchar(20)           not null comment '标签名称',
@@ -53,58 +54,57 @@ create table if not exists `tag`
     `pwd`        varchar(50) comment '密码(如果是私有的需要密码)'
 );
 
-
-create table if not exists `navigation_tag`
+CREATE TABLE IF NOT EXISTS `navigation_tag`
 (
     `id`            int not null auto_increment primary key,
     `tag_id`        int not null comment '标签id',
     `navigation_id` int not null comment '导航id'
 );
 
-CREATE table if not exists `shi_ci`
+CREATE TABLE IF NOT EXISTS `shi_ci`
 (
     `id`          int NOT NULL AUTO_INCREMENT,
     `content`     varchar(100) DEFAULT NULL,
     `origin`      varchar(100) DEFAULT NULL,
     `author`      varchar(10)  DEFAULT NULL,
     `category`    varchar(100) DEFAULT NULL,
-    `deleted`     int          DEFAULT '0',
+    `deleted`     int          DEFAULT 0,
     `create_time` datetime     DEFAULT NULL,
     `update_time` datetime     DEFAULT NULL,
     `version`     int          DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
 
-CREATE table if not exists `yi_yan`
+CREATE TABLE IF NOT EXISTS `yi_yan`
 (
-    `id`          int NOT NULL,
-    `uuid`        char(40)  DEFAULT NULL,
-    `hitokoto`    char(100) DEFAULT NULL,
-    `type`        char(5)   DEFAULT NULL,
-    `from`        char(50)  DEFAULT NULL,
-    `from_who`    char(20)  DEFAULT NULL,
-    `creator`     char(20)  DEFAULT NULL,
-    `creator_uid` int       DEFAULT NULL,
-    `reviewer`    int       DEFAULT NULL,
-    `commit_from` char(20)  DEFAULT NULL,
-    `created_at`  char(20)  DEFAULT NULL,
-    `length`      int       DEFAULT NULL,
-    `deleted`     int       DEFAULT '0',
-    `create_time` datetime  DEFAULT NULL,
-    `update_time` datetime  DEFAULT NULL,
-    `version`     int       DEFAULT NULL,
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `uuid`        varchar(80)  DEFAULT NULL,
+    `hitokoto`    varchar(200) DEFAULT NULL,
+    `type`        varchar(5)   DEFAULT NULL,
+    `from`        varchar(50)  DEFAULT NULL,
+    `from_who`    varchar(20)  DEFAULT NULL,
+    `creator`     varchar(20)  DEFAULT NULL,
+    `creator_uid` int          DEFAULT NULL,
+    `reviewer`    int          DEFAULT NULL,
+    `commit_from` varchar(20)  DEFAULT NULL,
+    `created_at`  varchar(20)  DEFAULT NULL,
+    `length`      int          DEFAULT NULL,
+    `deleted`     int          DEFAULT 0,
+    `create_time` datetime     DEFAULT NULL,
+    `update_time` datetime     DEFAULT NULL,
+    `version`     int          DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
 
-create table if not exists  weather_sub
+CREATE TABLE IF NOT EXISTS weather_sub
 (
-    id       int auto_increment primary key ,
+    id       int auto_increment primary key,
     location varchar(10) not null comment '订阅的城市',
     email    varchar(30) not null comment '邮箱'
 )
     comment '天气订阅表';
 
-CREATE TABLE if not exists api.daily_log
+CREATE TABLE IF NOT EXISTS daily_log
 (
     id          BIGINT auto_increment      NOT NULL,
     url         varchar(700)               NOT NULL COMMENT '签到的url',
@@ -112,11 +112,9 @@ CREATE TABLE if not exists api.daily_log
     create_time DATETIME                   NOT NULL COMMENT '创建时间',
     `type`      TINYINT UNSIGNED           NOT NULL COMMENT '类型 1 网址 2 other',
     CONSTRAINT daily_log_PK PRIMARY KEY (id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci;
+);
 
-create table if not exists Device
+CREATE TABLE IF NOT EXISTS Device
 (
     id         int auto_increment
         primary key,
@@ -124,24 +122,76 @@ create table if not exists Device
     name       varchar(10)  null comment '设备名称',
     model      varchar(30)  null comment '设备型号',
     android_id varchar(60)  null comment '安卓Id'
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci;
+);
 
-create table if not exists push_log
+CREATE TABLE IF NOT EXISTS push_log
 (
-    id      int auto_increment,
-    type    int           not null comment '1 mail,2 app,3 server',
-    title   varchar(100)  not null,
-    body    varchar(3000) null,
-    receive varchar(300)   not null comment 'device token or topic or toEmail',
-    status  tinyint       default 0 not null comment '0 初始化，1已推送， 2失败',
-    create_time datetime null,
+    id          int auto_increment,
+    type        int                not null comment '1 mail,2 app,3 server',
+    title       varchar(100)       not null,
+    body        varchar(3000)      null,
+    receive     varchar(300)       not null comment 'device token or topic or toEmail',
+    status      tinyint  default 0 not null comment '0 初始化，1已推送， 2失败',
+    create_time datetime           null,
     update_time datetime default null,
     constraint push_log_pk
         primary key (id)
 )
     comment '推送日志记录表';
+
+CREATE TABLE IF NOT EXISTS netease_music_song
+(
+    id   int auto_increment NOT NULL,
+    name varchar(50)        NOT NULL,
+    CONSTRAINT netease_music_music_PK PRIMARY KEY (id)
+) COMMENT ='歌曲';
+
+CREATE TABLE IF NOT EXISTS netease_music_playlist
+(
+    id          int auto_increment NOT NULL,
+    name        varchar(100)       NOT NULL COMMENT '名称',
+    user_id     varchar(100)       NOT NULL COMMENT '用户Id',
+    description varchar(500)       NOT NULL,
+    create_time TIMESTAMP          NULL,
+    update_time TIMESTAMP          NULL,
+    CONSTRAINT netease_music_playlist_PK PRIMARY KEY (id)
+) COMMENT ='歌单';
+
+CREATE TABLE if not exists netease_music_user
+(
+    id             int auto_increment NOT NULL,
+    third_id       bigint             NULL,
+    avatar_url     varchar(500)       NULL,
+    city           int                NULL,
+    birthday       bigint             NULL,
+    nickname       varchar(100)       NULL,
+    background_img varchar(500)       NULL,
+    CONSTRAINT netease_music_user_PK PRIMARY KEY (id)
+);
+
+CREATE TABLE if not exists netease_music_song_user
+(
+    id      int auto_increment NOT NULL,
+    user_id int                NULL,
+    song_id int                NULL,
+    CONSTRAINT netease_music_song_user_PK PRIMARY KEY (id)
+);
+
+
+create table if not exists netease_music_album
+(
+    id           int auto_increment,
+    third_id     bigint       null comment '第三方平台id',
+    name         varchar(200) null comment '专辑名称',
+    pic_url      varchar(500) null comment '专辑图片',
+    type         varchar(20)  null comment '类型',
+    publish_time timestamp    null comment '发布时间',
+    user_id      int          null,
+    constraint netease_music_album_pk
+        primary key (id)
+)
+    comment '专辑';
+
 
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (2, '4e71bc61-9f2e-49e1-a62f-d4b8ad9716c6', '面对就好，去经历就好。', 'a', '花伞菌', null, 'umbrella', 0, 0, 'web', '1468605909', 11, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;

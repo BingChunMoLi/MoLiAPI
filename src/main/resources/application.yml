@@ -17,6 +17,8 @@ moli:
     certificatePath: #证书路径
     privateKeyPath: #私钥路径
     domain: #更新的域名
+    play-list-id:
+    cookies:
 server:
   port: 8090
   http2:

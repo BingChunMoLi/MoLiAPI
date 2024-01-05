@@ -14,6 +14,10 @@ public class PlayListBO {
     private ResultDTO result;
     @JsonProperty("code")
     private Integer code;
+    @JsonProperty("msg")
+    private String msg;
+    @JsonProperty("message")
+    private String message;
 
     @NoArgsConstructor
     @Data

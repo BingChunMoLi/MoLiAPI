@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingchunmoli.api.netease.mapper.NeteaseMusicSongMapper">
+
+    <resultMap id="BaseResultMap" type="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name
+    </sql>
+    <insert id="saveSongUser">
+        insert into netease_music_song_user(user_id, song_id) values
+            <foreach collection="userIds" item="item" close=")" separator="," open="(">
+                ${item}, ${songId}
+            </foreach>
+    </insert>
+</mapper>
