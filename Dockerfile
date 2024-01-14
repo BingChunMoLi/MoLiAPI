@@ -19,4 +19,4 @@ ARG JAR_FILE
 ADD /target/${JAR_FILE} /root/.api/app.jar
 
 # 启动镜像自动运行程序
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","/root/.api/app.jar"]
+ENTRYPOINT ["sh", "-c" ,"java -Djava.security.egd=file:/dev/urandom ${JAVA_OPTS} -jar /root/.api/app.jar ${0} ${@}"]
