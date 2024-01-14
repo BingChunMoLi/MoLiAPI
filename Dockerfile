@@ -4,7 +4,7 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
-RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests=true
+RUN ./mvnw install -DskipTests=true
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM eclipse-temurin:17-jdk-alpine
