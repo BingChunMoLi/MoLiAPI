@@ -5,8 +5,8 @@ import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.host.bean.Host;
 import com.bingchunmoli.api.host.service.HostService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +21,12 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class HostTask {
-    private static final String[] PREFIXS = {"https://github.com/", "https://hub.fastgit.org", "https://github.com.cnpmjs.org/", "https://ghproxy.com/"};
     private static final String NEO_HOST = " https://raw.githubusercontent.com/neoFelhz/neohosts/gh-pages/basic/hosts";
     private static final String NEO_HOST_2 = "https://cdn.jsdelivr.net/gh/neoFelhz/neohosts@gh-pages/basic/hosts";
-    @Autowired
-    private HostService hostService;
+    private final HostService hostService;
+
     @Scheduled(cron = "0 0 0 * * ?")
     public void getHost(){
         String result = null;

@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 @Slf4j
 @Order(1)
 @Service
+@Profile("!test")
 @RequiredArgsConstructor
 public class InitFcmServiceImpl implements InitService {
     @Value("classpath:google-service.json")

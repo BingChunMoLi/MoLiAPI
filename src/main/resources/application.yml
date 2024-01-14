@@ -39,7 +39,7 @@ spring:
       max-request-size: -1
   datasource:
     driver-class-name: org.h2.Driver
-    url: "jdbc:h2:file///~/.api/api.db?MODE=MySQL&DATABASE_TO_LOWER=true&database_to_upper=false&AUTO_SERVER=true&DB_CLOSE_ON_EXIT=false&CASE_INSENSITIVE_IDENTIFIERS=true"
+    url: "jdbc:h2:mem:api;MODE=MySQL;DATABASE_TO_LOWER=TRUE;database_to_upper=false;CASE_INSENSITIVE_IDENTIFIERS=true;"
     username: root
     password: root
     type: com.zaxxer.hikari.HikariDataSource
@@ -49,7 +49,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: h2
+    active: default
   data:
     redis:
       database: 1

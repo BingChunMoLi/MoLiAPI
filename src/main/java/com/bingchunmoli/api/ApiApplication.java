@@ -18,7 +18,7 @@ import org.springframework.stereotype.Indexed;
 @EnableRetry(proxyTargetClass = false)
 @EnableCaching
 @EnableScheduling
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(exposeProxy = true)
 @SpringBootApplication
 @MapperScan("com.bingchunmoli.**.mapper")
 public class ApiApplication {

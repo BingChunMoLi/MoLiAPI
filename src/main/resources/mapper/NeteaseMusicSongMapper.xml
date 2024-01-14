@@ -6,16 +6,18 @@
 
     <resultMap id="BaseResultMap" type="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
             <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="thirdId" column="third_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="albumId" column="album_id" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name
+        id,third_id,`name`,album_id
     </sql>
     <insert id="saveSongUser">
         insert into netease_music_song_user(user_id, song_id) values
-            <foreach collection="userIds" item="item" close=")" separator="," open="(">
-                ${item}, ${songId}
+        <foreach collection="userIds" item="item" separator=",">
+            (${item}, ${songId})
             </foreach>
     </insert>
 </mapper>

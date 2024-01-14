@@ -5,7 +5,6 @@ import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.service.BingService;
 import com.bingchunmoli.api.utils.RedisUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,7 @@ public class BingControllerTest {
     private RedisUtil redisUtil;
 
     @BeforeEach
-    void beforeGetBing() throws JsonProcessingException {
+    void beforeGetBing() {
         BingImageVO cnBingImageVO = bingService.getBingImageByRemote(BingEnum.CN_BING);
         BingImageVO enBingImageVO = bingService.getBingImageByRemote(BingEnum.EN_BING);
         BingImage bingImage = new BingImage(cnBingImageVO, enBingImageVO);
@@ -47,19 +46,19 @@ public class BingControllerTest {
     @Test
     void getBingAllTest() {
         BingImage image = bingController.getAllBingImage().getData();
-        log.info("getBingAllTest: {}", image);
+        log.debug("getBingAllTest: {}", image);
     }
 
     @Test
     void getBingCnTest() {
         BingImageVO image = bingController.cnBingImage().getData();
-        log.info("getBingCnTest: {}", image);
+        log.debug("getBingCnTest: {}", image);
     }
 
     @Test
     void getBingEnTest() {
         BingImageVO image = bingController.enBingImage().getData();
-        log.info("getBingEnTest: {}", image);
+        log.debug("getBingEnTest: {}", image);
     }
 
 }
