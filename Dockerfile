@@ -1,22 +1,20 @@
-# 基础镜像
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:17-jdk-alpine as build
+WORKDIR /workspace/app
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
+FROM eclipse-temurin:17-jdk-alpine
 # 作者信息
 MAINTAINER  BingChunMoLi <bingchunmoli@foxmail.com>
-
-USER root
-
-# 添加一个存储空间
-VOLUME /root/.api/
-
-# 暴露8090端口
+VOLUME /tmp
 EXPOSE 8090
-
-# 添加变量，如果使用dockerfile-maven-plugin，则会自动替换这里的变量内容
-ARG JAR_FILE
-
-# 往容器中添加jar包
-ADD /target/${JAR_FILE} /root/.api/app.jar
-
-# 启动镜像自动运行程序
-ENTRYPOINT ["sh", "-c" ,"java -Djava.security.egd=file:/dev/urandom ${JAVA_OPTS} -jar /root/.api/app.jar ${0} ${@}"]
+ARG DEPENDENCY=/workspace/app/target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*", "-Djava.security.egd=file:/dev/urandom","hello.Application"]
+ENTRYPOINT ["sh", "-c" ,"java -cp app:app/lib/* -Djava.security.egd=file:/dev/urandom ${JAVA_OPTS} ApiApplication ${0} ${@}"]

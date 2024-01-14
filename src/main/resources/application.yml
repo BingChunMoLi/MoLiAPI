@@ -9,9 +9,9 @@ moli:
     weatherUri: devapi.qweather.com
     weatherGeoUri: geoapi.qweather.com
     serverSauceKey: #server酱通知的key
-    pcPath: ${moli.path}img/pc #pc随机图的图片路径
-    mobilePath: ${moli.path}img/mobile #mobile随机图的图片路径
-    path1080: ${moli.path}img/1080 #1080接口随机图的图片路径
+    pcPath: ${moli.path}img${file.separator}pc #pc随机图的图片路径
+    mobilePath: ${moli.path}img${file.separator}mobile #mobile随机图的图片路径
+    path1080: ${moli.path}img${file.separator}1080 #1080接口随机图的图片路径
     uploadTempPath:
     uploadTempSecret:
     certificatePath: #证书路径
@@ -24,7 +24,7 @@ server:
   http2:
     enabled: true
   tomcat:
-    basedir: ${moli.path}${file.separator}log${file.separator}tomcat${file.separator}
+    basedir: ${file.separator}log${file.separator}tomcat${file.separator}
     accesslog:
       enabled: true
       pattern: "%t %a %r %s (%D ms)"
@@ -77,12 +77,3 @@ logging:
     file: utf-8
     console: utf-8
   config: classpath:config/logback-spring.xml
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-        exclude: auditevents,info,metrics,loggers,logfile,httptrace,env,flyway,liquidbase,shutdown,mappings,scheduledtasks,threaddump,heapdump
-    jmx:
-      exposure:
-        exclude: '*'
