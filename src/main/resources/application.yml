@@ -57,7 +57,7 @@ spring:
       timeout: 3000
       password:
       port: 6379
-      host: redis
+      host: localhost
 mybatis-plus:
   configuration:
     cache-enabled: true
