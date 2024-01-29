@@ -38,7 +38,9 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
             if (id == null) {
                 return getBingImageByRemote();
             }
-            return getById(id);
+            BingImage bingImage = getById(id);
+            redisUtil.setObject(BingEnum.ALL_BING.getKey(), bingImage, 1, TimeUnit.DAYS);
+            return bingImage;
         }
         return t;
     }
@@ -58,7 +60,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     }
 
     @Override
-    public BingImageVO getBingImage(BingEnum bingEnum){
+    public BingImageVO getBingImage(BingEnum bingEnum) {
         BingImageVO t = redisUtil.getObject(bingEnum.getKey());
         if (t == null) {
             getBingImageByRemote();
@@ -68,7 +70,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     }
 
     @Override
-    public BingImageVO getBingImageByRemote(BingEnum bingEnum){
+    public BingImageVO getBingImageByRemote(BingEnum bingEnum) {
         String bingResult = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=" + bingEnum.getSearch() + "&format=js");
         try {
             return om.readValue(bingResult, BingImageVO.class);
