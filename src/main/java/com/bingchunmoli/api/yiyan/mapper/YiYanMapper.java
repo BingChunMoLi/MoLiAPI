@@ -13,12 +13,8 @@ import org.apache.ibatis.annotations.Select;
 public interface YiYanMapper extends BaseMapper<YiYan> {
 
     /**
-     * description: 查询随机一条一言
-     * author: BingChunMoLi
-     * date: 2020/11/12 20:09
-     * version: 0.0.1-SNAPSHOT
-     *
-     * @return com.bingchunmoli.api.entity.Yiyan
+     * randomYiYan
+     * @return yiyan
      */
     @Select("SELECT * FROM yi_yan as t1 WHERE t1.id>=(RAND()*(SELECT MAX(id) FROM yi_yan))LIMIT 1")
     YiYan findRandom();

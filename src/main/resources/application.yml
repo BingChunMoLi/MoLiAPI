@@ -2,20 +2,20 @@ moli:
   version: @version@
   path: ${user.home}${file.separator}.api${file.separator}
   init:
-    sqlPath: init/db
-    yiYanJsonPath: init/data/
+    sql-path: init/db
+    yi-yan-json-path: init/data/
   apiConfig:
-    weatherKey: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
-    weatherUri: devapi.qweather.com
-    weatherGeoUri: geoapi.qweather.com
-    serverSauceKey: #server酱通知的key
-    pcPath: ${moli.path}img${file.separator}pc #pc随机图的图片路径
-    mobilePath: ${moli.path}img${file.separator}mobile #mobile随机图的图片路径
+    weather-key: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
+    weather-uri: devapi.qweather.com
+    weather-geo-uri: geoapi.qweather.com
+    server-sauce-key: #server酱通知的key
+    pc-path: ${moli.path}img${file.separator}pc #pc随机图的图片路径
+    mobile-path: ${moli.path}img${file.separator}mobile #mobile随机图的图片路径
     path1080: ${moli.path}img${file.separator}1080 #1080接口随机图的图片路径
-    uploadTempPath:
-    uploadTempSecret:
-    certificatePath: #证书路径
-    privateKeyPath: #私钥路径
+    upload-temp-path:
+    upload-temp-secret:
+    certificate-path: #证书路径
+    privateKey-path: #私钥路径
     domain: #更新的域名
     play-list-id:
     cookies:
