@@ -39,7 +39,6 @@ public class MusicService {
     private final NeteaseMusicAlbumServiceImpl albumService;
     private final NeteaseMusicSongService songService;
     private final NeteaseMusicUserService userService;
-
     private final String urlHost = "https://music.163.com";
     private final HttpHost baseHost = HttpHost.create(urlHost);
 

@@ -5,6 +5,8 @@ import com.bingchunmoli.api.app.bean.DeviceVO;
 import com.bingchunmoli.api.app.mapper.DeviceMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
 * @author MoLi
 */
@@ -12,8 +14,10 @@ import org.springframework.stereotype.Service;
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, DeviceVO> implements DeviceService{
 
     @Override
-    public String getDefaultToken() {
-        return getById(1).getToken();
+    public Optional<String> getDefaultToken() {
+        DeviceVO defaultDevice = getById(1);
+        return Optional.ofNullable(defaultDevice)
+                .map(DeviceVO::getToken);
     }
 }
 

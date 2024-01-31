@@ -4,11 +4,11 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ApiConstant;
-import com.bingchunmoli.api.push.bean.AppMessage;
-import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.img.service.ImgService;
 import com.bingchunmoli.api.properties.ApiConfig;
+import com.bingchunmoli.api.push.bean.AppMessage;
+import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -71,10 +71,11 @@ public class ImgTask {
                 (pcPath == null ? 0 : pcPath.size()) +
                 "  更新移动图片:" +
                 (mobilePath == null ? 0 : mobilePath.size());
-        applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
+        AppMessage appMessage = new AppMessage()
                 .setTitle("随机图定时任务 更新成功")
                 .setBody(body)
-                .setDeviceToken(deviceService.getById(1).getToken())
-                .setAppMessageEnum(AppMessageEnum.TOPIC)));
+                .setAppMessageEnum(AppMessageEnum.TOPIC);
+        deviceService.getDefaultToken().ifPresentOrElse(v -> appMessage.setDeviceToken(v), () -> appMessage.setDefaultTopic());
+        applicationEventPublisher.publishEvent(new MessageEven(this, appMessage));
     }
 }

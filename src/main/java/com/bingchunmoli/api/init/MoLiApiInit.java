@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,8 +21,9 @@ import java.util.Map;
  */
 @Slf4j
 @Component
+@Order(Integer.MIN_VALUE)
 @RequiredArgsConstructor
-public class ApiCommandLineRunner implements CommandLineRunner {
+public class MoLiApiInit implements CommandLineRunner {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final Map<String, InitService> initServiceMap;
 

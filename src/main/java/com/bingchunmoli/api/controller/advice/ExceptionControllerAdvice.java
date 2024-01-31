@@ -97,15 +97,14 @@ public class ExceptionControllerAdvice {
     public ResultVO<String> defaultException(Exception e) {
         log.error(getExceptionErrorLogMessage("未分类异常"), e);
         if (mailEnable) {
-            AppMessage errAppMessage = null;
+            AppMessage errAppMessage = new AppMessage()
+                    .setTitle("出现未分类异常");
             try {
-                errAppMessage = new AppMessage()
-                        .setTitle("出现未分类异常")
-                        .setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()))
-                        .setDeviceToken(deviceService.getDefaultToken());
+                errAppMessage.setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()));
             } catch (JsonProcessingException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
+            deviceService.getDefaultToken().ifPresentOrElse(v -> errAppMessage.setDeviceToken(v), () -> errAppMessage.setDefaultTopic());
             applicationEventPublisher.publishEvent(new MessageEven(this, errAppMessage));
         }
         return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());

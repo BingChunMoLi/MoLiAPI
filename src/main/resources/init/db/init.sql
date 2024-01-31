@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS daily_log
     CONSTRAINT daily_log_PK PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS Device
+CREATE TABLE IF NOT EXISTS device
 (
     id         int auto_increment
         primary key,
