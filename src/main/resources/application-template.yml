@@ -20,14 +20,6 @@ spring:
     default-encoding: UTF-8
     protocol: smtps
     defaultTo: #默认发送通知给那个邮箱
-management:
-  #  endpoints:
-  #    web:
-  #      exposure:
-  #        include: '*'
-  endpoint:
-    health:
-      show-details: WHEN_AUTHORIZED
 moli:
   apiConfig:
     weatherKey: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
@@ -45,7 +37,3 @@ moli:
   init:
     sqlPath: "${moli.path}/init/db/"
     yiYanJsonPath: "${moli.path}/init/data/"
-logging:
-  level:
-    com.bingchunmoli: info
-    com.baomidou.example.mapper: info

@@ -1,7 +1,6 @@
 package com.bingchunmoli.api.init.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.init.InitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +11,8 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.nio.file.Path;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author MoLi
@@ -38,20 +35,7 @@ public class InitSqlServiceImpl implements InitService {
                 //存在表跳过初始化
                 return;
             }
-            String driverName;
-            try {
-                driverName = dataSource.getConnection().getMetaData().getDriverName().toLowerCase();
-            } catch (SQLException e) {
-                log.error("获取数据库类型出错");
-                throw new ApiInitException(e);
-            }
-            if (driverName.contains("mysql")) {
-                driverName = "mysql";
-            }
-            if (driverName.contains("h2")) {
-                driverName = "h2";
-            }
-            new ResourceDatabasePopulator(new ClassPathResource(sqlPath + File.separator + driverName + ".sql")).execute(dataSource);
+            new ResourceDatabasePopulator(new ClassPathResource(sqlPath + "init.sql")).execute(dataSource);
         }
     }
 

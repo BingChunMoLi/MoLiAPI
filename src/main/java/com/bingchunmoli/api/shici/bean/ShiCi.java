@@ -2,6 +2,7 @@ package com.bingchunmoli.api.shici.bean;
 
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.bingchunmoli.api.bean.ApiConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
+@TableName(ApiConstant.SHI_CI_TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class ShiCi implements Serializable {
 

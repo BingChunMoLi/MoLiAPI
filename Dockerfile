@@ -1,19 +1,18 @@
-# 基础镜像
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:17-jdk-alpine as build
+WORKDIR /workspace/app
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+RUN --mount=type=cache,target=/home/cnb/.m2 chmod +x ./mvnw && ./mvnw install -DskipTests
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-# 作者信息
-MAINTAINER  BingChunMoLi <bingchunmoli@foxmail.com>
-
-USER root
-
-# 添加一个存储空间
-VOLUME /root/.api/
-
-# 暴露8090端口
+FROM eclipse-temurin:17-jdk-alpine
+MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
+VOLUME /tmp
 EXPOSE 8090
-
-# 往容器中添加jar包
-ADD /target/moliapi.jar /root/.api/app.jar
-
-# 启动镜像自动运行程序
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","/root/.api/app.jar"]
+ARG DEPENDENCY=/workspace/app/target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["sh", "-c" ,"java -cp app:app/lib/* -Djava.security.egd=file:/dev/urandom ${JAVA_OPTS} ApiApplication ${0} ${@}"]

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@Profile("prod")
+@Profile({"!test", "!dev"})
 @RequiredArgsConstructor
 public class InitImgServiceImpl implements InitService {
     private final ImgTask imgTask;

@@ -133,7 +133,7 @@ public class MusicService {
                 }
                 NeteaseMusicSong song = NeteaseMusicSong.builder()
                         .name(track.getName())
-                        .id(track.getId())
+                        .thirdId(Long.valueOf(track.getId()))
                         .albumId(musicAlbum.getId())
                         .artists(musicUserList)
                         .build();

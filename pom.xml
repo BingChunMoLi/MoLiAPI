@@ -5,29 +5,29 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.15.0</version>
+    <version>3.15.1</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <mybatis.version>3.5.15</mybatis.version>
         <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <hutool.version>5.8.24</hutool.version>
+        <hutool.version>5.8.25</hutool.version>
         <zxing.version>3.5.2</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.2.224</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <knife4j.version>4.4.0</knife4j.version>
-        <tencent-cloud-api.version>3.1.893</tencent-cloud-api.version>
+        <knife4j.version>4.5.0</knife4j.version>
+        <tencent-cloud-api.version>3.1.954</tencent-cloud-api.version>
         <kotlin.version>1.9.22</kotlin.version>
         <firebase-admin.version>9.2.0</firebase-admin.version>
     </properties>
@@ -81,10 +81,6 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -166,6 +162,16 @@
             <artifactId>firebase-admin</artifactId>
             <version>${firebase-admin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter-test</artifactId>
+            <version>${mybatis-plus.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -175,6 +181,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
                     <executable>true</executable>
                     <excludes>
                         <exclude>
@@ -227,19 +236,6 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${docker-plugin.version}</version>
-                <configuration>
-                    <repository>${project.artifactId}</repository>
-                    <tag>latest</tag>
-                    <tag>${project.version}</tag>
-                    <buildArgs>
-                        <JAR_FILE>${project.artifactId}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
             </plugin>
         </plugins>
     </build>

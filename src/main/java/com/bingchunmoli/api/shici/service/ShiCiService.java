@@ -18,11 +18,4 @@ public interface ShiCiService extends IService<ShiCi> {
      * @return 一条诗词数据
      */
     ShiCi findRandomShiCi();
-
-    /**
-     * 指定id诗词
-     * @param id 主键id
-     * @return 诗词对象
-     */
-    ShiCi getShiCi(Integer id);
 }

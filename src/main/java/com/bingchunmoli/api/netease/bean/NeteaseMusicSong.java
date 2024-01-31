@@ -32,6 +32,12 @@ public class NeteaseMusicSong implements Serializable {
     private String name;
 
     /**
+     * 第三方平台Id
+     */
+    @TableField(value = "third_id")
+    private Long thirdId;
+
+    /**
      * 专辑id
      */
     @TableField(value = "album_id")

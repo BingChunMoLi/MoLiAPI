@@ -142,13 +142,16 @@ CREATE TABLE IF NOT EXISTS push_log
 CREATE TABLE IF NOT EXISTS netease_music_song
 (
     id   int auto_increment NOT NULL,
+    third_id bigint null,
     name varchar(50)        NOT NULL,
+    album_id int    null comment '专辑Id',
     CONSTRAINT netease_music_music_PK PRIMARY KEY (id)
 ) COMMENT ='歌曲';
 
 CREATE TABLE IF NOT EXISTS netease_music_playlist
 (
     id          int auto_increment NOT NULL,
+    third_id bigint,
     name        varchar(100)       NOT NULL COMMENT '名称',
     user_id     varchar(100)       NOT NULL COMMENT '用户Id',
     description varchar(500)       NOT NULL,

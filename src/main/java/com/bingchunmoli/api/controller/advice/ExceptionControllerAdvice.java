@@ -1,7 +1,6 @@
 package com.bingchunmoli.api.controller.advice;
 
 import com.bingchunmoli.api.app.DeviceService;
-import com.bingchunmoli.api.push.bean.MailMessage;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.even.MessageEven;
@@ -10,11 +9,13 @@ import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
+import com.bingchunmoli.api.push.bean.AppMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -34,7 +35,8 @@ public class ExceptionControllerAdvice {
     @Value("${spring.mail.enable:false}")
     private boolean mailEnable;
     private final ObjectMapper om;
-    private final DeviceService deviceService;
+    @Autowired(required = false)
+    private DeviceService deviceService;
 
     @ExceptionHandler
     public ResultVO<String> fileIsEmptyException(ApiFileIsEmptyException e) {
@@ -95,13 +97,16 @@ public class ExceptionControllerAdvice {
     public ResultVO<String> defaultException(Exception e) {
         log.error(getExceptionErrorLogMessage("未分类异常"), e);
         if (mailEnable) {
-            MailMessage errMailMessage = null;
+            AppMessage errAppMessage = null;
             try {
-                errMailMessage = MailMessage.builder().title("出现未分类异常").body("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace())).to(deviceService.getById(1).getToken()).build();
+                errAppMessage = new AppMessage()
+                        .setTitle("出现未分类异常")
+                        .setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()))
+                        .setDeviceToken(deviceService.getDefaultToken());
             } catch (JsonProcessingException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
-            applicationEventPublisher.publishEvent(new MessageEven(this, errMailMessage));
+            applicationEventPublisher.publishEvent(new MessageEven(this, errAppMessage));
         }
         return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
     }

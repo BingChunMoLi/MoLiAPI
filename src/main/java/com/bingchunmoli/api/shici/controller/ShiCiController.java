@@ -26,7 +26,7 @@ public class ShiCiController {
      */
     @GetMapping("{id}")
     public ShiCi getShiCi(@PathVariable Integer id) {
-        return shiCiService.getShiCi(id);
+        return shiCiService.getById(id);
     }
 
     /**

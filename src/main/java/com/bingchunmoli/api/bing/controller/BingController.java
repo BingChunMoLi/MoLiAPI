@@ -8,6 +8,7 @@ import com.bingchunmoli.api.bing.service.BingService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,11 +82,12 @@ public class BingController {
 
     /**
      * 获取指定日期的bing随机图
+     *
      * @param date 日期
      * @return BingImage
      */
     @GetMapping("date")
-    public ResultVO<BingImage> getBingImageByDate(@Valid @NotNull LocalDate date){
+    public ResultVO<BingImage> getBingImageByDate(@Valid @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResultVO.ok(bingService.getBingImageByDate(date));
     }
 }

@@ -2,20 +2,20 @@ moli:
   version: @version@
   path: ${user.home}${file.separator}.api${file.separator}
   init:
-    sqlPath: init/db
-    yiYanJsonPath: init/data/
+    sql-path: init/db
+    yi-yan-json-path: init/data/
   apiConfig:
-    weatherKey: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
-    weatherUri: devapi.qweather.com
-    weatherGeoUri: geoapi.qweather.com
-    serverSauceKey: #server酱通知的key
-    pcPath: ${moli.path}img/pc #pc随机图的图片路径
-    mobilePath: ${moli.path}img/mobile #mobile随机图的图片路径
-    path1080: ${moli.path}img/1080 #1080接口随机图的图片路径
-    uploadTempPath:
-    uploadTempSecret:
-    certificatePath: #证书路径
-    privateKeyPath: #私钥路径
+    weather-key: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
+    weather-uri: devapi.qweather.com
+    weather-geo-uri: geoapi.qweather.com
+    server-sauce-key: #server酱通知的key
+    pc-path: ${moli.path}img${file.separator}pc #pc随机图的图片路径
+    mobile-path: ${moli.path}img${file.separator}mobile #mobile随机图的图片路径
+    path1080: ${moli.path}img${file.separator}1080 #1080接口随机图的图片路径
+    upload-temp-path:
+    upload-temp-secret:
+    certificate-path: #证书路径
+    privateKey-path: #私钥路径
     domain: #更新的域名
     play-list-id:
     cookies:
@@ -24,7 +24,7 @@ server:
   http2:
     enabled: true
   tomcat:
-    basedir: ${moli.path}${file.separator}log${file.separator}tomcat${file.separator}
+    basedir: ${file.separator}log${file.separator}tomcat${file.separator}
     accesslog:
       enabled: true
       pattern: "%t %a %r %s (%D ms)"
@@ -39,7 +39,7 @@ spring:
       max-request-size: -1
   datasource:
     driver-class-name: org.h2.Driver
-    url: "jdbc:h2:file///~/.api/api.db?MODE=MySQL&DATABASE_TO_LOWER=true&database_to_upper=false&AUTO_SERVER=true&DB_CLOSE_ON_EXIT=false&CASE_INSENSITIVE_IDENTIFIERS=true"
+    url: "jdbc:h2:mem:api;MODE=MySQL;DATABASE_TO_LOWER=TRUE;database_to_upper=false;CASE_INSENSITIVE_IDENTIFIERS=true;"
     username: root
     password: root
     type: com.zaxxer.hikari.HikariDataSource
@@ -49,7 +49,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: h2
+    active: default
   data:
     redis:
       database: 1
@@ -57,7 +57,7 @@ spring:
       timeout: 3000
       password:
       port: 6379
-      host: redis
+      host: localhost
 mybatis-plus:
   configuration:
     cache-enabled: true
@@ -77,12 +77,3 @@ logging:
     file: utf-8
     console: utf-8
   config: classpath:config/logback-spring.xml
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-        exclude: auditevents,info,metrics,loggers,logfile,httptrace,env,flyway,liquidbase,shutdown,mappings,scheduledtasks,threaddump,heapdump
-    jmx:
-      exposure:
-        exclude: '*'
