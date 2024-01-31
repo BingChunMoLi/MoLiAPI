@@ -20,10 +20,8 @@ public class AppController {
 
     @PostMapping(value = "/app")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultVO<Void> saveOrUpdateDevice(@RequestBody DeviceVO device){
-        log.info("device: {}", device);
-        deviceService.saveOrUpdate(device);
-        return ResultVO.ok(null);
+    public ResultVO<Boolean> saveOrUpdateDevice(@RequestBody DeviceVO device){
+        return ResultVO.ok(deviceService.saveOrUpdate(device));
     }
 
     @GetMapping("/app/{name}/{model}/{androidId}")
