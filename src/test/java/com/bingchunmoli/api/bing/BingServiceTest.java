@@ -1,4 +1,4 @@
-package com.bingchunmoli.api.bing.controller;
+package com.bingchunmoli.api.bing;
 
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;

@@ -3,6 +3,7 @@ package com.bingchunmoli.api.controller.advice;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
@@ -22,16 +23,17 @@ import java.awt.image.BufferedImage;
 public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(@NotNull MethodParameter returnType, @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, @NotNull MediaType selectedContentType, @NotNull Class<? extends HttpMessageConverter<?>> selectedConverterType, @NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response) {
         if (returnType.getGenericParameterType().equals(String.class)) {
             //String无法直接包装
             ObjectMapper objectMapper = new ObjectMapper();
             try {
+                //iss contentType为text错误的contentType类型预期为application/json
                 return objectMapper.writeValueAsString(new ResultVO<>(body));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
