@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.push;
 
+import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.exception.ApiMessageException;
-import com.bingchunmoli.api.properties.ApiConfig;
 import com.bingchunmoli.api.push.bean.HttpMessage;
 import com.bingchunmoli.api.push.bean.Message;
 import com.bingchunmoli.api.push.bean.SendParam;

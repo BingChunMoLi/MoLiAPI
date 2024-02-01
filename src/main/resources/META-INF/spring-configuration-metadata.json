@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "moli.api-config",
-      "type": "com.bingchunmoli.api.properties.ApiConfig",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "type": "com.bingchunmoli.api.config.ApiConfig",
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     }
   ],
   "properties": [
@@ -11,73 +11,73 @@
       "name": "moli.api-config.certificate-path",
       "type": "java.lang.String",
       "description": "证书路径(为腾讯CDN自动更新)",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.domain",
       "type": "java.lang.String",
       "description": "域名",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.mobile-path",
       "type": "java.lang.String",
       "description": "mobile图片路径",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.path1080",
       "type": "java.lang.String",
       "description": "1080p",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.pc-path",
       "type": "java.lang.String",
       "description": "pc图片路径",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.private-key-path",
       "type": "java.lang.String",
       "description": "私钥路径(为腾讯CDN自动更新)",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.server-sauce-key",
       "type": "java.lang.String",
       "description": "server酱key",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.upload-temp-path",
       "type": "java.lang.String",
       "description": "上传临时文件的路径",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.upload-temp-secret",
       "type": "java.lang.String",
       "description": "上传临时文件的密钥",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.weather-geo-uri",
       "type": "java.lang.String",
       "description": "和风天气请求地区ApiUri",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.weather-key",
       "type": "java.lang.String",
       "description": "和风天气key",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },
     {
       "name": "moli.api-config.weather-uri",
       "type": "java.lang.String",
       "description": "和风天气请求uri",
-      "sourceType": "com.bingchunmoli.api.properties.ApiConfig"
+      "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     }
   ],
   "hints": []

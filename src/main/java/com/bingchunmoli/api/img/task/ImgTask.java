@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ApiConstant;
+import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.img.service.ImgService;
-import com.bingchunmoli.api.properties.ApiConfig;
 import com.bingchunmoli.api.push.bean.AppMessage;
 import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class ImgTask {
                 .setTitle("随机图定时任务 更新成功")
                 .setBody(body)
                 .setAppMessageEnum(AppMessageEnum.TOPIC);
-        deviceService.getDefaultToken().ifPresentOrElse(v -> appMessage.setDeviceToken(v), () -> appMessage.setDefaultTopic());
+        deviceService.getDefaultToken().ifPresentOrElse(appMessage::setDeviceToken, appMessage::setDefaultTopic);
         applicationEventPublisher.publishEvent(new MessageEven(this, appMessage));
     }
 }

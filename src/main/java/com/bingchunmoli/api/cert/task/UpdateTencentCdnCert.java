@@ -2,9 +2,15 @@ package com.bingchunmoli.api.cert.task;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
-import com.bingchunmoli.api.properties.ApiConfig;
+import com.bingchunmoli.api.config.ApiConfig;
 import com.tencentcloudapi.cdn.v20180606.CdnClient;
-import com.tencentcloudapi.cdn.v20180606.models.*;
+import com.tencentcloudapi.cdn.v20180606.models.DescribeDomainsConfigRequest;
+import com.tencentcloudapi.cdn.v20180606.models.DescribeDomainsConfigResponse;
+import com.tencentcloudapi.cdn.v20180606.models.DetailDomain;
+import com.tencentcloudapi.cdn.v20180606.models.Https;
+import com.tencentcloudapi.cdn.v20180606.models.ServerCert;
+import com.tencentcloudapi.cdn.v20180606.models.UpdateDomainConfigRequest;
+import com.tencentcloudapi.cdn.v20180606.models.UpdateDomainConfigResponse;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.provider.ProfileCredentialsProvider;

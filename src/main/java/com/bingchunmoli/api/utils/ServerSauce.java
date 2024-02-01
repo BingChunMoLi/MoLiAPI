@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.utils;
 
 import cn.hutool.core.util.StrUtil;
-import com.bingchunmoli.api.properties.ApiConfig;
+import com.bingchunmoli.api.config.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -11,8 +11,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author bingchunmoli
@@ -29,19 +29,13 @@ public class ServerSauce {
             return;
         }
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        StringBuilder params = new StringBuilder();
-        try {
-            params.append("https://sctapi.ftqq.com/");
-            params.append(apiConfig.getServerSauceKey());
-            params.append(".send?title=");
-            params.append(URLEncoder.encode(title, "utf-8"));
-            params.append("&desp=");
-            params.append(URLEncoder.encode(desp, "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            log.debug("URL编码异常");
-            e.printStackTrace();
-        }
-        HttpPost httpPost = new HttpPost(params.toString());
+        String params = "https://sctapi.ftqq.com/" +
+                apiConfig.getServerSauceKey() +
+                ".send?title=" +
+                URLEncoder.encode(title, StandardCharsets.UTF_8) +
+                "&desp=" +
+                URLEncoder.encode(desp, StandardCharsets.UTF_8);
+        HttpPost httpPost = new HttpPost(params);
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpPost);

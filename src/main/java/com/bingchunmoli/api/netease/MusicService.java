@@ -1,11 +1,11 @@
 package com.bingchunmoli.api.netease;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicAlbum;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicPlaylist;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicSong;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicUser;
-import com.bingchunmoli.api.properties.ApiConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
