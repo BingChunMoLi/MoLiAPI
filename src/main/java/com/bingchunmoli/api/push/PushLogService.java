@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.push;
 
-import com.bingchunmoli.api.push.bean.PushLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bingchunmoli.api.push.bean.PushLog;
 
 /**
 * @author MoLi

@@ -4,6 +4,11 @@
       "name": "moli.api-config",
       "type": "com.bingchunmoli.api.config.ApiConfig",
       "sourceType": "com.bingchunmoli.api.config.ApiConfig"
+    },
+    {
+      "name": "moli.downbili",
+      "type": "com.bingchunmoli.api.down.config.SystemConfig",
+      "sourceType": "com.bingchunmoli.api.down.config.SystemConfig"
     }
   ],
   "properties": [

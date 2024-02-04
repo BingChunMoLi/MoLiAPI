@@ -2,8 +2,8 @@ package com.bingchunmoli.api.navigation.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bingchunmoli.api.navigation.bean.NavigationPO;
 import com.bingchunmoli.api.navigation.bean.Navigation;
+import com.bingchunmoli.api.navigation.bean.NavigationPO;
 import com.bingchunmoli.api.navigation.bean.TagPO;
 import org.apache.ibatis.annotations.Param;
 

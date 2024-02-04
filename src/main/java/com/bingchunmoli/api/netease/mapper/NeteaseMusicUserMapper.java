@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.netease.mapper;
 
-import com.bingchunmoli.api.netease.bean.NeteaseMusicUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicUser;
 
 import java.util.List;
 

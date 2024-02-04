@@ -37,3 +37,13 @@ moli:
   init:
     sqlPath: "${moli.path}/init/db/"
     yiYanJsonPath: "${moli.path}/init/data/"
+  bili:
+    BBDownPath: ${moli.utilPath}BBDown
+    downloadPath: /soft/bili/video/
+    baiduPCSPath: ${moli.utilPath}BaiduPCS-Go
+    uploadPath: /soft/bili/fav/
+    rclonePath: ${moli.utilPath}rclone
+    youGetPath: ${moli.utilPath}YouGet
+    utilPath: /soft/bili/util/
+    downloadAudioPath: ${moli.basePath}/audio
+    basePath: /soft/bili

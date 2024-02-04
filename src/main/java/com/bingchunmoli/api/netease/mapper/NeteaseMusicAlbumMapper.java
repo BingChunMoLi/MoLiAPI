@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.netease.mapper;
 
-import com.bingchunmoli.api.netease.bean.NeteaseMusicAlbum;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicAlbum;
 
 /**
 * @author MoLi
