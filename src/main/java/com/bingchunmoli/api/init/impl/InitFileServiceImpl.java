@@ -1,8 +1,8 @@
 package com.bingchunmoli.api.init.impl;
 
+import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.init.InitService;
-import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

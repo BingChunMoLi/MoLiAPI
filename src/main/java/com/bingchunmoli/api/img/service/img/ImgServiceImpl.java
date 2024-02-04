@@ -1,10 +1,9 @@
 package com.bingchunmoli.api.img.service.img;
 
 import com.bingchunmoli.api.bean.ApiConstant;
+import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.exception.ApiCacheException;
-import com.bingchunmoli.api.exception.ApiImgException;
 import com.bingchunmoli.api.img.service.ImgService;
-import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +13,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +43,7 @@ public class ImgServiceImpl implements ImgService {
             try {
                 img = ImageIO.read(getRandomImgByRedis(ApiConstant.PC_IMG));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("readPcImage", e);
             }
             if (img != null) {
                 return img;
@@ -51,7 +55,7 @@ public class ImgServiceImpl implements ImgService {
             try {
                 return ImageIO.read(getRandomImgByFileSystem(apiConfig.getPcPath()));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("read pcImage", e);
             }
             i++;
         }
@@ -66,7 +70,7 @@ public class ImgServiceImpl implements ImgService {
             try {
                 img = ImageIO.read(getRandomImgByRedis(ApiConstant.MOBILE_IMG));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("readMobileImg", e);
             }
             if (img != null) {
                 return img;
@@ -78,7 +82,7 @@ public class ImgServiceImpl implements ImgService {
             try {
                 return ImageIO.read(getRandomImgByFileSystem(apiConfig.getMobilePath()));
             } catch (IOException e) {
-                throw new ApiImgException(e);
+                log.error("readMobileImg", e);
             }finally {
                 i++;
             }

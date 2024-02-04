@@ -13,11 +13,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -99,11 +109,12 @@ public class DailyController {
                     .tenant(tenant.equals("moli") ? 1 : 0)
                     .createTime(LocalDateTime.now()));
         });
-        applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage()
+        AppMessage appMessage = new AppMessage()
                 .setTitle("签到成功")
                 .setBody(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .setAppMessageEnum(AppMessageEnum.DEVICE_ID)
-                .setDeviceToken(deviceService.getDefaultToken())));
+                .setAppMessageEnum(AppMessageEnum.DEVICE_ID);
+        deviceService.getDefaultToken().ifPresentOrElse(v -> appMessage.setDeviceToken(v), () -> appMessage.setDefaultTopic());
+        applicationEventPublisher.publishEvent(new MessageEven(this, appMessage));
         return ResultVO.ok(dailyLogService.saveBatch(list));
     }
 }

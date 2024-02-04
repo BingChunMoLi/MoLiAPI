@@ -33,7 +33,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
         <!-- 日志文件的路径及文件名 -->
-        <File>api/logs/${APP_Name}.log</File>
+        <File>${user.home}/.api/logs/${APP_Name}.log</File>
 
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
         <append>true</append>

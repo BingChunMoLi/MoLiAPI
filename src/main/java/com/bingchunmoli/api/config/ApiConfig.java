@@ -1,4 +1,4 @@
-package com.bingchunmoli.api.properties;
+package com.bingchunmoli.api.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

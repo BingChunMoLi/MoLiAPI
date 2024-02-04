@@ -19,6 +19,10 @@ public class AppMessage implements Message{
         return getDeviceToken() == null || getDeviceToken().isEmpty() ? getTopic() : getDeviceToken();
     }
 
+    public void setDefaultTopic() {
+        this.topic = "api";
+    }
+
     @Override
     public PushMessageEnum getType() {
         return PushMessageEnum.APP_MESSAGE;

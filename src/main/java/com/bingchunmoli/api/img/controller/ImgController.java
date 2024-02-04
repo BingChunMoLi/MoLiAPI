@@ -1,8 +1,8 @@
 package com.bingchunmoli.api.img.controller;
 
 import com.bingchunmoli.api.bean.ApiConstant;
+import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.img.service.ImgService;
-import com.bingchunmoli.api.properties.ApiConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.FileSystemResource;
