@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import router from '@/router'
 import type {ResultVO} from '@/type/ResultVO'
-import type {FormInstance} from 'element-plus';
-import {reactive} from 'vue';
+import type {FormInstance} from 'element-plus'
+import {reactive, ref} from 'vue'
 
 fetch(import.meta.env.VITE_API_BASE_URL + 'init', {
   method: 'get',
   headers: {
     'Content-Type': 'application/json'
   }
-}).then((r) => r.json() as Promise<ResultVO<Boolean>>)
+})
+    .then((r) => r.json() as Promise<ResultVO<Boolean>>)
     .then((res) => {
       if (res && res.code === '00000' && res.data === true) {
         ElMessage('前往初始化注册用户')
@@ -26,7 +27,7 @@ function getSystemConfig() {
     method: 'get',
     headers: {
       'Content-Type': 'application/json'
-    },
+    }
   })
       .then((r) => {
         if (r.status === 200 && r.ok) {
@@ -37,33 +38,33 @@ function getSystemConfig() {
           }
           throw new Error()
         }
-
       })
       .then((res) => {
         if (res && res.code === '00000') {
           form = Object.assign(form, res.data)
         }
-      }).catch(r => {
-    console.log(r)
-  })
+      })
+      .catch((r) => {
+        console.log(r)
+      })
 }
 
 getSystemConfig()
 
 interface ApiConfig {
-  weatherKey: string,
-  weatherUri: string,
-  weatherGeoUri: string,
-  serverSauceKey: string,
-  pcPath: string,
-  mobilePath: string,
-  path1080: string,
-  uploadTempPath: string,
-  uploadTempSecret: string,
-  certificatePath: string,
-  privateKeyPath: string,
-  domain: string,
-  playListId: Array<string>,
+  weatherKey: string
+  weatherUri: string
+  weatherGeoUri: string
+  serverSauceKey: string
+  pcPath: string
+  mobilePath: string
+  path1080: string
+  uploadTempPath: string
+  uploadTempSecret: string
+  certificatePath: string
+  privateKeyPath: string
+  domain: string
+  playListId: Array<string>
   cookies: string
 }
 
@@ -83,6 +84,7 @@ let form = reactive<ApiConfig>({
   playListId: [],
   cookies: ''
 })
+const ruleFormRef = ref<FormInstance>()
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   getSystemConfig()
