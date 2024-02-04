@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS daily_log
     CONSTRAINT daily_log_PK PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS Device
+CREATE TABLE IF NOT EXISTS device
 (
     id         int auto_increment
         primary key,
@@ -194,6 +194,17 @@ create table if not exists netease_music_album
         primary key (id)
 )
     comment '专辑';
+
+create table if not exists api_user
+(
+    id          int auto_increment,
+    name        varchar(30) null,
+    password    varchar(60) null,
+    create_time timestamp   null,
+    update_time timestamp   null,
+    constraint user_pk
+        primary key (id)
+);
 
 
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;

@@ -2,7 +2,7 @@ moli:
   version: @version@
   path: ${user.home}${file.separator}.api${file.separator}
   init:
-    sql-path: init/db
+    sql-path: classpath:/init/db/init.sql
     yi-yan-json-path: init/data/
   apiConfig:
     weather-key: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)

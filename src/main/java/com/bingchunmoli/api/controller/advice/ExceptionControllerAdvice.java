@@ -8,6 +8,8 @@ import com.bingchunmoli.api.exception.ApiException;
 import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.exception.ApiParamException;
+import com.bingchunmoli.api.exception.system.ApiSystemException;
+import com.bingchunmoli.api.exception.system.ApiUserNonFoundException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import com.bingchunmoli.api.push.bean.AppMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,6 +39,22 @@ public class ExceptionControllerAdvice {
     private final ObjectMapper om;
     @Autowired(required = false)
     private DeviceService deviceService;
+
+    @ExceptionHandler
+    public ResultVO<String> apiUserNonFoundException(ApiUserNonFoundException e) {
+        log.error(getExceptionErrorLogMessage("用户不存在"), e);
+        ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+        result.setMsg("用户未找到");
+        return result;
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> systemException(ApiSystemException e) {
+        log.error(getExceptionErrorLogMessage("后台管理异常"), e);
+        ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+        result.setMsg("后台管理异常");
+        return result;
+    }
 
     @ExceptionHandler
     public ResultVO<String> fileIsEmptyException(ApiFileIsEmptyException e) {
@@ -97,15 +115,14 @@ public class ExceptionControllerAdvice {
     public ResultVO<String> defaultException(Exception e) {
         log.error(getExceptionErrorLogMessage("未分类异常"), e);
         if (mailEnable) {
-            AppMessage errAppMessage = null;
+            AppMessage errAppMessage = new AppMessage()
+                    .setTitle("出现未分类异常");
             try {
-                errAppMessage = new AppMessage()
-                        .setTitle("出现未分类异常")
-                        .setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()))
-                        .setDeviceToken(deviceService.getDefaultToken());
+                errAppMessage.setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()));
             } catch (JsonProcessingException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
+            deviceService.getDefaultToken().ifPresentOrElse(errAppMessage::setDeviceToken, errAppMessage::setDefaultTopic);
             applicationEventPublisher.publishEvent(new MessageEven(this, errAppMessage));
         }
         return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());

@@ -3,6 +3,8 @@ package com.bingchunmoli.api.shici.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -18,4 +20,9 @@ public interface ShiCiService extends IService<ShiCi> {
      * @return 一条诗词数据
      */
     ShiCi findRandomShiCi();
+
+    /**
+     * 初始化service中的shiciList
+     */
+    void setShiCiList(List<ShiCi> list);
 }

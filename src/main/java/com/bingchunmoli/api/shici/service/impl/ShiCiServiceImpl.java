@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Random;
 
@@ -26,13 +25,17 @@ import java.util.Random;
 public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements ShiCiService {
     private List<ShiCi> list;
 
-    @PostConstruct
-    void init(){
-        list = list();
-    }
-
     @Override
     public ShiCi findRandomShiCi() {
         return list.get(new Random().nextInt(list.size()));
     }
+
+    /**
+     * 初始化service中的shiciList
+     */
+    @Override
+    public void setShiCiList(List<ShiCi> list) {
+        this.list = list;
+    }
+
 }
