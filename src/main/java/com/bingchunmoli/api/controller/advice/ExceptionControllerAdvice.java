@@ -1,6 +1,5 @@
 package com.bingchunmoli.api.controller.advice;
 
-import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.even.MessageEven;
@@ -11,13 +10,12 @@ import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.exception.system.ApiSystemException;
 import com.bingchunmoli.api.exception.system.ApiUserNonFoundException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
-import com.bingchunmoli.api.push.bean.AppMessage;
+import com.bingchunmoli.api.push.bean.MailMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -36,9 +34,12 @@ public class ExceptionControllerAdvice {
     private final ApplicationEventPublisher applicationEventPublisher;
     @Value("${spring.mail.enable:false}")
     private boolean mailEnable;
+    @Value("${spring.mail.defaultTo}")
+    private String defaultTo;
+    @Value("${spring.mail.username}")
+    private String mailFrom;
+
     private final ObjectMapper om;
-    @Autowired(required = false)
-    private DeviceService deviceService;
 
     @ExceptionHandler
     public ResultVO<String> apiUserNonFoundException(ApiUserNonFoundException e) {
@@ -115,15 +116,17 @@ public class ExceptionControllerAdvice {
     public ResultVO<String> defaultException(Exception e) {
         log.error(getExceptionErrorLogMessage("未分类异常"), e);
         if (mailEnable) {
-            AppMessage errAppMessage = new AppMessage()
-                    .setTitle("出现未分类异常");
+            MailMessage errMailMessage = MailMessage.builder()
+                    .from(mailFrom)
+                    .to(defaultTo)
+                    .title("未分类异常")
+                    .build();
             try {
-                errAppMessage.setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()));
+                errMailMessage.setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()));
             } catch (JsonProcessingException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
-            deviceService.getDefaultToken().ifPresentOrElse(errAppMessage::setDeviceToken, errAppMessage::setDefaultTopic);
-            applicationEventPublisher.publishEvent(new MessageEven(this, errAppMessage));
+            applicationEventPublisher.publishEvent(new MessageEven(this, errMailMessage));
         }
         return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
     }

@@ -11,7 +11,7 @@
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.15.1</version>
+    <version>3.15.2</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
@@ -22,7 +22,7 @@
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
         <hutool.version>5.8.25</hutool.version>
-        <zxing.version>3.5.2</zxing.version>
+        <zxing.version>3.5.3</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <h2.version>2.2.224</h2.version>
         <ip-info.version>2.2.0</ip-info.version>

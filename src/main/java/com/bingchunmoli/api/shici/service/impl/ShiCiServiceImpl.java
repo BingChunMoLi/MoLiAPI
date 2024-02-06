@@ -27,15 +27,10 @@ public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements
 
     @Override
     public ShiCi findRandomShiCi() {
+        if (list == null) {
+            list = list();
+        }
         return list.get(new Random().nextInt(list.size()));
-    }
-
-    /**
-     * 初始化service中的shiciList
-     */
-    @Override
-    public void setShiCiList(List<ShiCi> list) {
-        this.list = list;
     }
 
 }
