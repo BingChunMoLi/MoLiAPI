@@ -22,6 +22,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 统一异常处理
@@ -67,12 +68,19 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     public ResultVO<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.error(getExceptionErrorLogMessage("请求方法不正确或者没有受支持的方法"), e);
+        log.warn(getExceptionErrorLogMessage("请求方法不正确或者没有受支持的方法"), e);
         ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
         result.setMsg("请求方法不正确或者没有受支持的方法");
         return result;
     }
 
+    @ExceptionHandler
+    public ResultVO<String> noResourceFoundException(NoResourceFoundException e) {
+        log.warn(getExceptionErrorLogMessage("没有找到需要的资源"), e);
+        ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, getExceptionJsonMessage());
+        result.setMsg("没有找到需要的资源");
+        return result;
+    }
 
     @ExceptionHandler
     public ResultVO<String> apiException(ApiException e) {
