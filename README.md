@@ -1,15 +1,11 @@
 # [MoLiAPI](https://api.bingchunmoli.com)
 
 ![](https://badgen.net/github/release/bingchunmoli/MoLiApi/stable)
-![](https://badgen.net/github/stars/bingchunmoli/MoLiApi)
-![](https://badgen.net/github/forks/bingchunmoli/MoLiApi)
-![](https://badgen.net/github/open-issues/bingchunmoli/MoLiApi)
 ![](https://badgen.net/github/prs/bingchunmoli/MoLiApi)
 ![](https://badgen.net/github/commits/bingchunmoli/MoLiApi)
 ![](https://badgen.net/github/releases/bingchunmoli/MoLiApi)
 ![](https://badgen.net/github/license/bingchunmoli/MoLiApi)
-![](https://badgen.net/github/contributors/bingchunmoli/MoLiApi)
-
+[![Java CI with Maven](https://github.com/BingChunMoLi/MoLiAPI/actions/workflows/maven.yml/badge.svg?event=branch_protection_rule)](https://github.com/BingChunMoLi/MoLiAPI/actions/workflows/maven.yml)
 
 ## 快速开始:
 1. docker(v3.8.1):
