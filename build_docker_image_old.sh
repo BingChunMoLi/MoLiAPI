@@ -1,0 +1,1 @@
+docker build -f Dockerfile_old -t bingyantang/moliapi:latest .
