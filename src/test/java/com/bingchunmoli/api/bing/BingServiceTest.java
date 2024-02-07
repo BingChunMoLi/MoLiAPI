@@ -54,7 +54,7 @@ public class BingServiceTest {
         enBingImage = bingService.getBingImageByRemote(BingEnum.EN_BING);
         BingImage bingImage = new BingImage(cnBingImage, enBingImage);
         Assert.isTrue(LocalDate.parse(bingImage.getEndDate(), DateTimeFormatter.ofPattern("yyyyMMdd")).isEqual(LocalDate.now()) ||
-                        LocalDate.parse(bingImage.getEndDateEn(), DateTimeFormatter.ofPattern("yyyYMMdd")).isEqual(LocalDate.now()),
+                        LocalDate.parse(bingImage.getEndDateEn(), DateTimeFormatter.ofPattern("yyyyMMdd")).isEqual(LocalDate.now()),
                 "获取的bingImage.EndDate已过时");
         Assert.isTrue(bingImage.getCreateTime().toLocalDate().isEqual(LocalDate.now()), "获取的bingImage.creatTime已过时");
     }
