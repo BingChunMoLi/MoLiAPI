@@ -12,14 +12,19 @@
 ```shell
 docker run -d --name api -p 8090:8090 -v /tmp:/root/.api/ bingyantang/moliapi:h2-alpha
 ```
+
+3.15.3>
+
+```shell
+docker run -d --name api -p 8090:8090 -v /tmp:/java/.api/ bingchunmoli/moliapi:latest
+或者
+docker run -d --name api -p 8090:8090 -v /tmp:/java/.api/ bingchunmoli/moliapi:3.15.3
+```
+
 3. fatjar:
-使用h2(部分功能)
+   支持mysql,h2数据库
 ```shell
 java -jar --spring.profiles.active=h2 moliapi.jar
-```
-使用mysql(需配置)
-```shell
-java -jar --spring.profiles.active=prod moliapi.jar
 ```
 ## 已支持接口:
 1. Bing美图
