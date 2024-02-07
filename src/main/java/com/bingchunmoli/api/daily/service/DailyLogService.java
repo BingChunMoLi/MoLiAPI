@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.daily.service;
 
-import com.bingchunmoli.api.daily.bean.DailyLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bingchunmoli.api.daily.bean.DailyLog;
 
 /**
 * @author MoLi

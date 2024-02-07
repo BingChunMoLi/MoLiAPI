@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.netease;
 
-import com.bingchunmoli.api.netease.bean.NeteaseMusicSong;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bingchunmoli.api.netease.bean.NeteaseMusicSong;
 
 import java.util.List;
 

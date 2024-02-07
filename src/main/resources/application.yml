@@ -58,6 +58,8 @@ spring:
       password:
       port: 6379
       host: localhost
+    mail:
+      defaultTo: #默认发送通知给那个邮箱
 mybatis-plus:
   configuration:
     cache-enabled: true
