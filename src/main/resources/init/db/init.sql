@@ -234,7 +234,7 @@ create table if not exists bili_media
     id              int                      not null
         primary key,
     type            int                      null,
-    title           varchar(80)              null comment '标题',
+    title varchar(150) null comment '标题',
     cover           varchar(500)             null comment '封面图',
     intro           varchar(3000)            null comment '简介',
     page            int                      null comment '分P数',

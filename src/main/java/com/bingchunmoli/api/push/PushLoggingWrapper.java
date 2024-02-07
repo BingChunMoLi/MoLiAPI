@@ -14,9 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 public class PushLoggingWrapper implements Push {
     private final Push push;
     private final PushLogService pushLogService;
+    private final Object source;
 
     @Override
     public String send(Message message) {
+        if (log.isDebugEnabled()) {
+            log.debug("message: {}, source： {}", message, source);
+        }
         PushLog pushLog = new PushLog()
                 .setType(message.getType().getType())
                 .setTitle(message.getTitle())
