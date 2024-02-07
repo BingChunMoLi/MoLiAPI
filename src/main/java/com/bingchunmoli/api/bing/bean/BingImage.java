@@ -1,6 +1,10 @@
 package com.bingchunmoli.api.bing.bean;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +33,7 @@ public class BingImage implements Serializable {
     private String fullStartDate;
     private String fullStartDateEn;
     private String endDate;
+    private String endDateEn;
     private String url;
     private String urlEn;
     private String urlBase;
@@ -53,6 +58,7 @@ public class BingImage implements Serializable {
         this.fullStartDate = bingImagesCn.getFullStartDate();
         this.fullStartDateEn = bingImagesEn.getFullStartDate();
         this.endDate = bingImagesCn.getEndDate();
+        this.endDateEn = bingImagesEn.getEndDate();
         this.url = bingImagesCn.getUrl();
         this.urlEn = bingImagesEn.getUrl();
         this.urlBase = bingImagesCn.getUrlBase();

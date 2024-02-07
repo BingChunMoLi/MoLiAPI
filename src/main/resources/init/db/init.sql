@@ -206,6 +206,71 @@ create table if not exists api_user
         primary key (id)
 );
 
+DROP TABLE IF EXISTS `bili_fav`;
+CREATE TABLE `bili_fav`
+(
+    `id`          int          NOT NULL,
+    `fid`         int          NOT NULL,
+    `mid`         int          NOT NULL COMMENT '用户',
+    `title`       varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   DEFAULT NULL COMMENT '收藏夹名称',
+    `type`        int                                                            DEFAULT NULL COMMENT '类型',
+    `media_count` int                                                            DEFAULT NULL COMMENT '个数',
+    `cover`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL COMMENT '封面图',
+    `intro`       varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '简介',
+    `ctime`       int                                                            DEFAULT NULL COMMENT '创建时间',
+    `mtime`       int                                                            DEFAULT NULL,
+    `only_audio`  int unsigned NOT NULL                                          DEFAULT '0',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `fav_fid_uindex` (`fid`) USING BTREE,
+    UNIQUE KEY `fav_fid_uindex_2` (`fid`) USING BTREE,
+    UNIQUE KEY `fav_id_uindex` (`id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='收藏夹';
+
+
+DROP TABLE IF EXISTS `bili_media`;
+CREATE TABLE `bili_media`
+(
+    `id`              int          NOT NULL,
+    `type`            int                                                            DEFAULT NULL,
+    `title`           varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   DEFAULT NULL COMMENT '标题',
+    `cover`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  DEFAULT NULL COMMENT '封面图',
+    `intro`           varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '简介',
+    `page`            int                                                            DEFAULT NULL COMMENT '分P数',
+    `mid`             int                                                            DEFAULT NULL COMMENT '用户',
+    `ctime`           int                                                            DEFAULT NULL COMMENT '创建时间',
+    `pubtime`         int                                                            DEFAULT NULL COMMENT '发布时间',
+    `fav_time`        int                                                            DEFAULT NULL COMMENT '收藏时间',
+    `bv_id`           varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   DEFAULT NULL,
+    `down`            int          NOT NULL                                          DEFAULT '0',
+    `upload`          int          NOT NULL                                          DEFAULT '0',
+    `invalid_push`    int          NOT NULL                                          DEFAULT '0',
+    `onedrive_upload` int          NOT NULL                                          DEFAULT '0',
+    `only_audio`      int unsigned NOT NULL                                          DEFAULT '0',
+    `fav_id`          int                                                            DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `media_id_uindex` (`id`) USING BTREE,
+    UNIQUE KEY `media_bv_id_uindex` (`bv_id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  ROW_FORMAT = DYNAMIC;
+
+
+DROP TABLE IF EXISTS `bili_user`;
+CREATE TABLE `bili_user`
+(
+    `id`   int NOT NULL,
+    `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '昵称',
+    `face` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `user_id_uindex` (`id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  ROW_FORMAT = DYNAMIC;
 
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (2, '4e71bc61-9f2e-49e1-a62f-d4b8ad9716c6', '面对就好，去经历就好。', 'a', '花伞菌', null, 'umbrella', 0, 0, 'web', '1468605909', 11, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
