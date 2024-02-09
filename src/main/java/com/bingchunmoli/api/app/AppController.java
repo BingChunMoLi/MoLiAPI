@@ -4,6 +4,7 @@ package com.bingchunmoli.api.app;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bingchunmoli.api.app.bean.DeviceVO;
 import com.bingchunmoli.api.bean.ResultVO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@Tag(name = "app")
 @RequiredArgsConstructor
 public class AppController {
     private final DeviceService deviceService;
