@@ -29,6 +29,6 @@ public class MessageEvenListener implements ApplicationListener<MessageEven> {
     public void onApplicationEvent(@NotNull MessageEven event) {
         Message message = event.getMessage();
         Push push = pushList.stream().filter(v -> v.support(message)).findFirst().orElseThrow(() -> new ApiMessageException("没有找到合适的推送渠道"));
-        new PushLoggingWrapper(push, pushLogService).send(message);
+        new PushLoggingWrapper(push, pushLogService, event.getSource()).send(message);
     }
 }

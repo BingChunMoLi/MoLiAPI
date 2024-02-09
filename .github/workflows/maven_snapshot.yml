@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'BingChunMoLi/MoLiAPI' }}
     steps:
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/ShangHai"
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v4

@@ -41,10 +41,10 @@ public class RefreshFav {
     private final BiliUserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ObjectMapper objectMapper;
-    @Value("${spring.profiles.active}")
-    public String profile;
-    @Value("${spring.mail.defaultTo:mailDefaultTo}")
-    public String defaultTo;
+    @Value("${spring.mail.defaultTo}")
+    private String defaultTo;
+    @Value("${spring.mail.username}")
+    private String mailFrom;
 
     //    @Scheduled(cron = "* * 1 * * ?")
 //    public void refreshRSS() {
@@ -100,7 +100,7 @@ public class RefreshFav {
                 for (MediaPO v : needInvalidPushMediaList) {
                     applicationEventPublisher.publishEvent(new MessageEven(this,
                             MailMessage.builder()
-                                    .from(defaultTo)
+                                    .from(mailFrom)
                                     .to(defaultTo)
                                     .title("发现已失效视频")
                                     .body("视频AV: " + v.getId() + "  BV: " + v.getBvId() + "   video av: [av链接](" + "https://www.bilibili.com/video/av" + v.getId() + ")" + "   video bv: [BV链接](" + "https://www.bilibili.com/video/" + v.getBvId() + ") ,失效视频标题" + v.getTitle() + " 失效视频对象:" + objectMapper.writeValueAsString(v))
