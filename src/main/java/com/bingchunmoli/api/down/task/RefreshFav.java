@@ -41,9 +41,7 @@ public class RefreshFav {
     private final BiliUserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ObjectMapper objectMapper;
-    @Value("${spring.profiles.active}")
-    private String profile;
-    @Value("${spring.mail.defaultTo:mailDefaultTo}")
+    @Value("${spring.mail.defaultTo}")
     private String defaultTo;
     @Value("${spring.mail.username}")
     private String mailFrom;

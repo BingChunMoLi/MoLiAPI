@@ -31,21 +31,17 @@
 
     <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份) -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
         <!-- 日志文件的路径及文件名 -->
         <File>${user.home}/.api/logs/${APP_Name}.log</File>
-
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
         <append>true</append>
-
         <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
         <prudent>false</prudent>
-
         <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!-- TimeBased默认是一天更新一次 -->
             <!--        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">&lt;!&ndash; 按固定窗口大小生成日志 &ndash;&gt;-->
             <!-- 历史日志文件的存放路径和名称 -->
-            <fileNamePattern>.api/logs/error/error_%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <fileNamePattern>${user.home}/.api/logs/error/error_%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <!-- 日志文件最大的保存历史 数量-->
             <maxHistory>5000</maxHistory>
             <!-- 必要节点，包含文件名及“%d”转换符，“%d”可以包含一个java.text.SimpleDateFormat指定的时间格式 -->
@@ -66,7 +62,43 @@
             <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %X{RequestId} %logger{} - %msg%n</Pattern>
         </encoder>
     </appender>
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 日志文件的路径及文件名 -->
+        <File>${user.home}/.api/logs/${APP_Name}_debug.log</File>
+        <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
+        <append>true</append>
+        <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
+        <prudent>false</prudent>
+        <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!-- TimeBased默认是一天更新一次 -->
+            <!--        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">&lt;!&ndash; 按固定窗口大小生成日志 &ndash;&gt;-->
+            <!-- 历史日志文件的存放路径和名称 -->
+            <fileNamePattern>${user.home}/.api/logs/error/error_%d{yyyy-MM-dd}_debug.log.gz</fileNamePattern>
+            <!-- 日志文件最大的保存历史 数量-->
+            <maxHistory>5000</maxHistory>
+            <!-- 必要节点，包含文件名及“%d”转换符，“%d”可以包含一个java.text.SimpleDateFormat指定的时间格式 -->
+            <!--            <FileNamePattern>logs/${APP_Name}.log.%i.zip</FileNamePattern>-->
+            <!-- 窗口索引最小值 -->
+            <!--            <MinIndex>1</MinIndex>-->
+            <!-- 窗口索引最大值 -->
+            <!--            <MaxIndex>100</MaxIndex>-->
+        </rollingPolicy>
 
+        <!-- 告知 RollingFileAppender 合适激活滚动 -->
+        <!--        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+        <!--            <MaxFileSize>100MB</MaxFileSize>-->
+        <!--        </triggeringPolicy>-->
+
+        <!-- 对记录事件进行格式化 -->
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %X{RequestId} %logger{} - %msg%n</Pattern>
+        </encoder>
+    </appender>
     <!--MyBatis log configure-->
     <logger name="java.sql.Connection" level="DEBUG"/>
     <logger name="java.sql.Statement" level="DEBUG"/>
@@ -89,4 +121,8 @@
         <appender-ref ref="STDOUT"/> <!-- 控制台输出 -->
         <appender-ref ref="FILE"/> <!-- 文件输出 -->
     </root>
+    <logger name="com.bingchunmoli" level="trace">
+        <appender-ref ref="DEBUG" additivity="false"/>
+    </logger>
+
 </configuration>

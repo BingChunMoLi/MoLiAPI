@@ -29,7 +29,7 @@ java -jar --spring.profiles.active=h2 moliapi.jar
 ## 已支持接口:
 1. Bing美图
 2. emoji表情处理
-3. 请求IP
+3. 公网IP查询
 4. UserAgent解析
 5. 二维码处理
 6. 随机诗词或指定
@@ -43,14 +43,11 @@ java -jar --spring.profiles.active=h2 moliapi.jar
 14. 每日签到网址
 15. 请求地址
 16. 自动更新腾讯CDN证书(定时任务, 暂仅支持单域名,如需多域名请提Iss)
+17. 网易云音乐歌单收藏
+18. b站收藏获取,通知失效视频
 
 ## 启用所有功能
 1. 添加配置文件(~/.api/目录下) application.yml
-2. 下载application-template.yml 并修改文件名为application-prod.yml
-3. 完善application-prod.yml配置(如果使用H2参考，application-h2.yml，如果使用mysql,参考application-template.yml)
-4. application.yml内容添加
-```yaml
-spring:
-  profiles:
-    active: prod
-```
+2. 下载application-template.yml 并修改文件名为application-default.yml
+3. 完善application-default.yml配置
+
