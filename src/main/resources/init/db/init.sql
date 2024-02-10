@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `bing_image`
     `full_start_date`    varchar(30)  default null comment '开始时间完全版',
     `full_start_date_en` varchar(30)  default null comment '国际版开始时间完全版',
     `end_date`           varchar(30)  default null comment '结束时间',
+    `end_date_en` varchar(30) default null comment '结束时间国际版',
     `url`                varchar(150) default null comment '图片地址',
     `url_en`             varchar(150) default null comment '国际版图片地址',
     `url_base`           varchar(70)  default null comment '图片地址基础不带清晰度',
