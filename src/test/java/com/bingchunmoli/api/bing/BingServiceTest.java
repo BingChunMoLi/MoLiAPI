@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @JsonTest
@@ -53,9 +52,10 @@ public class BingServiceTest {
         cnBingImage = bingService.getBingImageByRemote(BingEnum.CN_BING);
         enBingImage = bingService.getBingImageByRemote(BingEnum.EN_BING);
         BingImage bingImage = new BingImage(cnBingImage, enBingImage);
-        Assert.isTrue(LocalDate.parse(bingImage.getEndDate(), DateTimeFormatter.ofPattern("yyyyMMdd")).isEqual(LocalDate.now()) ||
-                        LocalDate.parse(bingImage.getEndDateEn(), DateTimeFormatter.ofPattern("yyyyMMdd")).isEqual(LocalDate.now()),
-                "获取的bingImage.EndDate已过时");
+        // github action 获取的bingEndDate总是国际版bing
+//        Assert.isTrue(LocalDate.parse(bingImage.getEndDate(), DateTimeFormatter.ofPattern("yyyyMMdd")).isEqual(LocalDate.now()) ||
+//                        LocalDate.parse(bingImage.getEndDateEn(), DateTimeFormatter.ofPattern("yyyyMMdd")).isEqual(LocalDate.now()),
+//                "获取的bingImage.EndDate已过时");
         Assert.isTrue(bingImage.getCreateTime().toLocalDate().isEqual(LocalDate.now()), "获取的bingImage.creatTime已过时");
     }
 

@@ -9,6 +9,8 @@ import com.bingchunmoli.api.daily.service.DailyLogService;
 import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.push.bean.AppMessage;
 import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ import java.util.stream.Stream;
  * @author MoLi
  */
 @RestController
+@Tag(name = "每日签到", description = "也可以是文本存储器,便签")
 @RequestMapping("daily")
 @RequiredArgsConstructor
 public class DailyController {
@@ -51,6 +54,7 @@ public class DailyController {
      * @return 签到网址列表
      */
     @GetMapping
+    @Operation(summary = "获取每日签到的地址列表")
     public ResultVO<Collection<String>> getDailys(String key) {
         return ResultVO.ok(map.get(key) == null ? null : map.get(key));
     }
@@ -61,6 +65,7 @@ public class DailyController {
      * @return 存储的列表
      */
     @PutMapping
+    @Operation(summary = "添加需要签到的网址")
     public ResultVO<Collection<String>> addDaily(@RequestBody Daily daily){
         if (map.containsKey(daily.getKey())) {
             map.get(daily.getKey()).add(daily.getValue());
@@ -71,6 +76,7 @@ public class DailyController {
     }
 
     @PutMapping("all")
+    @Operation(summary = "添加多个每日签到网址")
     public ResultVO<Collection<Daily>> addDailyAll(@RequestBody List<Daily> dailies) {
         dailies.forEach(daily -> {
             if (map.containsKey(daily.getKey())) {
@@ -87,6 +93,7 @@ public class DailyController {
      * @return 是否成功
      */
     @PostMapping("signed")
+    @Operation(summary = "签到后的回调，用于通知app")
     public ResultVO<Boolean> signed(@RequestBody List<String> urls){
         if (CollectionUtil.isEmpty(urls)) {
             return new ResultVO<>(CodeEnum.ERROR, null);

@@ -16,5 +16,4 @@ public class Host {
     private String ip;
     private String domain;
     private String source;
-
 }

@@ -15,12 +15,14 @@ public interface ImgService {
      * 随机PC随机图
      * @return 随机图PC
      */
+    @Deprecated
     BufferedImage getRandomImageByPc();
 
     /**
      * 获取随机移动随机图
      * @return 随机图mobile
      */
+    @Deprecated
     BufferedImage getRandomImageMobile();
 
     /**

@@ -2,6 +2,7 @@ package com.bingchunmoli.api.bean;
 
 
 import com.bingchunmoli.api.bean.enums.CodeEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
  * @author bingchunmoli
  */
 @Data
+@Schema
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResultVO<T> {
