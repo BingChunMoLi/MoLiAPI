@@ -1,6 +1,8 @@
 package com.bingchunmoli.api.host.controller;
 
 import com.bingchunmoli.api.host.service.HostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,8 +19,8 @@ import java.util.ArrayList;
  * hosts订阅
  * @author BingChunMoLi
  */
-
 @RestController
+@Tag(name = "去广告host订阅,推荐配合switchHost")
 @RequiredArgsConstructor
 @RequestMapping("host")
 public class HostController {
@@ -31,6 +33,7 @@ public class HostController {
      * @return json的Host序列化
      */
     @GetMapping("json")
+    @Operation(summary = "根据type获取hosts")
     public String getHosts(@RequestParam(defaultValue = "0") ArrayList<Integer> type) {
         return hostService.getHosts(type);
     }
@@ -42,6 +45,7 @@ public class HostController {
      * @throws IOException response返回可能引发异常
      */
     @GetMapping(value = "raw", produces = MediaType.TEXT_HTML_VALUE)
+    @Operation(summary = "在线预览的host")
     public void getRaw(@RequestParam(defaultValue="0") ArrayList<Integer> type, HttpServletResponse response) throws IOException {
         response.setHeader("Content-Type", "text/plain");
         response.getOutputStream().print(hostService.getHosts(type));
@@ -54,6 +58,7 @@ public class HostController {
      * @throws IOException response返回可能引发异常
      */
     @GetMapping("file")
+    @Operation(summary = "生成hosts文件并下载")
     public void getFile(@RequestParam(defaultValue = "0") ArrayList<Integer> type, HttpServletResponse response) throws IOException {
         response.setHeader("Content-Disposition", "attachment;fileName=hosts");
         response.getOutputStream().write(hostService.getHosts(type).getBytes(StandardCharsets.UTF_8));

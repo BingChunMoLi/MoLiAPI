@@ -9,6 +9,10 @@
 # eolink在线接口文档
 [https://www.eolink.com/share/index?shareCode=9Jav6c](https://www.eolink.com/share/index?shareCode=9Jav6c)
 
+# swagger3.0文档
+
+[https://api.bingchunmoli.com/doc.html](https://api.bingchunmoli.com/doc.html)
+
 fetch请求示例:
 ```javascript
 fetch('https://api.bingchunmoli.com/bing/all')

@@ -48,8 +48,8 @@ public class ImgTask {
                         .setAppMessageEnum(AppMessageEnum.TOPIC)));
             }
             if (CollectionUtil.isNotEmpty(pcPath)) {
-                redisTemplate.opsForList().trim(ApiConstant.PC_IMG, -2, -1);
-                redisTemplate.opsForList().leftPushAll(ApiConstant.PC_IMG, pcPath.stream().map(Path::toString).toArray());
+                redisTemplate.opsForList().trim(ApiConstant.REDIS_PC_IMG_KEY, -2, -1);
+                redisTemplate.opsForList().leftPushAll(ApiConstant.REDIS_PC_IMG_KEY, pcPath.stream().map(Path::toString).toArray());
             }
         }
         if (StrUtil.isNotBlank(apiConfig.getMobilePath())) {
@@ -63,8 +63,8 @@ public class ImgTask {
                         .setAppMessageEnum(AppMessageEnum.TOPIC)));
             }
             if (CollectionUtil.isNotEmpty(mobilePath)) {
-                redisTemplate.opsForList().trim(ApiConstant.MOBILE_IMG, -1, -2);
-                redisTemplate.opsForList().leftPushAll(ApiConstant.MOBILE_IMG, mobilePath.stream().map(Path::toString).toArray());
+                redisTemplate.opsForList().trim(ApiConstant.REDIS_MOBILE_IMG_KEY, -1, -2);
+                redisTemplate.opsForList().leftPushAll(ApiConstant.REDIS_MOBILE_IMG_KEY, mobilePath.stream().map(Path::toString).toArray());
             }
         }
         String body = "更新PC图片:" +

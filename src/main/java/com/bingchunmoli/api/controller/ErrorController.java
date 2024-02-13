@@ -5,6 +5,7 @@ import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.bean.enums.NotSupportHttpCode;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
      * @param response 响应
      * @return ModelAndView视图
      */
+    @Operation(summary = "错误的http状态码生成错误的消息图片")
     @RequestMapping(value = "/error", produces = MediaType.IMAGE_JPEG_VALUE)
     public BufferedImage handleError(HttpServletRequest request, HttpServletResponse response) {
         Object message = request.getAttribute("javax.servlet.error.message");
@@ -77,6 +79,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
      * @param response 响应
      * @return ResultVO<String>
      */
+    @Operation(summary = "错误的消息,json格式")
     @RequestMapping(value = "/error", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResultVO<Object> handleErrorBody(HttpServletRequest request, HttpServletResponse response){
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
