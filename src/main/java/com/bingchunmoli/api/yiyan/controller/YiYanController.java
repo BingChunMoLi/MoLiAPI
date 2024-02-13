@@ -2,6 +2,8 @@ package com.bingchunmoli.api.yiyan.controller;
 
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.service.YiYanService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "一言")
 @RequestMapping("yiyan")
 public class YiYanController {
     private final YiYanService yiYanService;
@@ -29,6 +32,7 @@ public class YiYanController {
      * @return 一言数据
      */
     @GetMapping("{id}")
+    @Operation(summary = "获取指定一言")
     public Optional<YiYan> getYiYan(@PathVariable Integer id) {
         return yiYanService.getOptById(id);
     }
@@ -39,6 +43,7 @@ public class YiYanController {
      * @return 一条一言
      */
     @GetMapping("random")
+    @Operation(summary = "获取随机一言")
     public YiYan getRandomYiYan() {
         return yiYanService.findRandomYiYan();
     }

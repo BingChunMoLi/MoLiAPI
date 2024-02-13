@@ -41,7 +41,7 @@ public class ImgServiceImpl implements ImgService {
         int i = 0;
         while (i < 3) {
             try {
-                img = ImageIO.read(getRandomImgByRedis(ApiConstant.PC_IMG));
+                img = ImageIO.read(getRandomImgByRedis(ApiConstant.REDIS_PC_IMG_KEY));
             } catch (IOException e) {
                 log.error("readPcImage", e);
             }
@@ -68,7 +68,7 @@ public class ImgServiceImpl implements ImgService {
         int i = 0;
         while (i < 3) {
             try {
-                img = ImageIO.read(getRandomImgByRedis(ApiConstant.MOBILE_IMG));
+                img = ImageIO.read(getRandomImgByRedis(ApiConstant.REDIS_MOBILE_IMG_KEY));
             } catch (IOException e) {
                 log.error("readMobileImg", e);
             }
