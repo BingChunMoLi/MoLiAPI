@@ -7,16 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -36,7 +31,7 @@ public class UserController {
         return ResultVO.ok(userService.count() == 0L);
     }
 
-    @PutMapping
+    @PutMapping("/register")
     public ResultVO<Boolean> register(@Valid @RequestBody User user) {
         if (userService.register(user)) {
             request.getSession().setAttribute("user", user.getId());

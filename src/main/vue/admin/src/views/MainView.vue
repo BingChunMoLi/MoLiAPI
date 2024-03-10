@@ -4,7 +4,8 @@ import type {ResultVO} from '@/type/ResultVO'
 import type {FormInstance} from 'element-plus'
 import {reactive, ref} from 'vue'
 
-fetch(import.meta.env.VITE_API_BASE_URL + 'init', {
+let flag = false;
+fetch(import.meta.env.VITE_API_BASE_URL + 'user/init', {
   method: 'get',
   headers: {
     'Content-Type': 'application/json'
@@ -14,6 +15,7 @@ fetch(import.meta.env.VITE_API_BASE_URL + 'init', {
     .then((res) => {
       if (res && res.code === '00000' && res.data === true) {
         ElMessage('前往初始化注册用户')
+        flag = true;
         router.push({path: '/init'})
       }
     })
@@ -34,9 +36,10 @@ function getSystemConfig() {
           return r.json() as Promise<ResultVO<ApiConfig>>
         } else {
           if (r.status === 401) {
-            router.push({path: '/login'})
+            if (!flag) {
+              router.push({path: '/login'});
           }
-          throw new Error()
+          }
         }
       })
       .then((res) => {
@@ -49,7 +52,9 @@ function getSystemConfig() {
       })
 }
 
-getSystemConfig()
+if (!flag) {
+  getSystemConfig()
+}
 
 interface ApiConfig {
   weatherKey: string

@@ -53,7 +53,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      fetch(import.meta.env.VITE_API_BASE_URL, {
+      fetch(import.meta.env.VITE_API_BASE_URL + 'user/register', {
         method: 'put',
         headers: {
           'Content-Type': 'application/json'

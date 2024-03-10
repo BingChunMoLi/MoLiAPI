@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +30,7 @@ public class IpInterceptor implements HandlerInterceptor {
         String clientIP = JakartaServletUtil.getClientIP(request);
         String key = "filter:" + requestURI + ":" + clientIP + ":" + request.getRequestedSessionId();
         Integer value = redisUtil.getObject(key);
-        if (value != null && value > 10) {
+        if (value != null && value > 40) {
             response.setStatus(429);
             return false;
         }
@@ -49,15 +48,5 @@ public class IpInterceptor implements HandlerInterceptor {
         }
         redisUtil.setObject(key, count.get(), 60, TimeUnit.SECONDS);
         return true;
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
     }
 }

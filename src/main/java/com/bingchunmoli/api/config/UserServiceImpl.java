@@ -33,7 +33,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public synchronized boolean register(User user) {
-        if (count() > 1) {
+        if (count() > 0) {
             throw new ApiSystemException("错误的初始化用户");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
