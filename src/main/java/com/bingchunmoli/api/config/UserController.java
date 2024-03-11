@@ -2,6 +2,7 @@ package com.bingchunmoli.api.config;
 
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.config.bean.User;
+import com.bingchunmoli.api.config.service.UserService;
 import com.bingchunmoli.api.exception.system.ApiSystemException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

@@ -76,76 +76,72 @@ public class MusicService {
             log.info("playListId is empty ignore");
             return;
         }
-        for (String id: apiConfig.getPlayListId()) {
-            PlayListBO playListInfo = getPlayListInfo(id, apiConfig.getCookies());
-            if (playListInfo.getCode() != 200) {
-                log.info("playList get err");
-                return;
+        PlayListBO playListInfo = getPlayListInfo(apiConfig.getPlayListId(), apiConfig.getCookies());
+        if (playListInfo.getCode() != 200) {
+            log.info("playList get err");
+            return;
+        }
+        PlayListBO.ResultDTO playList = playListInfo.getResult();
+        PlayListBO.ResultDTO.CreatorDTO creator = playList.getCreator();
+        NeteaseMusicUser playListUser = NeteaseMusicUser.builder()
+                .thirdId(creator.getUserId().longValue())
+                .avatarUrl(creator.getAvatarUrl())
+                .city(creator.getCity())
+                .birthday(creator.getBirthday())
+                .nickname(creator.getNickname())
+                .backgroundImg(creator.getBackgroundUrl()).build();
+        Integer playUserId = userService.saveOrUpdateByThirdId(playListUser);
+        NeteaseMusicPlaylist musicPlaylist = NeteaseMusicPlaylist.builder()
+                .thirdId(playList.getId())
+                .userId(String.valueOf(playUserId))
+                .name(playList.getName())
+                .description(String.valueOf(playList.getDescription()))
+                .createTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(playList.getCreateTime()), ZoneId.systemDefault()))
+                .updateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(playList.getUpdateTime()), ZoneId.systemDefault())).build();
+        playlistService.saveIsExist(musicPlaylist);
+        List<PlayListBO.ResultDTO.TracksDTO> tracks = playList.getTracks();
+        if (tracks == null || tracks.isEmpty()) {
+            return;
+        }
+        Integer trackCount = playList.getTrackCount();
+        log.info("test, trackCount: {}, tracksSize: {}", trackCount, tracks.size());
+        List<NeteaseMusicSong> songs = new ArrayList<>(tracks.size());
+        for (PlayListBO.ResultDTO.TracksDTO track : tracks) {
+            PlayListBO.ResultDTO.TracksDTO.AlbumDTO album = track.getAlbum();
+            NeteaseMusicAlbum musicAlbum = NeteaseMusicAlbum.builder()
+                    .thirdId(album.getId().longValue())
+                    .name(album.getName())
+                    .picUrl(album.getPicUrl())
+                    .type(album.getType())
+                    .publishTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(album.getPublishTime()), ZoneId.systemDefault())).build();
+            NeteaseMusicAlbum dbAlbum = albumService.getOne(new LambdaQueryWrapper<NeteaseMusicAlbum>()
+                    .eq(NeteaseMusicAlbum::getThirdId, musicAlbum.getThirdId()));
+            if (dbAlbum == null) {
+                albumService.save(musicAlbum);
             }
-            PlayListBO.ResultDTO playList = playListInfo.getResult();
-            PlayListBO.ResultDTO.CreatorDTO creator = playList.getCreator();
-            NeteaseMusicUser playListUser = NeteaseMusicUser.builder()
-                    .thirdId(creator.getUserId().longValue())
-                    .avatarUrl(creator.getAvatarUrl())
-                    .city(creator.getCity())
-                    .birthday(creator.getBirthday())
-                    .nickname(creator.getNickname())
-                    .backgroundImg(creator.getBackgroundUrl()).build();
-            Integer playUserId = userService.saveOrUpdateByThirdId(playListUser);
-            NeteaseMusicPlaylist musicPlaylist = NeteaseMusicPlaylist.builder()
-                    .thirdId(playList.getId())
-                    .userId(String.valueOf(playUserId))
-                    .name(playList.getName())
-                    .description(String.valueOf(playList.getDescription()))
-                    .createTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(playList.getCreateTime()), ZoneId.systemDefault()))
-                    .updateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(playList.getUpdateTime()), ZoneId.systemDefault())).build();
-            playlistService.saveIsExist(musicPlaylist);
-            List<PlayListBO.ResultDTO.TracksDTO> tracks = playList.getTracks();
-            if (tracks == null || tracks.isEmpty()) {
-                return;
-            }
-            Integer trackCount = playList.getTrackCount();
-            log.info("test, trackCount: {}, tracksSize: {}", trackCount, tracks.size());
-            List<NeteaseMusicSong> songs = new ArrayList<>(tracks.size());
-            for (PlayListBO.ResultDTO.TracksDTO track : tracks) {
-                PlayListBO.ResultDTO.TracksDTO.AlbumDTO album = track.getAlbum();
-                NeteaseMusicAlbum musicAlbum = NeteaseMusicAlbum.builder()
-                        .thirdId(album.getId().longValue())
-                        .name(album.getName())
-                        .picUrl(album.getPicUrl())
-                        .type(album.getType())
-                        .publishTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(album.getPublishTime()), ZoneId.systemDefault())).build();
-                NeteaseMusicAlbum dbAlbum = albumService.getOne(new LambdaQueryWrapper<NeteaseMusicAlbum>()
-                        .eq(NeteaseMusicAlbum::getThirdId, musicAlbum.getThirdId()));
-                if (dbAlbum == null) {
-                    albumService.save(musicAlbum);
-                }
-                List<PlayListBO.ResultDTO.TracksDTO.ArtistsDTO> artists = track.getArtists();
-                List<NeteaseMusicUser> musicUserList = new ArrayList<>(artists.size());
-                for (PlayListBO.ResultDTO.TracksDTO.ArtistsDTO artist : artists) {
-                    NeteaseMusicUser musicUser = NeteaseMusicUser.builder()
-                            .thirdId(artist.getId().longValue())
-                            .nickname(artist.getName())
-                            .backgroundImg(artist.getPicUrl())
-                            .build();
-                    musicUserList.add(musicUser);
-                }
-                NeteaseMusicSong song = NeteaseMusicSong.builder()
-                        .name(track.getName())
-                        .thirdId(Long.valueOf(track.getId()))
-                        .albumId(musicAlbum.getId())
-                        .artists(musicUserList)
+            List<PlayListBO.ResultDTO.TracksDTO.ArtistsDTO> artists = track.getArtists();
+            List<NeteaseMusicUser> musicUserList = new ArrayList<>(artists.size());
+            for (PlayListBO.ResultDTO.TracksDTO.ArtistsDTO artist : artists) {
+                NeteaseMusicUser musicUser = NeteaseMusicUser.builder()
+                        .thirdId(artist.getId().longValue())
+                        .nickname(artist.getName())
+                        .backgroundImg(artist.getPicUrl())
                         .build();
-                songs.add(song);
+                musicUserList.add(musicUser);
             }
-            songService.saveBatchAndChild(songs);
-
-
-            try {
-                TimeUnit.MINUTES.sleep(5);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            NeteaseMusicSong song = NeteaseMusicSong.builder()
+                    .name(track.getName())
+                    .thirdId(Long.valueOf(track.getId()))
+                    .albumId(musicAlbum.getId())
+                    .artists(musicUserList)
+                    .build();
+            songs.add(song);
+        }
+        songService.saveBatchAndChild(songs);
+        try {
+            TimeUnit.MINUTES.sleep(5);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

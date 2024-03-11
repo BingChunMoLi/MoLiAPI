@@ -4,8 +4,6 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
  * ApiConfig
  * @author bingchunmoli
@@ -69,7 +67,7 @@ public class ApiConfig {
     /**
      * 定时任务歌单id
      */
-    private List<String> playListId;
+    private String playListId;
 
     /**
      * 歌单用的cookies，

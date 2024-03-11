@@ -1,9 +1,10 @@
-package com.bingchunmoli.api.config;
+package com.bingchunmoli.api.config.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.config.bean.User;
 import com.bingchunmoli.api.config.mapper.UserMapper;
+import com.bingchunmoli.api.config.service.UserService;
 import com.bingchunmoli.api.exception.system.ApiSystemException;
 import com.bingchunmoli.api.exception.system.ApiUserNonFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Optional<User> optional = getOneOpt(Wrappers.lambdaQuery(new User()).eq(User::getName, user.getName()));
         optional.orElseThrow(() -> new ApiUserNonFoundException("non user"));
         String password = optional.map(User::getPassword).orElseThrow(() -> new ApiSystemException("non password"));
-        return passwordEncoder.matches(user.getPassword(), password);
+        boolean matche = passwordEncoder.matches(user.getPassword(), password);
+        if (matche) {
+            user.setId(optional.map(User::getId).orElseThrow());
+        }
+        return matche;
     }
 
     @Override

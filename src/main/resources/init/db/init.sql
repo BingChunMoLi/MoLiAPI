@@ -259,7 +259,7 @@ create table if not exists bili_media
 
 create table if not exists bili_user
 (
-    id   int         not null
+    id int not null
         primary key,
     name varchar(30) null comment '昵称',
     face varchar(80) null,
@@ -267,6 +267,18 @@ create table if not exists bili_user
         unique (id)
 )
     row_format = DYNAMIC;
+
+CREATE TABLE if not exists `config`
+(
+    id            INT auto_increment not null,
+    `key`         varchar(100)       NOT NULL COMMENT '配置的key',
+    `value`       varchar(500) COMMENT '配置的值',
+    `create_time` datetime           NOT NULL COMMENT '创建时间',
+    `update_time` datetime           NOT NULL COMMENT '更新时间',
+    primary key (`id`),
+    constraint config_uindex
+        unique (`key`)
+);
 
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (2, '4e71bc61-9f2e-49e1-a62f-d4b8ad9716c6', '面对就好，去经历就好。', 'a', '花伞菌', null, 'umbrella', 0, 0, 'web', '1468605909', 11, 0, null, null, null) ON DUPLICATE KEY UPDATE id = id;
