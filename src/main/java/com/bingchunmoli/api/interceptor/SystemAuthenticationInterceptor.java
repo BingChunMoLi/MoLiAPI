@@ -2,12 +2,13 @@ package com.bingchunmoli.api.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Slf4j
 @Component
 public class SystemAuthenticationInterceptor implements HandlerInterceptor {
 
@@ -37,8 +38,7 @@ public class SystemAuthenticationInterceptor implements HandlerInterceptor {
         if (!request.getRequestURI().startsWith("/system")) {
             return true;
         }
-        HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("user");
+        Integer userId = (Integer) request.getSession().getAttribute("user");
         if (userId == null || userId < 1) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;

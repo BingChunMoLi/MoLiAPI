@@ -1,4 +1,4 @@
-package com.bingchunmoli.api.config;
+package com.bingchunmoli.api.config.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bingchunmoli.api.config.bean.User;

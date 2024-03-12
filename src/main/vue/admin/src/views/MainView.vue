@@ -4,7 +4,8 @@ import type {ResultVO} from '@/type/ResultVO'
 import type {FormInstance} from 'element-plus'
 import {reactive, ref} from 'vue'
 
-fetch(import.meta.env.VITE_API_BASE_URL + 'init', {
+let flag = false;
+fetch(import.meta.env.VITE_API_BASE_URL + 'user/init', {
   method: 'get',
   headers: {
     'Content-Type': 'application/json'
@@ -14,6 +15,7 @@ fetch(import.meta.env.VITE_API_BASE_URL + 'init', {
     .then((res) => {
       if (res && res.code === '00000' && res.data === true) {
         ElMessage('前往初始化注册用户')
+        flag = true;
         router.push({path: '/init'})
       }
     })
@@ -34,9 +36,10 @@ function getSystemConfig() {
           return r.json() as Promise<ResultVO<ApiConfig>>
         } else {
           if (r.status === 401) {
-            router.push({path: '/login'})
+            if (!flag) {
+              router.push({path: '/login'});
           }
-          throw new Error()
+          }
         }
       })
       .then((res) => {
@@ -49,7 +52,9 @@ function getSystemConfig() {
       })
 }
 
-getSystemConfig()
+if (!flag) {
+  getSystemConfig()
+}
 
 interface ApiConfig {
   weatherKey: string
@@ -88,6 +93,35 @@ const ruleFormRef = ref<FormInstance>()
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   getSystemConfig()
+}
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  fetch(import.meta.env.VITE_API_BASE_URL + 'system', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(form),
+  })
+      .then((r) => {
+        if (r.status === 200 && r.ok) {
+          return r.json() as Promise<ResultVO<Boolean>>
+        } else {
+          if (r.status === 401) {
+            if (!flag) {
+              router.push({path: '/login'});
+            }
+          }
+        }
+      })
+      .then((res) => {
+        if (res && res.code === '00000') {
+          console.log(res.data)
+        }
+      })
+      .catch((r) => {
+        console.log(r)
+      })
 }
 </script>
 
@@ -138,7 +172,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
       </el-form-item>
 
       <el-form-item>
-        <!-- <el-button type="primary" @click="submitForm(ruleFormRef)">Login</el-button> -->
+        <el-button type="primary" @click="submitForm(ruleFormRef)">修改</el-button>
         <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
       </el-form-item>
     </el-form>
