@@ -1,10 +1,13 @@
 package com.bingchunmoli.api.daily.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.daily.bean.DailyLog;
+import com.bingchunmoli.api.daily.bean.DailyLogPO;
+import com.bingchunmoli.api.daily.bean.DailyQuery;
 import com.bingchunmoli.api.daily.service.DailyLogService;
 import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.push.bean.AppMessage;
@@ -15,21 +18,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,15 +42,8 @@ public class DailyController {
     private final ApplicationEventPublisher applicationEventPublisher;
     Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
 
-    /**
-     * 获取每日签到网址列表
-     * @param key 存储的key default moli
-     * @return 签到网址列表
-     */
-    @GetMapping
-    @Operation(summary = "获取每日签到的地址列表")
-    public ResultVO<Collection<String>> getDailys(String key) {
-        return ResultVO.ok(map.get(key) == null ? null : map.get(key));
+    private static int getTenant(String tenant) {
+        return tenant.equals("moli") ? 1 : 0;
     }
 
     /**
@@ -89,6 +76,18 @@ public class DailyController {
     }
 
     /**
+     * 获取每日签到网址列表
+     *
+     * @param key 存储的key default moli
+     * @return 签到网址列表
+     */
+    @GetMapping
+    @Operation(summary = "获取每日签到的地址列表")
+    public ResultVO<Collection<String>> getDailys(String key) {
+        return ResultVO.ok(map.get(key));
+    }
+
+    /**
      * 签到回调
      * @return 是否成功
      */
@@ -105,24 +104,60 @@ public class DailyController {
             mapOrDefault.add(key);
             collectMap.put(f, mapOrDefault);
         }));
-        ArrayList<DailyLog> list = new ArrayList<>();
+        ArrayList<DailyLogPO> list = new ArrayList<>();
         //循环构建DailyLog
         urls.forEach(v -> {
             Collection<String> tenants = map.getOrDefault(v, Collections.singleton(""));
             String tenant = tenants.stream().filter(k -> k.equalsIgnoreCase("moli")).findFirst().orElse("0");
-            list.add(new DailyLog()
+            list.add(new DailyLogPO()
                     .type(1)
                     .url(v)
-                    .tenant(tenant.equals("moli") ? 1 : 0)
+                    .tenant(getTenant(tenant))
                     .createTime(LocalDateTime.now()));
         });
         AppMessage appMessage = new AppMessage()
                 .setTitle("签到成功")
                 .setBody(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .setAppMessageEnum(AppMessageEnum.DEVICE_ID);
-        deviceService.getDefaultToken().ifPresentOrElse(v -> appMessage.setDeviceToken(v), () -> appMessage.setDefaultTopic());
+        deviceService.getDefaultToken().ifPresentOrElse(appMessage::setDeviceToken, appMessage::setDefaultTopic);
         applicationEventPublisher.publishEvent(new MessageEven(this, appMessage));
         return ResultVO.ok(dailyLogService.saveBatch(list));
+    }
+
+    /**
+     * 获取查询的请求参数, 比如开始时间与结束时间，以及可以查询的url
+     *
+     * @param url 可以根据url查询出最早的开始时间与最晚的结束时间
+     * @return 查询参数
+     */
+    @GetMapping("param")
+    public ResultVO<DailyQuery> getQueryParam(String url, @RequestHeader String tenant) {
+        return ResultVO.ok(dailyLogService.getQueryParam(url, tenant));
+    }
+
+    /**
+     * 获取当天签到状态
+     *
+     * @return 如果已签到，返回当日签到的url
+     */
+    @GetMapping("check")
+    public ResultVO<List<String>> getNowSign(@RequestHeader String tenant) {
+        return ResultVO.ok(dailyLogService.list(new LambdaQueryWrapper<DailyLogPO>()
+                        .eq(DailyLogPO::createTime, LocalDate.now())
+                        .eq(DailyLogPO::tenant, getTenant(tenant)))
+                .stream().map(DailyLogPO::url)
+                .toList());
+    }
+
+    /**
+     * 查询签名日历表
+     *
+     * @param dailyQuery
+     * @return
+     */
+    @GetMapping("query")
+    public ResultVO<Map<LocalDate, List<DailyLog>>> querySign(DailyQuery dailyQuery, @RequestHeader String tenant) {
+        return ResultVO.ok(dailyLogService.querySign(dailyQuery, getTenant(tenant)));
     }
 }
 

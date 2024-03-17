@@ -1,16 +1,12 @@
 <template>
-  <div>
-    <el-form ref="ruleFormRef" :model="user" :rules="rules" status-icon>
-      <el-form-item label="username" prop="name">
-        <el-input v-model="user.name" placeholder="Please input username"/>
+  <div class="login-container">
+    <el-form ref="ruleFormRef" :model="user" :rules="rules" class="login-form" status-icon>
+      <el-form-item label="Username" prop="name">
+        <el-input v-model="user.name" class="input-field" placeholder="Please input username"/>
       </el-form-item>
-      <el-form-item label="password" prop="password">
-        <el-input
-            v-model="user.password"
-            placeholder="Please input password"
-            show-password
-            type="password"
-        />
+      <el-form-item label="Password" prop="password">
+        <el-input v-model="user.password" class="input-field" placeholder="Please input password" show-password
+                  type="password"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">Login</el-button>
@@ -48,6 +44,7 @@ const rules = reactive<FormRules<RuleForm>>({
     {min: 5, max: 15, message: 'Length should be 5 to 15', trigger: 'blur'}
   ]
 })
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
@@ -57,6 +54,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         headers: {
           'Content-Type': 'application/json'
         },
+        cache: 'no-cache',
         body: JSON.stringify(user)
       })
           .then((r) => r.json())
@@ -76,10 +74,31 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
+
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.input-field {
+  width: 100%;
+}
+
+</style>

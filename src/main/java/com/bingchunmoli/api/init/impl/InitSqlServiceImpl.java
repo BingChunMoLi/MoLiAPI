@@ -17,6 +17,7 @@ import java.sql.ResultSet;
  */
 @Slf4j
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class InitSqlServiceImpl implements InitService {
     private final DataSource dataSource;

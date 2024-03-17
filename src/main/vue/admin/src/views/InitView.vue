@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-form ref="ruleFormRef" :model="user" :rules="rules" status-icon>
+  <div class="login-container">
+    <el-form ref="ruleFormRef" :model="user" :rules="rules" class="login-form" status-icon>
       <el-form-item label="username" prop="name">
         <el-input v-model="user.name" placeholder="Please input username"/>
       </el-form-item>
@@ -12,7 +12,7 @@
             type="password"
         />
       </el-form-item>
-      <el-alert show-icon title="第一次启动, 创建用户初始化" type="info"/>
+      <el-alert show-icon style="margin-bottom: 15px" title="第一次启动, 创建用户初始化" type="info"/>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">register</el-button>
         <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
@@ -84,4 +84,20 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+</style>
