@@ -10,6 +10,7 @@
             placeholder="Please input password"
             show-password
             type="password"
+            @keyup.enter.native="submitForm(ruleFormRef)"
         />
       </el-form-item>
       <el-alert show-icon style="margin-bottom: 15px" title="第一次启动, 创建用户初始化" type="info"/>

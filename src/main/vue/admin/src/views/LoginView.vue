@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="Password" prop="password">
         <el-input v-model="user.password" class="input-field" placeholder="Please input password" show-password
-                  type="password"/>
+                  type="password" @keyup.enter.native="submitForm(ruleFormRef)"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">Login</el-button>
