@@ -106,11 +106,11 @@ CREATE TABLE IF NOT EXISTS weather_sub
 
 CREATE TABLE IF NOT EXISTS daily_log
 (
-    id          BIGINT auto_increment NOT NULL,
-    url         varchar(700)          NOT NULL COMMENT '签到的url',
+    id          BIGINT auto_increment      NOT NULL,
+    url         varchar(700)               NOT NULL COMMENT '签到的url',
     tenant      TINYINT UNSIGNED DEFAULT 0 NOT NULL COMMENT '租户 1, moli',
-    create_time DATETIME              NOT NULL COMMENT '创建时间',
-    `type`      TINYINT UNSIGNED NOT NULL COMMENT '类型 1 网址 2 other',
+    create_time DATETIME                   NOT NULL COMMENT '创建时间',
+    `type`      TINYINT UNSIGNED           NOT NULL COMMENT '类型 1 网址 2 other',
     CONSTRAINT daily_log_PK PRIMARY KEY (id)
 );
 
@@ -136,9 +136,7 @@ CREATE TABLE IF NOT EXISTS push_log
     update_time datetime default null,
     constraint push_log_pk
         primary key (id)
-)
-comment
-'推送日志记录表';
+) comment '推送日志记录表';
 
 CREATE TABLE IF NOT EXISTS netease_music_song
 (
@@ -193,9 +191,7 @@ create table if not exists netease_music_album
     user_id      int          null,
     constraint netease_music_album_pk
         primary key (id)
-)
-comment
-'专辑';
+) comment '专辑';
 
 create table if not exists api_user
 (
@@ -210,17 +206,17 @@ create table if not exists api_user
 
 create table if not exists bili_fav
 (
-    id          int           not null
+    id          int                      not null
         primary key,
-    fid         int           not null,
-    mid         int           not null comment '用户',
-    title       varchar(20)   null comment '收藏夹名称',
-    type        int           null comment '类型',
-    media_count int           null comment '个数',
-    cover       varchar(500)  null comment '封面图',
-    intro       varchar(3000) null comment '简介',
-    ctime       int           null comment '创建时间',
-    mtime       int           null,
+    fid         int                      not null,
+    mid         int                      not null comment '用户',
+    title       varchar(20)              null comment '收藏夹名称',
+    type        int                      null comment '类型',
+    media_count int                      null comment '个数',
+    cover       varchar(500)             null comment '封面图',
+    intro       varchar(3000)            null comment '简介',
+    ctime       int                      null comment '创建时间',
+    mtime       int                      null,
     only_audio  int unsigned default '0' not null,
     constraint bili_fav_fid_uindex
         unique (fid),
@@ -229,29 +225,29 @@ create table if not exists bili_fav
     constraint bili_fav_id_uindex
         unique (id)
 )
-comment
-'收藏夹' row_format = DYNAMIC;
+    comment
+        '收藏夹' row_format = DYNAMIC;
 
 create table if not exists bili_media
 (
-    id              int           not null
+    id              int                      not null
         primary key,
-    type            int           null,
-    title           varchar(150)  null comment '标题',
-    cover           varchar(500)  null comment '封面图',
-    intro           varchar(3000) null comment '简介',
-    page            int           null comment '分P数',
-    mid             int           null comment '用户',
-    ctime           int           null comment '创建时间',
-    pubtime         int           null comment '发布时间',
-    fav_time        int           null comment '收藏时间',
-    bv_id           varchar(12)   null,
-    down            int default 0 not null,
-    upload          int default 0 not null,
-    invalid_push    int default 0 not null,
-    onedrive_upload int default 0 not null,
+    type            int                      null,
+    title           varchar(150)             null comment '标题',
+    cover           varchar(500)             null comment '封面图',
+    intro           varchar(3000)            null comment '简介',
+    page            int                      null comment '分P数',
+    mid             int                      null comment '用户',
+    ctime           int                      null comment '创建时间',
+    pubtime         int                      null comment '发布时间',
+    fav_time        int                      null comment '收藏时间',
+    bv_id           varchar(12)              null,
+    down            int          default 0   not null,
+    upload          int          default 0   not null,
+    invalid_push    int          default 0   not null,
+    onedrive_upload int          default 0   not null,
     only_audio      int unsigned default '0' not null,
-    fav_id          int           null,
+    fav_id          int                      null,
     constraint bili_media_bv_id_uindex
         unique (bv_id),
     constraint bili_media_id_uindex

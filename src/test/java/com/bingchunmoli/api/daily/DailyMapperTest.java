@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Slf4j
 @MybatisPlusTest
-@TestPropertySource(properties = "spring.sql.init.data-locations=classpath*:dailyData.sql")
+@TestPropertySource(properties = {"spring.sql.init.data-locations=classpath*:dailyData.sql", "spring.sql.init.schema-locations=classpath*:init/db/ddl.sql"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class DailyMapperTest {
     @Autowired

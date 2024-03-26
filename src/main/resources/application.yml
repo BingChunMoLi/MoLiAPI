@@ -56,10 +56,11 @@ spring:
   mail:
     username: default@example.com
     defaultTo: default@example.com #默认发送通知给那个邮箱
-  sql:
-    init:
-      schema-locations: classpath*:init/db/ddl.sql
-      data-locations: classpath*:init/db/data.sql
+#  sql:
+#    init:
+#      schema-locations: classpath*:init/db/ddl.sql
+#      data-locations: classpath*:init/db/data.sql
+#      encoding: utf-8
 mybatis-plus:
   configuration:
     cache-enabled: true
