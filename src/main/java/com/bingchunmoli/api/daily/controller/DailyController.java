@@ -110,10 +110,10 @@ public class DailyController {
             Collection<String> tenants = map.getOrDefault(v, Collections.singleton(""));
             String tenant = tenants.stream().filter(k -> k.equalsIgnoreCase("moli")).findFirst().orElse("0");
             list.add(new DailyLogPO()
-                    .type(1)
-                    .url(v)
-                    .tenant(getTenant(tenant))
-                    .createTime(LocalDateTime.now()));
+                    .setType(1)
+                    .setUrl(v)
+                    .setTenant(getTenant(tenant))
+                    .setCreateTime(LocalDateTime.now()));
         });
         AppMessage appMessage = new AppMessage()
                 .setTitle("签到成功")
@@ -131,7 +131,8 @@ public class DailyController {
      * @return 查询参数
      */
     @GetMapping("param")
-    public ResultVO<DailyQuery> getQueryParam(String url, @RequestHeader String tenant) {
+    @Operation(summary = "获取查询的请求参数, 比如开始时间与结束时间，以及可以查询的url")
+    public ResultVO<DailyQuery> getQueryParam(String url, @RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.getQueryParam(url, tenant));
     }
 
@@ -141,22 +142,24 @@ public class DailyController {
      * @return 如果已签到，返回当日签到的url
      */
     @GetMapping("check")
-    public ResultVO<List<String>> getNowSign(@RequestHeader String tenant) {
+    @Operation(summary = "获取当天签到状态")
+    public ResultVO<List<String>> getNowSign(@RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.list(new LambdaQueryWrapper<DailyLogPO>()
-                        .eq(DailyLogPO::createTime, LocalDate.now())
-                        .eq(DailyLogPO::tenant, getTenant(tenant)))
-                .stream().map(DailyLogPO::url)
+                        .eq(DailyLogPO::getCreateTime, LocalDate.now())
+                        .eq(DailyLogPO::getTenant, getTenant(tenant)))
+                .stream().map(DailyLogPO::getUrl)
                 .toList());
     }
 
     /**
-     * 查询签名日历表
+     * 查询签到日历表
      *
-     * @param dailyQuery
-     * @return
+     * @param dailyQuery 查询参数
+     * @return 日历表详情
      */
     @GetMapping("query")
-    public ResultVO<Map<LocalDate, List<DailyLog>>> querySign(DailyQuery dailyQuery, @RequestHeader String tenant) {
+    @Operation(summary = "查询签到日历表")
+    public ResultVO<Map<LocalDate, List<DailyLog>>> querySign(DailyQuery dailyQuery, @RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.querySign(dailyQuery, getTenant(tenant)));
     }
 }

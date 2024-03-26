@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  */
 
 @Data
-@Accessors(chain = true, fluent = true)
+@Accessors(chain = true)
 @TableName(value = "daily_log")
 public class DailyLogPO implements Serializable {
     @Serial
