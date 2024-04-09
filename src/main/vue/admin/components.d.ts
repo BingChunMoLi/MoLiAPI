@@ -9,8 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
-      ElCalendar: typeof import('element-plus/es')['ElCalendar']
-      ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
+    ElCalendar: typeof import('element-plus/es')['ElCalendar']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
