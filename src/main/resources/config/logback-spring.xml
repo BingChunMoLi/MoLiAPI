@@ -105,9 +105,19 @@
         </http>
         <format>
             <label>
-                <pattern>app=moliapi,host=${HOSTNAME}</pattern>
+                <pattern>app=moliapi,host=${HOSTNAME},level=%level</pattern>
             </label>
-            <message class="com.github.loki4j.logback.JsonLayout" />
+            <message>
+                <pattern>
+                    {
+                    "level":"%level",
+                    "class":"%logger{36}",
+                    "thread":"%thread",
+                    "message": "%message",
+                    "requestId": "%X{traceId}]"
+                    }
+                </pattern>
+            </message>
         </format>
     </appender>
 
