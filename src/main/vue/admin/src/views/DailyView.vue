@@ -8,9 +8,14 @@ if (res.length == 0) {
   signed.value = false
 }
 //res 当日签到的数组 长度为0时未签到
+const url = ref('')
 const param = await get('daily/param');
 console.log(param)
+if (param) {
+  console.log(param.urls);
+}
 
+const options = ref({})
 const sign = async () => {
   const dailyList = await get('daily?key=moli')
   for (let i of dailyList) {
@@ -28,7 +33,21 @@ const sign = async () => {
       <template #date-cell="{ data }">
         <p :class="data.isSelected ? 'is-selected' : ''">
           {{ data.day.split('-').slice(1).join('-') }}
+          <el-select
+              v-model="url"
+              placeholder="Select"
+              size="large"
+              style="width: 240px"
+          >
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
           {{ data.isSelected ? '✔️' : '' }}
+          {{data.day}}
         </p>
       </template>
       <template #header="{date}">
