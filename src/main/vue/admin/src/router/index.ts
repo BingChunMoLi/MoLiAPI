@@ -17,6 +17,11 @@ const router = createRouter({
             path: '/init',
             name: 'init',
             component: () => import('@/views/InitView.vue')
+        },
+        {
+            path: '/daily',
+            name: 'daily',
+            component: () => import('@/views/DailyView.vue')
         }
     ]
 })
