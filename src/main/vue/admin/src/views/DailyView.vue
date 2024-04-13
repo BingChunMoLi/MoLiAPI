@@ -10,12 +10,13 @@ if (res.length == 0) {
 //res 当日签到的数组 长度为0时未签到
 const url = ref('')
 const param = await get('daily/param');
-console.log(param)
+const month = ref<Date>(new Date())
+const options = ref<Array<string>>()
 if (param) {
-  console.log(param.urls);
+  options.value = [...param.urls]
+}else{
+  options.value = ["testa", "testb"]
 }
-
-const options = ref({})
 const sign = async () => {
   const dailyList = await get('daily?key=moli')
   for (let i of dailyList) {
@@ -24,7 +25,17 @@ const sign = async () => {
   const signResult = await post('daily/signed', dailyList)
   console.log("签到结果: ", signResult ? "成功" : "失败");
 }
-
+const change = async () => {
+  const date = new Date(month.value);
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
+  const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  let requestUrl = 'daily/query?startDate=' + firstDayOfMonth.toLocaleDateString() +'&endDate=' + lastDayOfMonth.toLocaleDateString();
+  if (url.value) {
+    requestUrl = requestUrl + '&urls=' + url.value
+  }
+  const daily = await get(requestUrl);
+  console.log(daily)
+};
 </script>
 
 <template>
@@ -33,25 +44,36 @@ const sign = async () => {
       <template #date-cell="{ data }">
         <p :class="data.isSelected ? 'is-selected' : ''">
           {{ data.day.split('-').slice(1).join('-') }}
-          <el-select
-              v-model="url"
-              placeholder="Select"
-              size="large"
-              style="width: 240px"
-          >
-            <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            />
-          </el-select>
           {{ data.isSelected ? '✔️' : '' }}
-          {{data.day}}
+          {{ data.day }}
         </p>
       </template>
       <template #header="{date}">
         {{ date }}
+        <el-select
+            v-model="url"
+            clearable
+            placeholder="Select"
+            size="large"
+            style="width: 240px"
+            @change="change"
+        >
+          <el-option
+              v-for="item in options"
+              :key="item"
+              :label="item"
+              :value="item"
+          />
+        </el-select>
+        <div class="block">
+          <span class="demonstration">Month</span>
+          <el-date-picker
+              v-model="month"
+              placeholder="Pick a month"
+              type="month"
+              @change="change"
+          />
+        </div>
         <el-button :disabled="signed" round type="success" @click="sign">签到</el-button>
       </template>
     </el-calendar>
