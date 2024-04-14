@@ -105,17 +105,12 @@
         </http>
         <format>
             <label>
-                <pattern>app=moliapi,host=${HOSTNAME},level=%level</pattern>
+                <pattern>app=moliapi,host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceId=%X{traceId}</pattern>
             </label>
             <message>
                 <pattern>
-                    {
-                    "level":"%level",
-                    "class":"%logger{36}",
-                    "thread":"%thread",
-                    "message": "%message",
-                    "requestId": "%X{traceId}]"
-                    }
+                    [%X{traceId}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line]
+                    %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
                 </pattern>
             </message>
         </format>
