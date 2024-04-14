@@ -105,7 +105,7 @@
         </http>
         <format>
             <label>
-                <pattern>app=moliapi,host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceId=%X{traceId}</pattern>
+                <pattern>app=${APP_Name},date=%d{yyyy-MM-dd HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread</pattern>
             </label>
             <message>
                 <pattern>
@@ -138,7 +138,6 @@
     <root level="INFO">
         <appender-ref ref="STDOUT"/> <!-- 控制台输出 -->
         <appender-ref ref="FILE"/> <!-- 文件输出 -->
-        <appender-ref ref="LOKI" />
     </root>
     <logger name="com.bingchunmoli" level="trace">
         <appender-ref ref="DEBUG" additivity="false"/>
