@@ -11,13 +11,13 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
     <!-- 用来定义变量值的标签，<property> 有两个属性，name和value；其中name的值是变量的名称，value的值时变量定义的值。通过<property>定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。 -->
-    <property name="APP_Name" value="api"/>
+    <property name="app_name" value="api"/>
 
     <!-- key: 标识此timestamp的名字; datePattern: 设置将当前时间（解析配置文件的时间）转换为字符串的模式，遵循java.txt.SimpleDateFormat的格式。 -->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
 
     <!-- 每个logger都关联到logger上下文，默认上下文名称为“default”。但可以使用<contextName>设置成其他名字，用于区分不同应用程序的记录。一旦设置，不能修改。 -->
-    <contextName>${APP_Name}</contextName>
+    <contextName>${app_name}</contextName>
 
     <!-- 子节点appender：负责写日志的组件，它有两个必要属性name和class。name指定appender名称，class指定appender的全限定名 -->
     <!-- 控制台输出日志 -->
@@ -32,7 +32,7 @@
     <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份) -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志文件的路径及文件名 -->
-        <File>${user.home}/.api/logs/${APP_Name}.log</File>
+        <File>${user.home}/.api/logs/${app_name}.log</File>
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
         <append>true</append>
         <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
@@ -45,7 +45,7 @@
             <!-- 日志文件最大的保存历史 数量-->
             <maxHistory>5000</maxHistory>
             <!-- 必要节点，包含文件名及“%d”转换符，“%d”可以包含一个java.text.SimpleDateFormat指定的时间格式 -->
-            <!--            <FileNamePattern>logs/${APP_Name}.log.%i.zip</FileNamePattern>-->
+            <!--            <FileNamePattern>logs/${app_name}.log.%i.zip</FileNamePattern>-->
             <!-- 窗口索引最小值 -->
             <!--            <MinIndex>1</MinIndex>-->
             <!-- 窗口索引最大值 -->
@@ -69,7 +69,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <!-- 日志文件的路径及文件名 -->
-        <File>${user.home}/.api/logs/${APP_Name}_debug.log</File>
+        <File>${user.home}/.api/logs/${app_name}_debug.log</File>
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
         <append>true</append>
         <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
@@ -82,7 +82,7 @@
             <!-- 日志文件最大的保存历史 数量-->
             <maxHistory>5000</maxHistory>
             <!-- 必要节点，包含文件名及“%d”转换符，“%d”可以包含一个java.text.SimpleDateFormat指定的时间格式 -->
-            <!--            <FileNamePattern>logs/${APP_Name}.log.%i.zip</FileNamePattern>-->
+            <!--            <FileNamePattern>logs/${app_name}.log.%i.zip</FileNamePattern>-->
             <!-- 窗口索引最小值 -->
             <!--            <MinIndex>1</MinIndex>-->
             <!-- 窗口索引最大值 -->
@@ -105,7 +105,9 @@
         </http>
         <format>
             <label>
-                <pattern>app=${APP_Name},date=%d{yyyy-MM-dd HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread</pattern>
+                <pattern>app=${app_name},date=%d{yyyy-MM-dd
+                    HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceID=%X{traceId:-NONE}
+                </pattern>
             </label>
             <message>
                 <pattern>
