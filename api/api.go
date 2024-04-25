@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-type YiYan struct {
+type YiYanEntity struct {
 	Id         int16  `json:"id,omitempty"`
 	Uuid       string `json:"uuid,omitempty"`
 	Hitokoto   string `json:"hitokoto,omitempty"`
@@ -24,7 +24,7 @@ type YiYan struct {
 	Length     int16  `json:"length,omitempty"`
 }
 
-func yiYan(w http.ResponseWriter, r *http.Request) {
+func YiYan(w http.ResponseWriter, r *http.Request) {
 	randString := string(rand.Intn(12) + 97)
 	file, err := os.ReadFile(filepath.Join("yiyan", randString+".json"))
 	if err != nil {
@@ -32,7 +32,7 @@ func yiYan(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		return
 	}
-	var yiYans []YiYan
+	var yiYans []YiYanEntity
 	err = json.Unmarshal(file, &yiYans)
 	if err != nil {
 		print(err)
@@ -56,7 +56,7 @@ func yiYan(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func img(w http.ResponseWriter, r *http.Request) {
+func Img(w http.ResponseWriter, r *http.Request) {
 	userHomeDir, err := os.UserHomeDir()
 	if err != nil {
 		print(err)

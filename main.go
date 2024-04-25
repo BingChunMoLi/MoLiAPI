@@ -1,21 +1,23 @@
 package main
 
 import (
+	"bingchunmoli.com/moliapi/api"
 	"fmt"
 	"net/http"
 )
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(w, "Welcome to moliapi!")
+		fmt.Println("Welcome to moliapi!")
 	})
-	http.HandleFunc("/yiyan/random", yiYan)
-	http.HandleFunc("/img/random", img)
+	http.HandleFunc("/yiyan/random", api.YiYan)
+	http.HandleFunc("/img/random", api.Img)
 
 	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	print("启动成功")
 
 }
