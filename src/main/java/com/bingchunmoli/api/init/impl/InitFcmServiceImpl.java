@@ -43,7 +43,8 @@ public class InitFcmServiceImpl implements InitService {
                             .build()))
                     .build();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("初始化fcm异常", e);
+            return;
         }
         FirebaseApp.initializeApp(options);
     }

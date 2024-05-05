@@ -8,8 +8,10 @@ import com.bingchunmoli.api.push.bean.enums.PushMessageEnum;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Notification;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class PushApp implements Push {
 
@@ -27,10 +29,12 @@ public class PushApp implements Push {
             try {
                 return FirebaseMessaging.getInstance().send(fcmMessage);
             } catch (FirebaseMessagingException e) {
-                throw new RuntimeException(e);
+                log.error("推送fcm失败", e);
             }
+        }else {
+            throw new ApiAppMessageException("错误的message类型. ");
         }
-        throw new ApiAppMessageException("错误的message类型. ");
+        return "success";
     }
 
     @Override

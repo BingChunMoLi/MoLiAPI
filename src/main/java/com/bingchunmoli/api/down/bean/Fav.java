@@ -74,6 +74,8 @@ public class Fav {
             private Integer likeState;
             @JsonProperty("media_count")
             private Integer mediaCount;
+            @JsonProperty("is_top")
+            private Boolean isTop;
 
             @NoArgsConstructor
             @Data
@@ -147,6 +149,8 @@ public class Fav {
             private Object ogv;
             @JsonProperty("ugc")
             private UgcDTO ugc;
+            @JsonProperty("media_list_link")
+            private String mediaListLink;
 
             @NoArgsConstructor
             @Data
