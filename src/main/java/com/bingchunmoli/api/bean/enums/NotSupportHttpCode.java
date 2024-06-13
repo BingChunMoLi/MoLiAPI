@@ -11,6 +11,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum NotSupportHttpCode {
+
+    /**
+     * null
+     */
+    NULL(null, null, "null"),
     /**
      * {@code 103 Checkpoint}.
      * @see <a href="https://code.google.com/p/gears/wiki/ResumableHttpRequestsProposal">A proposal for supporting
@@ -50,7 +55,7 @@ public enum NotSupportHttpCode {
      */
     HTTP_VERSION_NOT_SUPPORTED(505, HttpStatus.Series.SERVER_ERROR, "HTTP Version not supported");
 
-    private final int value;
+    private final Integer value;
 
     private final HttpStatus.Series series;
 

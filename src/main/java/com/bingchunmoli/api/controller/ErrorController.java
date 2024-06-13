@@ -63,6 +63,10 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
             graphics.drawString("statusCode: " + statusCode, 10, 20);
             return img;
         }
+        if (statusCode == null) {
+            log.info("错误状态码为null");
+            return null;
+        }
         Resource resource = resourceLoader.getResource("classpath:img/" + statusCode + ".jpg");
         try (InputStream inputStream = resource.getInputStream()){
             return ImageIO.read(inputStream);
