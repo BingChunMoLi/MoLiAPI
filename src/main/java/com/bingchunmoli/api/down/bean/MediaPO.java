@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MediaPO {
 
-    private Integer id;
+    private Long id;
     /**
      * 类型
      */

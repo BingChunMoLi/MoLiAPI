@@ -112,7 +112,7 @@ public class Fav {
         @Data
         public static class MediasDTO {
             @JsonProperty("id")
-            private Integer id;
+            private Long id;
             @JsonProperty("type")
             private Integer type;
             @JsonProperty("title")
@@ -186,7 +186,7 @@ public class Fav {
             @Data
             public static class UgcDTO {
                 @JsonProperty("first_cid")
-                private Integer firstCid;
+                private Long firstCid;
             }
         }
     }

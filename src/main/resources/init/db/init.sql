@@ -232,7 +232,7 @@ create table if not exists bili_fav
 
 create table if not exists bili_media
 (
-    id              int                      not null
+    id              bigint                      not null
         primary key,
     type            int                      null,
     title varchar(150) null comment '标题',

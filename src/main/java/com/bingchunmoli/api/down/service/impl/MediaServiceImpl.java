@@ -40,10 +40,10 @@ public class MediaServiceImpl extends ServiceImpl<MediaDao, MediaPO> implements 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveByFilterAlreadyExists(Collection<MediaPO> mediaList) {
-        List<Integer> saveMediaIdList = mediaList.stream().map(MediaPO::getId).collect(Collectors.toList());
+        List<Long> saveMediaIdList = mediaList.stream().map(MediaPO::getId).collect(Collectors.toList());
         LambdaQueryWrapper<MediaPO> queryWrapper = new LambdaQueryWrapper<MediaPO>().select(MediaPO::getId).in(MediaPO::getId, saveMediaIdList);
         List<MediaPO> mediaPoList = list(queryWrapper);
-        List<Integer> mediaPoIdList = mediaPoList.stream().map(MediaPO::getId).toList();
+        List<Long> mediaPoIdList = mediaPoList.stream().map(MediaPO::getId).toList();
         List<MediaPO> needSaveUserList = mediaList.stream().filter(v -> !mediaPoIdList.contains(v.getId())).collect(Collectors.toList());
         needSaveUserList.forEach(v -> {
             String title = v.getTitle();
@@ -104,7 +104,7 @@ public class MediaServiceImpl extends ServiceImpl<MediaDao, MediaPO> implements 
                 .ctime(source.getCtime())
                 .down(0)
                 .favTime(null)
-                .id(source.getAid())
+                .id(Long.valueOf(source.getAid()))
                 .intro(source.getDesc())
                 .mid(source.getOwner().getMid())
                 .invalidPush(0)
