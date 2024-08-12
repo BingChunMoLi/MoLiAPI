@@ -1,6 +1,5 @@
 package com.bingchunmoli.api.weather.task;
 
-import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.exception.ApiTaskException;
 import com.bingchunmoli.api.utils.SendMailUtil;
 import com.bingchunmoli.api.weather.bean.WeatherDailyBean;
@@ -12,14 +11,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -52,85 +52,25 @@ public class WeatherNotionTask {
         Map<String, List<WeatherSub>> messageMap = list.stream().collect(Collectors.groupingBy(WeatherSub::getLocation));
         for (Map.Entry<String, WeatherDailyBean> entry : notifiedLocationMap.entrySet()) {
             List<WeatherSub> weatherSub = messageMap.get(entry.getKey());
-            String messageStr = coverMessageToHtml(entry.getKey(), entry.getValue());
+            WeatherDailyBean value = entry.getValue();
             if (log.isDebugEnabled()) {
-                log.debug("message: {}", messageStr);
+                log.debug("key: {}, message: {}", entry.getKey(), entry.getValue());
             }
-            weatherSub.forEach(v ->
-                    {
-                        try {
-                            mailUtil.sendHtmlMail(v.getEmail(), "天气不好,记得带伞呦😘😘😘", messageStr);
-                        } catch (MessagingException e) {
-                            throw new ApiTaskException(e);
-                        }
-                    }
-            );
+            Context context = new Context();
+            weatherSub.forEach(v -> {
+                context.setLocale(Locale.CHINA);
+                context.setVariable("email", v.getEmail());
+                context.setVariable("location", v.getLocation());
+                context.setVariable("updateTime", value.getUpdateTime());
+                context.setVariable("fxLink", value.getFxLink());
+                context.setVariable("data", value.getDaily());
+                try {
+                    mailUtil.sendHtmlMail(v.getEmail(), "天气不好,记得带伞呦😘😘😘", "WeatherNotion", context);
+                } catch (MessagingException e) {
+                    throw new ApiTaskException(e);
+                }
+            });
         }
-    }
-
-    private String coverMessageToHtml(String location, @NotNull WeatherDailyBean dailyBean) {
-        WeatherDailyBean.DailyBean today = dailyBean.getDaily().get(0);
-        WeatherDailyBean.DailyBean tomorrow = dailyBean.getDaily().get(1);
-        WeatherDailyBean.DailyBean dayAfterTomorrow = dailyBean.getDaily().get(2);
-        return StrUtil.format("""
-                        <!DOCTYPE html>
-                        <html lang="en">
-                            <head>
-                                <meta charset="UTF-8">
-                                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                <title>天气不好,记得带伞呦😘😘😘</title>
-                            </head>
-                            <body style="height:100vh;width: 100%;">
-                                    <div style="margin: 0 auto; display: flex;align-items: center;justify-content: center;">
-                                        <td>地区: {}</td>
-                                    </div>
-                                    <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-around; align-items: stretch;">
-                                        <div>
-                                            <div>日期: </div>
-                                            <div>图标:</div>
-                                            <div>最低气温/最高气温: </div>
-                                            <div>天气: </div>
-                                        </div>
-                                        <div>
-                                            <div>{}&nbsp;</div>
-                                            <div><img src="https://obs.bingchunmoli.com/weather/{}-fill.svg"/></div>
-                                            <div>{}°c/{}°c</div>
-                                            <div>{}</div>
-                                        </div>
-                                        <div>
-                                            <div>{}&nbsp;</div>
-                                            <div><img src="https://obs.bingchunmoli.com/weather/{}-fill.svg"/></div>
-                                            <div>{}°c/{}°c</div>
-                                            <div>{}</div>
-                                        </div>
-                                        <div>
-                                            <div>{}&nbsp;</div>
-                                            <div><img src="https://obs.bingchunmoli.com/weather/{}-fill.svg"/></div>
-                                            <div>{}°c/{}°c</div>
-                                            <div>{}</div>
-                                        </div>
-                                </div>
-                                原始信息:
-                            </body>
-                        </html>
-                        """.trim(),
-                location,
-                today.getFxDate(),
-                today.getIconDay(),
-                today.getTempMin(),
-                today.getTempMax(),
-                today.getTextDay(),
-                tomorrow.getFxDate(),
-                tomorrow.getIconDay(),
-                tomorrow.getTempMin(),
-                tomorrow.getTempMax(),
-                tomorrow.getTextDay(),
-                dayAfterTomorrow.getFxDate(),
-                dayAfterTomorrow.getIconDay(),
-                dayAfterTomorrow.getTempMin(),
-                dayAfterTomorrow.getTempMax(),
-                dayAfterTomorrow.getTextDay());
     }
 
     private Map<String, WeatherDailyBean> getNotifiedLocation(List<WeatherSub> list) {
