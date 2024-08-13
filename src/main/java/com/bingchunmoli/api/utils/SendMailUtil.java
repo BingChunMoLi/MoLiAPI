@@ -2,9 +2,6 @@ package com.bingchunmoli.api.utils;
 
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.KeyUtil;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.signers.JWTSignerUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.Getter;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import javax.crypto.SecretKey;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -80,11 +76,9 @@ public class SendMailUtil {
 
     public void sendHtmlMail(String to, String subject, String template, Context context) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        SecretKey key = KeyUtil.generateKey("RS256", 2048);
-        log.info("keyFormat: {}", key.getFormat());
         HashMap<String, Object> payload = new HashMap<>();
         payload.put("to", to);
-        String unsubscribe = JWTUtil.createToken(payload, JWTSignerUtil.createSigner("RS256", key));
+        String unsubscribe = JwtUtil.createToken(payload);
         context.setVariable("unsubscribe", unsubscribe);
         mimeMessage.setHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
         mimeMessage.setHeader("List-Unsubscribe", "https://api.bingchunmoli.com/unsubscribe/?to=" + unsubscribe);

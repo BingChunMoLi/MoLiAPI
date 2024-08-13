@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>天气不好,记得带伞呦😘😘😘</title>
+    <style>
+        @media screen and (max-width: 600px) {
+            .content {
+                width: 100% !important;
+                display: block !important;
+                padding: 10px !important;
+            }
+            .header, .body, .footer {
+                padding: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body style="height:100vh;width: 100%;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td align="center" style="padding: 20px;">
+            <table border="0" cellpadding="0" cellspacing="0" class="content" style="border-collapse: collapse; border: 1px solid #cccccc;" width="600">
+                <!-- Header -->
+                <tr>
+                    <td class="header" style="background-color: #345C72; padding: 40px; text-align: center; color: white; font-size: 24px;">
+                        恶劣天气提醒
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td class="body" style="padding: 40px; text-align: left; font-size: 16px; line-height: 1.6;">
+                        Hello, moli! <br>
+                        明日记得带伞! 数据更新时间: <span th:text="${updateTime}"></span>
+                        <br><br>
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <th>日期</th>
+                                <th>最低气温/最高气温</th>
+                                <th>天气</th>
+                                <th>图标</th>
+                            </tr>
+                            <tr>
+                                <td th:each="i : ${data}" th:text="${i.fxDate}"></td>
+                            </tr>
+                            <tr>
+                                <td th:each="i : ${data}" th:text="${i.getTempMin() + '°c/' + i.getTempMax() + '°c'}"></td>
+                            </tr>
+                            <tr>
+                                <td th:each="i : ${data}" th:text="${i.textDay}"></td>
+                            </tr>
+                            <tr>
+                                <td th:each="i : ${data}">
+                                    <img th:src="${'https://obs.bingchunmoli.com/weather/' + i.iconDay + '-fill.svg'}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Call to action Button -->
+                <tr>
+                    <td style="padding: 0px 40px 0px 40px; text-align: center;">
+                        <!-- CTA Button -->
+                        <table cellpadding="0" cellspacing="0" style="margin: auto;">
+                            <tr>
+                                <td align="center" style="background-color: #345C72; padding: 10px 20px; border-radius: 5px;">
+                                    <a style="color: #ffffff; text-decoration: none; font-weight: bold;" target="_blank" th:href="${fxLink}">Get to weather detail</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="body" style="padding: 40px; text-align: center; font-size: 16px; line-height: 1.6;">
+                        <a style="color: #3d8fd1" th:href="'https://api.bingchunmoli.com/unsubscribe/?to=' + ${unsubscribe}">unsubscribe</a>
+                    </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                    <td class="footer" style="background-color: #333333; padding: 40px; text-align: center; color: white; font-size: 14px;">
+                        Copyright &copy; 2024 | MoliApi
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
