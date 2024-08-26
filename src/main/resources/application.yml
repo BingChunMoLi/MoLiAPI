@@ -79,3 +79,17 @@ logging:
     file: utf-8
     console: utf-8
   config: classpath:config/logback-spring.xml
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true

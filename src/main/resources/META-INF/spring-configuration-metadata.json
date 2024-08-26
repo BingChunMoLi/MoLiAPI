@@ -50,7 +50,7 @@
     },
     {
       "name": "moli.api-config.play-list-id",
-      "type": "java.util.List<java.lang.String>",
+      "type": "java.lang.String",
       "description": "定时任务歌单id",
       "sourceType": "com.bingchunmoli.api.config.ApiConfig"
     },

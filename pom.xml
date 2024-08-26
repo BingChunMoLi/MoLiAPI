@@ -178,6 +178,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -190,7 +198,7 @@
                     <layers>
                         <enabled>true</enabled>
                     </layers>
-                    <executable>true</executable>
+<!--                    <executable>true</executable>-->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
