@@ -23,9 +23,7 @@
     <!-- 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%X{traceId}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line]
-                %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)]
-            </pattern>
+            <pattern>[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)</pattern>
         </encoder>
     </appender>
 
@@ -59,7 +57,7 @@
 
         <!-- 对记录事件进行格式化 -->
         <encoder>
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %X{RequestId} %logger{} - %msg%n</Pattern>
+            <pattern>[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)</pattern>
         </encoder>
     </appender>
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -96,7 +94,7 @@
 
         <!-- 对记录事件进行格式化 -->
         <encoder>
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %X{RequestId} %logger{} - %msg%n</Pattern>
+            <pattern>[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)</pattern>
         </encoder>
     </appender>
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
@@ -105,14 +103,13 @@
         </http>
         <format>
             <label>
-                <pattern>app=${app_name},date=%d{yyyy-MM-dd
-                    HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceId=%X{traceId:-NONE}
+                <pattern>
+                    app=${app_name},date=%d{yyyy-MM-dd HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceId=%X{traceId:-NONE}
                 </pattern>
             </label>
             <message>
                 <pattern>
-                    [%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line]
-                    %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
+                    [%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
                 </pattern>
             </message>
         </format>
@@ -141,6 +138,7 @@
         <appender-ref ref="STDOUT"/> <!-- 控制台输出 -->
         <appender-ref ref="FILE"/> <!-- 文件输出 -->
     </root>
+
     <logger name="com.bingchunmoli" level="trace">
         <appender-ref ref="DEBUG" additivity="false"/>
         <appender-ref ref="LOKI" />
