@@ -27,7 +27,7 @@ public class InitSqlServiceImpl implements InitService {
 
     @Override
     public void init() {
-        if (sqlResource != null) {
+        if (sqlResource != null && sqlResource.exists()) {
             Boolean query = jdbcTemplate.query("SHOW TABLES", ResultSet::next);
             if (Boolean.TRUE.equals(query)) {
                 //存在表跳过初始化
