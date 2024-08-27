@@ -30,6 +30,7 @@ public class RequestTraceIdInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler, Exception ex) {
+        response.setHeader("X-Request-ID", MDC.get(TRACE_ID));
         MDC.clear();
     }
 }

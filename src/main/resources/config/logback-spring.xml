@@ -24,7 +24,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%X{traceId}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line]
-                %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n) [%X{spanId:-}]
+                %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)]
             </pattern>
         </encoder>
     </appender>
@@ -106,7 +106,7 @@
         <format>
             <label>
                 <pattern>app=${app_name},date=%d{yyyy-MM-dd
-                    HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceID=%X{traceId:-NONE}
+                    HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceId=%X{traceId:-NONE}
                 </pattern>
             </label>
             <message>
