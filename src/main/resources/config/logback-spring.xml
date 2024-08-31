@@ -28,7 +28,7 @@
     </appender>
 
     <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份) -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志文件的路径及文件名 -->
         <File>${user.home}/.api/logs/${app_name}.log</File>
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
@@ -60,6 +60,7 @@
             <pattern>[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)</pattern>
         </encoder>
     </appender>
+
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
@@ -134,9 +135,9 @@
     <logger name="com.baomidou.mybatisplus.extension" level="WARN"/>
 
     <!-- 表示 >=WARN 级别的日志的输出方式 -->
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="STDOUT"/> <!-- 控制台输出 -->
-        <appender-ref ref="FILE"/> <!-- 文件输出 -->
+        <appender-ref ref="ERROR"/> <!-- 文件输出 -->
     </root>
 
     <logger name="com.bingchunmoli" level="trace">

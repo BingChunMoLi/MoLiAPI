@@ -56,6 +56,17 @@ spring:
   mail:
     username: default@example.com
     defaultTo: default@example.com #默认发送通知给那个邮箱
+  web:
+    resources:
+      chain:
+        cache: true
+        strategy:
+          content:
+            enabled: true
+            paths: /**
+      cache:
+        cachecontrol:
+          max-age: 7d
 #  sql:
 #    init:
 #      schema-locations: classpath*:init/db/ddl.sql
@@ -79,6 +90,8 @@ logging:
     file: utf-8
     console: utf-8
   config: classpath:config/logback-spring.xml
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 management:
   tracing:
     sampling:
