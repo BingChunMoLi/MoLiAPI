@@ -3,6 +3,7 @@ package com.bingchunmoli.api.utils;
 import cn.hutool.crypto.KeyUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.signers.AlgorithmUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class JwtUtil {
 
-    private static final JWTSigner signer = JWTSignerUtil.createSigner("RS256", KeyUtil.generateKey("RS256", 2048));
+    private static final JWTSigner signer = JWTSignerUtil.createSigner(AlgorithmUtil.getAlgorithm("RS256"), KeyUtil.generateKeyPair(AlgorithmUtil.getAlgorithm("RS256"), 2048));
 
     public static String createToken(Map<String, Object> payload){
         return JWTUtil.createToken(payload, signer);
