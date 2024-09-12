@@ -2,10 +2,10 @@ FROM eclipse-temurin:17-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 RUN addgroup java && adduser java -D -S -s /bin/bash -G java
 USER java
-VOLUME /home/java/.api/
+VOLUME /soft/config
 WORKDIR /soft
 EXPOSE 8090
 ARG JAR_FILE=target/*.jar
 ADD ${JAR_FILE} /soft/moliapi.jar
 ENV JAVA_OPTS=""
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/urandom -Dspring.config.additional-location=optional:file:/home/java/.api/ -jar /soft/moliapi.jar ${0} ${@}"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/urandom -Dspring.config.additional-location=optional:file:/soft/config/ -jar /soft/moliapi.jar ${0} ${@}"]
