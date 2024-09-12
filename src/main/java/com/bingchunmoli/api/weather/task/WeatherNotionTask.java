@@ -67,6 +67,7 @@ public class WeatherNotionTask {
                 try {
                     mailUtil.sendHtmlMail(v.getEmail(), "天气不好,记得带伞呦😘😘😘", "WeatherNotion", context);
                 } catch (MessagingException e) {
+                    log.error("发送邮件异常: ", e);
                     throw new ApiTaskException(e);
                 }
             });

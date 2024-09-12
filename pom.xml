@@ -164,7 +164,7 @@
         <dependency>
             <groupId>com.github.loki4j</groupId>
             <artifactId>loki-logback-appender</artifactId>
-            <version>1.5.2</version>
+            <version>${loki-logback.version}</version>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
