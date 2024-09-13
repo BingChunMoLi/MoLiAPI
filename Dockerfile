@@ -4,6 +4,7 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
+COPY lombok.config .
 RUN --mount=type=cache,target=/root/.m2 mvn install -DskipTests
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
