@@ -14,8 +14,8 @@ VOLUME /soft/config
 EXPOSE 8090
 RUN addgroup -S api && adduser -S api -G api
 USER api:api
-ARG DEPENDENCY=/workspace/app/target/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /soft/lib
-COPY --from=build ${DEPENDENCY}/META-INF /soft/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /soft
-ENTRYPOINT ["sh", "-c" ,"java -cp soft:soft/lib/* -Djava.security.egd=file:/dev/urandom ${JAVA_OPTS} ApiApplication ${0} ${@}"]
+COPY --from=builder /workspace/app/extracted/dependencies/ ./
+COPY --from=builder /workspace/app/extracted/spring-boot-loader/ ./
+COPY --from=builder /workspace/app/extracted/snapshot-dependencies/ ./
+COPY --from=builder /workspace/app/extracted/application/ ./
+ENTRYPOINT ["sh", "-c" ,"java -Djava.security.egd=file:/dev/urandom ${JVM_OPTS} -jar moliapi.jar ${0} ${@}"]
