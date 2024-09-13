@@ -6,7 +6,7 @@ COPY pom.xml .
 COPY src src
 COPY lombok.config .
 RUN --mount=type=cache,target=/root/.m2 mvn install -DskipTests
-RUN java -Djarmode=tools -jar /target/moliapi.jar extract --layers --destination extracted
+RUN java -Djarmode=tools -jar target/moliapi.jar extract --layers --destination extracted
 
 FROM eclipse-temurin:17-jdk-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
