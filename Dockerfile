@@ -1,12 +1,11 @@
-FROM eclipse-temurin:17-jdk-alpine as build
+FROM maven:3.9.9-eclipse-temurin-17-alpine as build
 WORKDIR /workspace/app
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 RUN --mount=type=cache,target=/home/cnb/.m2 ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
-RUN java -Djarmode=tools -jar moliapi.jar extract --layers --destination extracted
+RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 FROM eclipse-temurin:17-jdk-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
