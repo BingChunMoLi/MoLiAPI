@@ -108,3 +108,5 @@ management:
         http:
           server:
             requests: true
+loki:
+  url: http://localhost:3100/loki/api/v1/push
