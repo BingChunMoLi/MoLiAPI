@@ -4,7 +4,7 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
-RUN --mount=type=cache,target=/home/cnb/.m2 mvn install -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn install -DskipTests
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 FROM eclipse-temurin:17-jdk-alpine
