@@ -98,8 +98,7 @@ CREATE TABLE IF NOT EXISTS `weather_sub`
 (
     `id`     int         NOT NULL AUTO_INCREMENT primary key,
     location varchar(10) not null comment '订阅的城市',
-    email    varchar(30) not null comment '邮箱',
-    PRIMARY KEY (`id`)
+    email    varchar(30) not null comment '邮箱'
 );
 
 CREATE TABLE IF NOT EXISTS daily_log
