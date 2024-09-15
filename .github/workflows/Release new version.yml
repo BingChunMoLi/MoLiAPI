@@ -33,7 +33,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
     - run: mkdir staging && cp target/*.jar staging
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: Package
         path: staging
@@ -48,11 +48,14 @@ jobs:
     - name: Build docker image
       run: mvn -B clean spring-boot:build-image --file pom.xml
     - name: Push
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:${{ github.ref_name }}
+    - name: buildx push
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags:
+          - ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:latest
+          - ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:${{ github.ref_name }}
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
