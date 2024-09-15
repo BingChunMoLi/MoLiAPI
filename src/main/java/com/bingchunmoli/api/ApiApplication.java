@@ -15,7 +15,7 @@ import org.springframework.stereotype.Indexed;
  */
 @Indexed
 @EnableAsync
-@EnableRetry(proxyTargetClass = false)
+@EnableRetry
 @EnableCaching
 @EnableScheduling
 @EnableAspectJAutoProxy(exposeProxy = true)
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Indexed;
 public class ApiApplication {
 
     public static void main(String[] args) {
-        System.setProperty("spring.config.additional-location","optional:file:${user.home}/.api/");
+        System.setProperty("spring.config.additional-location","optional:file:/soft/config/");
         SpringApplication.run(ApiApplication.class, args);
     }
 
