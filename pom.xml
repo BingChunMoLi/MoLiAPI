@@ -5,29 +5,30 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
+        <version>3.3.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.15.3</version>
+    <version>3.15.4</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
     <properties>
         <java.version>17</java.version>
-        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <hutool.version>5.8.26</hutool.version>
+        <hutool.version>5.8.32</hutool.version>
         <zxing.version>3.5.3</zxing.version>
         <emoji.version>5.1.1</emoji.version>
-        <h2.version>2.2.224</h2.version>
+        <h2.version>2.3.232</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <tencent-cloud-api.version>3.1.954</tencent-cloud-api.version>
-        <kotlin.version>1.9.23</kotlin.version>
-        <firebase-admin.version>9.2.0</firebase-admin.version>
+        <tencent-cloud-api.version>3.1.1069</tencent-cloud-api.version>
+        <kotlin.version>2.0.20</kotlin.version>
+        <firebase-admin.version>9.3.0</firebase-admin.version>
+        <loki-logback.version>1.5.1</loki-logback.version>
     </properties>
 
     <dependencies>
@@ -160,6 +161,36 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.loki4j</groupId>
+            <artifactId>loki-logback-appender</artifactId>
+            <version>${loki-logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -172,7 +203,7 @@
                     <layers>
                         <enabled>true</enabled>
                     </layers>
-                    <executable>true</executable>
+<!--                    <executable>true</executable>-->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

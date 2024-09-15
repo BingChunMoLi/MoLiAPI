@@ -14,19 +14,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @author BingChunMoLi
@@ -36,8 +35,9 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements YiYanService {
     private final ObjectMapper objectMapper;
+    private final ResourcePatternResolver resourceLoader;
     private final List<YiYan> list = new ArrayList<>(500);
-    @Value("${moli.init.yiYanJsonPath:init/data}")
+    @Value("${moli.init.yiYanJsonPath}")
     private String yiYanJsonPath;
 
     @PostConstruct
@@ -46,35 +46,77 @@ public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements
             log.info("没有配置yiYanJsonPath, 跳过初始化一言json文件");
             return;
         }
-        Path path = Paths.get(yiYanJsonPath);
-        File[] files = path.toFile().listFiles();
-        if (files == null) {
-            log.error("没有可以初始化的一言json数据");
-            return;
-        }
-        for (File file : files) {
-            if (!file.getName().endsWith(".json")) {
-                break;
-            }
-            MappingJsonFactory factory = new MappingJsonFactory();
-            try (JsonParser parser = factory.createParser(file)) {
-                JsonToken token = parser.nextToken();
-                if (token != JsonToken.START_ARRAY) {
-                    if (log.isErrorEnabled()) {
-                        log.error("解析出错, file: {}", file);
-                    }
-                    break;
-                }
-                token = parser.nextToken();
-                while (token != JsonToken.END_ARRAY) {
-                    JsonNode x = parser.readValueAsTree();
-                    YiYan yiYan = objectMapper.treeToValue(x, YiYan.class);
-                    list.add(yiYan);
-                    token = parser.nextToken();
-                }
-
+        if (yiYanJsonPath.startsWith("classpath")) {
+            Stream<InputStream> inputStreamStream;
+            try {
+                inputStreamStream = Arrays.stream(resourceLoader.getResources(yiYanJsonPath))
+                        .map(resource -> {
+                            try {
+                                return resource.getInputStream();
+                            } catch (IOException e) {
+                                return null;
+                            }
+                        })
+                        .filter(Objects::nonNull);
             } catch (IOException e) {
                 throw new ApiInitException(e);
+            }
+            MappingJsonFactory factory = new MappingJsonFactory();
+            List<JsonParser> jsonParserList = inputStreamStream.map(v -> {
+                try {
+                    return factory.createParser(v);
+                } catch (IOException e) {
+                    throw new ApiInitException(e);
+                }
+            }).toList();
+            try {
+                for (JsonParser parser : jsonParserList) {
+                    JsonToken token = parser.nextToken();
+                    if (token != JsonToken.START_ARRAY) {
+                        break;
+                    }
+                    token = parser.nextToken();
+                    while (token != JsonToken.END_ARRAY) {
+                        JsonNode x = parser.readValueAsTree();
+                        YiYan yiYan = objectMapper.treeToValue(x, YiYan.class);
+                        list.add(yiYan);
+                        token = parser.nextToken();
+                    }
+                }
+            } catch (IOException e) {
+                throw new ApiInitException(e);
+            }
+        }else {
+            Path path = Paths.get(yiYanJsonPath);
+            File[] files = path.toFile().listFiles();
+            if (files == null) {
+                log.error("没有可以初始化的一言json数据");
+                return;
+            }
+            for (File file : files) {
+                if (!file.getName().endsWith(".json")) {
+                    break;
+                }
+                MappingJsonFactory factory = new MappingJsonFactory();
+                try (JsonParser parser = factory.createParser(file)) {
+                    JsonToken token = parser.nextToken();
+                    if (token != JsonToken.START_ARRAY) {
+                        if (log.isErrorEnabled()) {
+                            log.error("解析出错, file: {}", file);
+                        }
+                        break;
+                    }
+                    token = parser.nextToken();
+                    while (token != JsonToken.END_ARRAY) {
+                        JsonNode x = parser.readValueAsTree();
+                        YiYan yiYan = objectMapper.treeToValue(x, YiYan.class);
+                        list.add(yiYan);
+                        token = parser.nextToken();
+                    }
+
+                } catch (IOException e) {
+                    throw new ApiInitException(e);
+                }
             }
         }
     }

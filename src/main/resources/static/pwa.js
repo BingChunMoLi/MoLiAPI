@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2020-11-17 22:25:00
- * @LastEditTime: 2020-11-17 22:25:13
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \undefinedd:\Github\JAVA\api_v2\src\main\resources\templates\pwa.js
- */
 /* ===========================================================
  * docsify sw.js
  * ===========================================================
@@ -38,7 +30,7 @@ const getFixedUrl = (req) => {
   // max-age on mutable content is error-prone, with SW life of bugs can even extend.
   // Until cache mode of Fetch API landed, we have to workaround cache-busting with query string.
   // Cache-Control-Bug: https://bugs.chromium.org/p/chromium/issues/detail?id=453190
-  if (url.hostname === self.location.hostname) {
+  if (url.hostname === self.location.hostname && url.href.match("admin")) {
     url.search += (url.search ? '&' : '?') + 'cache-bust=' + now
   }
   return url.href

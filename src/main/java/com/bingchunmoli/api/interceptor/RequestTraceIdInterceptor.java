@@ -25,6 +25,7 @@ public class RequestTraceIdInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         MDC.put(TRACE_ID, UUID.randomUUID().toString());
+        response.setHeader("X-Request-Id", MDC.get(TRACE_ID));
         return true;
     }
 

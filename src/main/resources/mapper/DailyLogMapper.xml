@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bingchunmoli.api.daily.mapper.DailyLogMapper">
 
-    <resultMap id="BaseResultMap" type="com.bingchunmoli.api.daily.bean.DailyLog">
+    <resultMap id="BaseResultMap" type="com.bingchunmoli.api.daily.bean.DailyLogPO">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="url" column="url" jdbcType="VARCHAR"/>
             <result property="tenant" column="tenant" jdbcType="TINYINT"/>
@@ -16,4 +16,62 @@
         id,url,tenant,
         create_time,type
     </sql>
+
+    <resultMap id="dailyQuery" type="com.bingchunmoli.api.daily.bean.DailyQuery">
+        <result property="startDate" column="start_date" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="end_date" jdbcType="TIMESTAMP"/>
+        <collection property="urls" ofType="java.lang.String">
+            <result property="url" column="url"/>
+        </collection>
+    </resultMap>
+    <select id="getStartAndEndTime" resultMap="dailyQuery">
+        SELECT
+        `url`,
+        (
+        SELECT MIN(daily_log.create_time) from daily_log
+        <where>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            and tenant = #{tenant}
+        </where>
+        ) start_date,
+        (
+        SELECT MAX(daily_log.create_time) from daily_log
+        <where>
+            <if test="url != null and url != ''">
+                url = #{url}
+            </if>
+            and tenant = #{tenant}
+        </where>
+        ) end_date
+        FROM daily_log
+        <where>
+            <if test="url != null and url != ''">
+                url = #{url}
+            </if>
+            and tenant = #{tenant}
+        </where>
+        group by `url`
+    </select>
+
+
+    <select id="querySign" resultMap="BaseResultMap">
+        select url, type, date(create_time) from daily_log
+        <where>
+            <if test="dailyQuery.urls != null">
+                url in
+                <foreach collection="dailyQuery.urls" item="i" close=")" open="(" separator=",">
+                    #{i}
+                </foreach>
+            </if>
+            <if test="dailyQuery.startDate != null">
+                and create_time > #{dailyQuery.startDate}
+            </if>
+            <if test="dailyQuery.endDate != null">
+                and create_time &lt; #{dailyQuery.endDate}
+            </if>
+            and tenant = #{tenant}
+        </where>
+    </select>
 </mapper>

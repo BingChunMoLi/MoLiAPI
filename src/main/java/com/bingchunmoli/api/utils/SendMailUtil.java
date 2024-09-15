@@ -5,13 +5,17 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -19,9 +23,12 @@ import java.util.Optional;
  *
  * @author MoLi
  */
+@Slf4j
 @Component
 public class SendMailUtil {
     private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
+
     @Getter
     @Value("${spring.mail.username:mailUsername}")
     private String defaultFrom;
@@ -30,8 +37,9 @@ public class SendMailUtil {
     @Value("${spring.mail.enable:false}")
     private boolean enable;
 
-    public SendMailUtil(@Autowired(required = false) JavaMailSender javaMailSender) {
+    public SendMailUtil(@Autowired(required = false) final JavaMailSender javaMailSender, final TemplateEngine templateEngine) {
         this.javaMailSender = javaMailSender;
+        this.templateEngine = templateEngine;
     }
 
     /**
@@ -66,24 +74,21 @@ public class SendMailUtil {
         return true;
     }
 
-    /**
-     * 发送html格式的邮件
-     *
-     * @param to      发送人
-     * @param title   标题
-     * @param content 内容
-     */
-    public void sendHtmlMail(String to, String title, String content) throws MessagingException {
-        if (checkEnable()) {
-            return;
-        }
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(defaultFrom);
+    public void sendHtmlMail(String to, String subject, String template, Context context) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        HashMap<String, Object> payload = new HashMap<>();
+        payload.put("to", to);
+        String unsubscribe = JwtUtil.createToken(payload);
+        context.setVariable("unsubscribe", unsubscribe);
+        mimeMessage.setHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+        mimeMessage.setHeader("List-Unsubscribe", "https://api.bingchunmoli.com/unsubscribe/?to=" + unsubscribe);
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        String htmlContent = templateEngine.process(template, context);
         helper.setTo(to);
-        helper.setSubject(title);
-        helper.setText(content, true);
-        javaMailSender.send(message);
+        helper.setFrom(defaultFrom);
+        helper.setSubject(subject);
+        helper.setText(htmlContent, true);
+        javaMailSender.send(mimeMessage);
     }
 
     public boolean checkEnable(){
