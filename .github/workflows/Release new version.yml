@@ -40,14 +40,20 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        tags: |
-          type=semver,pattern={{version}}
-          bingchunmoli/moliapi:latest
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/moliapi
     - name: buildx push
       uses: docker/build-push-action@v6
       with:
         push: true
         tags: ${{ github.ref_name }}
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: false
+        files: |
+          LICENSE
+          target/*.jar
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
