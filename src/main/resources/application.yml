@@ -69,6 +69,7 @@ spring:
           max-age: 7d
   flyway:
     enabled: true
+    baseline-on-migrate: true
 #  sql:
 #    init:
 #      schema-locations: classpath*:init/db/ddl.sql
