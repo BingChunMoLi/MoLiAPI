@@ -138,12 +138,15 @@
     <!-- 表示 >=WARN 级别的日志的输出方式 -->
     <root level="debug">
         <appender-ref ref="STDOUT"/> <!-- 控制台输出 -->
-        <appender-ref ref="ERROR"/> <!-- 文件输出 -->
     </root>
 
     <logger name="com.bingchunmoli" level="trace">
         <appender-ref ref="DEBUG" additivity="false"/>
-        <appender-ref ref="LOKI" />
     </logger>
-
+    <springProfile name="prod">
+        <root level="trace">
+            <appender-ref ref="LOKI" />
+            <appender-ref ref="ERROR"/> <!-- 文件输出 -->
+        </root>
+    </springProfile>
 </configuration>

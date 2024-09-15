@@ -24,8 +24,8 @@ public class DbBaseTests {
     @Test
     void conn() throws SQLException {
         try (Connection con = dataSource.getConnection();
-             PreparedStatement st = con.prepareStatement("select 1");
-             ResultSet rs = st.executeQuery()) {
+        PreparedStatement st = con.prepareStatement("select 1");
+        ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 assertEquals(1, rs.getInt(1));
             }
