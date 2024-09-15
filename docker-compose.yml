@@ -10,7 +10,7 @@ services:
       - ./docker-compose/mysql/data/:/var/lib/mysql
       - ./docker-compose/mysql/log/:/var/log/mysql
       - ./docker-compose/mysql/conf:/etc/mysql/conf.d
-      - ./src/main/resource/db/migration/:/docker-entrypoint-initdb.d/
+      - ./src/main/resources/db/migration/:/docker-entrypoint-initdb.d/
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
