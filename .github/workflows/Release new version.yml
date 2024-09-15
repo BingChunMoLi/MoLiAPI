@@ -41,14 +41,11 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        # list of Docker images to use as base name for tags
         tags: |
           type=semver,pattern={{version}}
           bingchunmoli/moliapi:latest
     - name: Build docker image
-      run: mvn -B clean spring-boot:build-image --file pom.xml
-    - name: Push
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:${{ github.ref_name }}
+      run: mvn -B clean spring-boot:build-image --file pom.xml && docker push ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:${{ github.ref_name }}
     - name: buildx push
       uses: docker/build-push-action@v6
       with:
