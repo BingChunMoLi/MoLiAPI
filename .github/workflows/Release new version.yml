@@ -44,8 +44,6 @@ jobs:
         tags: |
           type=semver,pattern={{version}}
           bingchunmoli/moliapi:latest
-    - name: Build docker image
-      run: mvn -B clean spring-boot:build-image --file pom.xml && docker push ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:${{ github.ref_name }}
     - name: buildx push
       uses: docker/build-push-action@v6
       with:
