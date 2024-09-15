@@ -46,7 +46,7 @@ jobs:
           type=semver,pattern={{version}}
           bingchunmoli/moliapi:latest
     - name: Build docker image
-      uses: mvn -B clean spring-boot:build-image --file pom.xml
+      run: mvn -B clean spring-boot:build-image --file pom.xml
     - name: Push
       uses: docker/build-push-action@v6
       with:
