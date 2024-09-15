@@ -11,6 +11,7 @@ RUN java -Djarmode=tools -jar target/moliapi.jar extract --layers --destination 
 FROM eclipse-temurin:17-jdk-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 VOLUME /soft/config
+VOLUME /var/log/moliapi
 EXPOSE 8090
 RUN addgroup -S api && adduser -S api -G api
 USER api:api
