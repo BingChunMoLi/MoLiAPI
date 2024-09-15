@@ -1,6 +1,6 @@
 moli:
   version: @version@
-  path: ${user.home}${file.separator}.api${file.separator}
+  path: /soft/config/
   init:
     sql-path: classpath:/init/db/init.sql
     yi-yan-json-path: init/data/

@@ -8,24 +8,19 @@
 [![Java CI with Maven](https://github.com/BingChunMoLi/MoLiAPI/actions/workflows/maven.yml/badge.svg?event=branch_protection_rule)](https://github.com/BingChunMoLi/MoLiAPI/actions/workflows/maven.yml)
 
 ## 快速开始:
-1. docker(v3.8.1):
-```shell
-docker run -d --name api -p 8090:8090 -v /tmp:/root/.api/ bingyantang/moliapi:h2-alpha
-```
-
-3.15.3>
-
 ```shell
 docker run -d --name api -p 8090:8090 -v /tmp:/java/.api/ bingchunmoli/moliapi:latest
-或者
-docker run -d --name api -p 8090:8090 -v /tmp:/java/.api/ bingchunmoli/moliapi:3.15.3
+```
+or
+```shell
+java -jar -Dspring.profiles.active=h2 moliapi.jar
 ```
 
-3. fatjar:
-   支持mysql,h2数据库
+docker-compose:
 ```shell
-java -jar --spring.profiles.active=h2 moliapi.jar
+docker-compose up -d
 ```
+
 ## 已支持接口:
 1. Bing美图
 2. emoji表情处理
