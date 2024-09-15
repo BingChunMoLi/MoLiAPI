@@ -18,7 +18,6 @@
     <springProfile name="!default">
         <property name="log_path" value="/var/log/moliapi"/>
     </springProfile>
-    <property name="log_path" value="/var/log/moliapi"/>
     <springProperty scope="context" name="loki_url" source="loki.url" defaultValue="localhost"/>
 
     <!-- key: 标识此timestamp的名字; datePattern: 设置将当前时间（解析配置文件的时间）转换为字符串的模式，遵循java.txt.SimpleDateFormat的格式。 -->
