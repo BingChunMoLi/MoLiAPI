@@ -9,7 +9,6 @@
 name: Release new version
 on:
   push:
-    branches: [ "master" ]
     tags:
       - "v*"
 jobs:
