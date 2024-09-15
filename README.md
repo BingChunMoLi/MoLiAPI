@@ -9,7 +9,7 @@
 
 ## 快速开始:
 ```shell
-docker run -d --name api -p 8090:8090 -v /tmp:/java/.api/ bingchunmoli/moliapi:latest
+docker run -d --name api -p 8090:8090 -v /.api/:/soft/config/ bingchunmoli/moliapi:latest
 ```
 or
 ```shell
@@ -44,4 +44,3 @@ docker-compose up -d
 1. 添加配置文件(~/.api/目录下) application.yml
 2. 下载application-template.yml 并修改文件名为application-default.yml
 3. 完善application-default.yml配置
-
