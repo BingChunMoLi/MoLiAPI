@@ -10,7 +10,7 @@ name: Release new version
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
 jobs:
   build:
     name: build
@@ -40,18 +40,16 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        tags: |
-          type=semver,pattern={{version}}
-          bingchunmoli/moliapi:latest
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/moliapi
     - name: buildx push
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/moliapi:${{ github.ref_name }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "${{ github.ref_name }}"
         prerelease: false
         files: |
           LICENSE
