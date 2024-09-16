@@ -44,7 +44,7 @@ moli:
     uploadPath: /soft/bili/fav/
     rclonePath: ${moli.utilPath}rclone
     youGetPath: ${moli.utilPath}YouGet
-    utilPath: /soft/config/util/
+    utilPath: ${moli.path}/util/
     downloadAudioPath: ${moli.basePath}/audio
     basePath: /soft/config
     play-list-id: 8792430274
