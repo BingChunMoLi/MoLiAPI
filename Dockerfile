@@ -13,11 +13,6 @@ MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 VOLUME /soft/config
 VOLUME /var/log/moliapi
 EXPOSE 8090
-RUN mkdir -p /var/log/moliapi
-RUN chmod -R 755 /var/log/moliapi
-RUN adduser -h /soft/config/ -D api api
-RUN chown -R api:api /var/log/moliapi
-USER api:api
 COPY --from=builder /workspace/app/extracted/dependencies/ ./
 COPY --from=builder /workspace/app/extracted/spring-boot-loader/ ./
 COPY --from=builder /workspace/app/extracted/snapshot-dependencies/ ./
