@@ -44,17 +44,11 @@
                                 <th>天气</th>
                                 <th>图标</th>
                             </tr>
-                            <tr>
-                                <td th:each="i : ${data}" th:text="${i.fxDate}"></td>
-                            </tr>
-                            <tr>
-                                <td th:each="i : ${data}" th:text="${i.getTempMin() + '°c/' + i.getTempMax() + '°c'}"></td>
-                            </tr>
-                            <tr>
-                                <td th:each="i : ${data}" th:text="${i.textDay}"></td>
-                            </tr>
-                            <tr>
-                                <td th:each="i : ${data}">
+                            <tr th:each="i : ${data}">
+                                <td th:text="${i.fxDate}"></td>
+                                <td th:text="${i.getTempMin() + '°c/' + i.getTempMax() + '°c'}"></td>
+                                <td th:text="${i.textDay}"></td>
+                                <td>
                                     <img th:src="${'https://obs.bingchunmoli.com/weather/' + i.iconDay + '-fill.svg'}" />
                                 </td>
                             </tr>
