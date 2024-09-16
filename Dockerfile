@@ -13,7 +13,7 @@ MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 VOLUME /soft/config
 VOLUME /var/log/moliapi
 EXPOSE 8090
-RUN adduser --disabled-password  -h /soft/config/ -D -g api api
+RUN adduser --disabled-password  -h /soft/config/ -D -g root api
 RUN mkdir -p /var/log/moliapi
 RUN chown -R api:api /var/log/moliapi
 USER api:api
