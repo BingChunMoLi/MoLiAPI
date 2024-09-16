@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-alpine
-MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
+MAINTAINER BingChunMoLi <bingchunmoli@bingchunmoli.com>
 RUN mkdir -p /var/log/moliapi
 RUN chmod -R a+w /var/log/moliapi
 RUN addgroup api && adduser api -D -S -s /bin/bash -G api

@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `yi_yan`
     `type`        varchar(5)   DEFAULT NULL,
     `from`        varchar(50)  DEFAULT NULL,
     `from_who`    varchar(20)  DEFAULT NULL,
-    `creator`     varchar(20)  DEFAULT NULL,
+    `creator`     varchar(50)  DEFAULT NULL,
     `creator_uid` int          DEFAULT NULL,
     `reviewer`    int          DEFAULT NULL,
     `commit_from` varchar(20)  DEFAULT NULL,
@@ -96,9 +96,10 @@ CREATE TABLE IF NOT EXISTS `yi_yan`
 
 CREATE TABLE IF NOT EXISTS `weather_sub`
 (
-    `id`     int         NOT NULL AUTO_INCREMENT primary key,
+    `id`     int         NOT NULL AUTO_INCREMENT,
     location varchar(10) not null comment '订阅的城市',
-    email    varchar(30) not null comment '邮箱'
+    email    varchar(30) not null comment '邮箱',
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS daily_log
@@ -254,21 +255,16 @@ create table if not exists bili_user
     id   int         not null
         primary key,
     name varchar(30) null comment '昵称',
-    face varchar(80) null,
-    constraint bili_user_id_uindex
-        unique (id)
+    face varchar(80) null
 );
 
 CREATE TABLE if not exists `config`
 (
-    id            INT auto_increment not null,
+    id            INT auto_increment not null primary key,
     `key`         varchar(100)       NOT NULL COMMENT '配置的key',
     `value`       varchar(500) COMMENT '配置的值',
     `create_time` datetime           NOT NULL COMMENT '创建时间',
-    `update_time` datetime           NOT NULL COMMENT '更新时间',
-    primary key (`id`),
-    constraint config_uindex
-        unique (`key`)
+    `update_time` datetime           NOT NULL COMMENT '更新时间'
 );
 
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at,

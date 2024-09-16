@@ -24,7 +24,7 @@ import org.springframework.stereotype.Indexed;
 public class ApiApplication {
 
     public static void main(String[] args) {
-        System.setProperty("spring.config.additional-location","optional:file:/soft/config/");
+        System.setProperty("spring.config.additional-location","optional:file:/soft/.api/config/");
         SpringApplication.run(ApiApplication.class, args);
     }
 
