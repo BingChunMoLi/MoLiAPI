@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `yi_yan`
     `type`        varchar(5)   DEFAULT NULL,
     `from`        varchar(50)  DEFAULT NULL,
     `from_who`    varchar(20)  DEFAULT NULL,
-    `creator`     varchar(20)  DEFAULT NULL,
+    `creator`     varchar(50)  DEFAULT NULL,
     `creator_uid` int          DEFAULT NULL,
     `reviewer`    int          DEFAULT NULL,
     `commit_from` varchar(20)  DEFAULT NULL,
