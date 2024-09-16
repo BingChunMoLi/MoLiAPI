@@ -14,7 +14,7 @@ EXPOSE 8090
 RUN mkdir -p /soft/.api/config
 RUN mkdir -p /soft/.api/log
 VOLUME /soft/.api/
-RUN adduser --disabled-password  -h /soft/.api/ -D -g api api && chown -R api:api /soft
+RUN adduser --disabled-password  -h /soft/.api/ -D -g api api && chown -R api:api /soft/.api/
 USER api:api
 WORKDIR /soft
 COPY --from=builder /workspace/app/extracted/dependencies/ ./
