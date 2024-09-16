@@ -9,11 +9,7 @@ RUN java -Djarmode=tools -jar target/moliapi.jar extract --layers --destination 
 FROM eclipse-temurin:17-jdk-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 EXPOSE 8090
-RUN mkdir -p /soft/.api/config
-RUN mkdir -p /soft/.api/log
-RUN adduser --disabled-password  -h /soft/.api/ -D -g api api && chown -R api /soft/.api
 VOLUME /soft/.api
-USER api:api
 WORKDIR /soft
 COPY --from=builder /workspace/app/extracted/dependencies/ ./
 COPY --from=builder /workspace/app/extracted/spring-boot-loader/ ./
