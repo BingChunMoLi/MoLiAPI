@@ -15,7 +15,7 @@ VOLUME /var/log/moliapi
 EXPOSE 8090
 RUN mkdir -p /var/log/moliapi
 RUN chmod -R a+w /var/log/moliapi
-RUN adduser api -G api
+RUN addgroup -S api && adduser -G api
 RUN chown -R api:api /var/log/moliapi
 USER api:api
 COPY --from=builder /workspace/app/extracted/dependencies/ ./
