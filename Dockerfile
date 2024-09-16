@@ -12,6 +12,7 @@ FROM eclipse-temurin:17-jdk-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 EXPOSE 8090
 RUN mkdir -p /soft/.api/config
+RUN mkdir -p /soft/.api/log
 VOLUME /soft/.api/
 RUN adduser --disabled-password  -h /soft/.api/ -D -g api api && chown -R api:api /soft
 USER api:api
