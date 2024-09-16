@@ -56,6 +56,7 @@ services:
       - "8090:8090"
     volumes:
       - ./docker-compose/config:/soft/config/
+      - /var/log/moliapi:/var/log/moliapi
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:

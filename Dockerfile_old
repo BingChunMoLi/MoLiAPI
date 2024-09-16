@@ -1,8 +1,12 @@
 FROM eclipse-temurin:17-alpine
 MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
-RUN addgroup java && adduser java -D -S -s /bin/bash -G java
-USER java
+RUN mkdir -p /var/log/moliapi
+RUN chmod -R a+w /var/log/moliapi
+RUN addgroup api && adduser api -D -S -s /bin/bash -G api
+RUN chown -R api:api /var/log/moliapi
+USER api:api
 VOLUME /soft/config
+VOLUME /var/log/moliapi
 WORKDIR /soft
 EXPOSE 8090
 ARG JAR_FILE=target/*.jar
