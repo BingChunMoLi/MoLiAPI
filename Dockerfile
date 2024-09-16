@@ -13,7 +13,7 @@ MAINTAINER  BingChunMoLi <bingchunmoli@bingchunmoli.com>
 VOLUME /soft/config
 VOLUME /var/log/moliapi
 EXPOSE 8090
-RUN adduser --disabled-password  -h /soft/config/ -D -g api api
+RUN adduser --disabled-password  -h /soft/config/ -D -g api api && chown -R api:api /soft
 USER api:api
 COPY --from=builder /workspace/app/extracted/dependencies/ ./
 COPY --from=builder /workspace/app/extracted/spring-boot-loader/ ./
