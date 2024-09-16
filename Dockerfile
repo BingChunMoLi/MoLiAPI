@@ -15,6 +15,7 @@ RUN mkdir -p /soft/config
 VOLUME /soft/config
 RUN adduser --disabled-password  -h /soft/config/ -D -g api api && chown -R api:api /soft
 USER api:api
+WORKDIR /soft
 COPY --from=builder /workspace/app/extracted/dependencies/ ./
 COPY --from=builder /workspace/app/extracted/spring-boot-loader/ ./
 COPY --from=builder /workspace/app/extracted/snapshot-dependencies/ ./
