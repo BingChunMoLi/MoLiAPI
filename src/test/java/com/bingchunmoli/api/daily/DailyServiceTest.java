@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.daily;
 
 import com.bingchunmoli.api.daily.bean.DailyLog;
+import com.bingchunmoli.api.daily.bean.DailyLogPO;
 import com.bingchunmoli.api.daily.bean.DailyQuery;
 import com.bingchunmoli.api.daily.mapper.DailyLogMapper;
 import com.bingchunmoli.api.daily.service.DailyLogService;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +36,9 @@ public class DailyServiceTest {
     void querySignTest() {
         Mockito.when(dailyLogMapper.querySign(DailyQuery.builder().build(), 0))
                 .thenReturn(List.of(
-                        DailyLog.builder().createTime(LocalDate.now()).build(),
-                        DailyLog.builder().createTime(LocalDate.now()).build(),
-                        DailyLog.builder().createTime(LocalDate.now().minusDays(1)).build()));
+                        new DailyLogPO().setCreateTime(LocalDateTime.now()),
+                        new DailyLogPO().setCreateTime(LocalDateTime.now()),
+                        new DailyLogPO().setCreateTime(LocalDateTime.now().minusDays(1))));
         Map<LocalDate, List<DailyLog>> map = dailyLogService.querySign(DailyQuery.builder().build(), 0);
         Assert.notEmpty(map, "查询不为空");
         Assert.isTrue(map.size() == 2, "查询不正确");
