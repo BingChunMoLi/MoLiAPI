@@ -57,7 +57,7 @@
 
 
     <select id="querySign" resultMap="BaseResultMap">
-        select url, type, date(create_time) from daily_log
+        select url, type, date(create_time) as create_time from daily_log
         <where>
             <if test="dailyQuery.urls != null">
                 url in

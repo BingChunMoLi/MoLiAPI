@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.daily;
 
 import com.baomidou.mybatisplus.test.autoconfigure.MybatisPlusTest;
-import com.bingchunmoli.api.daily.bean.DailyLog;
+import com.bingchunmoli.api.daily.bean.DailyLogPO;
 import com.bingchunmoli.api.daily.bean.DailyQuery;
 import com.bingchunmoli.api.daily.mapper.DailyLogMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class DailyMapperTest {
     private void querySignNoQueryTest() {
         DailyQuery query = DailyQuery.builder()
                 .build();
-        List<DailyLog> res = dailyLogMapper.querySign(query, 0);
+        List<DailyLogPO> res = dailyLogMapper.querySign(query, 0);
         Assert.notEmpty(res, "dailyLog查询不应为空");
         Assert.isTrue(res.size() == 5, "dailyLog查询结果不正确");
     }
@@ -68,7 +68,7 @@ public class DailyMapperTest {
         DailyQuery query = DailyQuery.builder()
                 .urls(List.of("test3"))
                 .build();
-        List<DailyLog> res = dailyLogMapper.querySign(query, 0);
+        List<DailyLogPO> res = dailyLogMapper.querySign(query, 0);
         Assert.notEmpty(res, "dailyLog查询不应为空");
         Assert.isTrue(res.size() == 4, "dailyLog查询结果不正确");
     }
@@ -77,7 +77,7 @@ public class DailyMapperTest {
         DailyQuery query = DailyQuery.builder()
                 .startDate(LocalDate.now().minusDays(1))
                 .build();
-        List<DailyLog> res = dailyLogMapper.querySign(query, 0);
+        List<DailyLogPO> res = dailyLogMapper.querySign(query, 0);
         Assert.notEmpty(res, "dailyLog查询不应为空");
         Assert.isTrue(res.size() == 4, "dailyLog查询结果不正确");
     }
@@ -86,7 +86,7 @@ public class DailyMapperTest {
         DailyQuery query = DailyQuery.builder()
                 .endDate(LocalDate.now().minusDays(1))
                 .build();
-        List<DailyLog> res = dailyLogMapper.querySign(query, 0);
+        List<DailyLogPO> res = dailyLogMapper.querySign(query, 0);
         Assert.notEmpty(res, "dailyLog查询不应为空");
         Assert.isTrue(res.size() == 1, "dailyLog查询结果不正确");
     }

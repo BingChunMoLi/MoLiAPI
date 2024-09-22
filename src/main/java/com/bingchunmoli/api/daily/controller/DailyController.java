@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.app.DeviceService;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
+import com.bingchunmoli.api.daily.bean.Daily;
 import com.bingchunmoli.api.daily.bean.DailyLog;
 import com.bingchunmoli.api.daily.bean.DailyLogPO;
 import com.bingchunmoli.api.daily.bean.DailyQuery;
@@ -14,8 +15,6 @@ import com.bingchunmoli.api.push.bean.AppMessage;
 import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
@@ -107,7 +106,7 @@ public class DailyController {
         ArrayList<DailyLogPO> list = new ArrayList<>();
         //循环构建DailyLog
         urls.forEach(v -> {
-            Collection<String> tenants = map.getOrDefault(v, Collections.singleton(""));
+            Collection<String> tenants = collectMap.getOrDefault(v, List.of());
             String tenant = tenants.stream().filter(k -> k.equalsIgnoreCase("moli")).findFirst().orElse("0");
             list.add(new DailyLogPO()
                     .setType(1)
@@ -162,14 +161,4 @@ public class DailyController {
     public ResultVO<Map<LocalDate, List<DailyLog>>> querySign(DailyQuery dailyQuery, @RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.querySign(dailyQuery, getTenant(tenant)));
     }
-}
-
-/**
- * 网址实体k,v一对多
- */
-@Data
-@AllArgsConstructor
-class Daily{
-    private String key;
-    private String value;
 }
