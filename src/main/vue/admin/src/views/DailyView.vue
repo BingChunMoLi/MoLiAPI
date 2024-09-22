@@ -1,6 +1,7 @@
 <script async lang="ts" setup>
 import {get, post} from '@/util/request'
 import {ref} from 'vue'
+// @ts-ignore
 import calendar from '@/util/lunnerDay'
 import type {CalendarInstance} from 'element-plus'
 import type {DailyMap} from '@/type/Daily'
