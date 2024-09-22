@@ -14,6 +14,7 @@ const request = async (url: string, config: RequestInit) => {
             return res.json();
         })
         .catch((error: any) => {
+            console.log(error)
             return Promise.reject(error);
         });
 };
