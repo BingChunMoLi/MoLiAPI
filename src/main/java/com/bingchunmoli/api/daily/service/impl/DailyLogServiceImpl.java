@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
-* @author MoLi
-*/
+ * @author MoLi
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,11 +30,15 @@ public class DailyLogServiceImpl extends ServiceImpl<DailyLogMapper, DailyLogPO>
 
     @Override
     public Map<LocalDate, List<DailyLog>> querySign(DailyQuery dailyQuery, int tenant) {
-        List<DailyLog> dailyLogs = baseMapper.querySign(dailyQuery, tenant);
-        return dailyLogs.stream().collect(Collectors.groupingBy(DailyLog::getCreateTime));
+        List<DailyLogPO> dailyLogs = baseMapper.querySign(dailyQuery, tenant);
+        return dailyLogs.stream()
+                .map(v -> DailyLog.builder()
+                        .id(v.getId())
+                        .url(v.getUrl())
+                        .type(v.getType())
+                        .tenant(v.getTenant())
+                        .createTime(v.getCreateTime().toLocalDate())
+                        .build()
+                ).collect(Collectors.groupingBy(DailyLog::getCreateTime));
     }
 }
-
-
-
-
