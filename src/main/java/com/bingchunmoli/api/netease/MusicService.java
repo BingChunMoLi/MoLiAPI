@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -49,17 +47,26 @@ public class MusicService {
      * @return 歌单实体
      */
     public PlayListBO getPlayListInfo(String id, String cookie){
-        Collection<BasicHeader> defaultHeader = List.of(new BasicHeader("cookie", cookie));
+        Collection<BasicHeader> defaultHeader = List.of(new BasicHeader("cookie", cookie),
+                new BasicHeader("referer", "https://music.163.com/"),
+                new BasicHeader("accept", "*/*"),
+                new BasicHeader("accept-language", "zh,zh-US;q=0.9,zh-SG;q=0.8,en-SG;q=0.7,en;q=0.6,zh-CN;q=0.5"),
+                new BasicHeader("pragma", "no-cache"),
+                new BasicHeader("sec-fetch-dest", "script"),
+                new BasicHeader("sec-fetch-mode", "no-cors"),
+                new BasicHeader("sec-fetch-site", "same-site"),
+                new BasicHeader("sec-ch-ua", "\n" +
+                        "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\""),
+                new BasicHeader("sec-ch-ua-platform", "\"windows\""),
+                new BasicHeader("origin", "https://music.163.com/"),
+                new BasicHeader("sec-ch-ua-mobile", "?0"));
         try (CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultHeaders(defaultHeader)
-                .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-                .setDefaultRequestConfig(RequestConfig.custom()
-                        .setCookieSpec(CookieSpecs.STANDARD).build())
+                .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
                 .build()){
             HttpRequest request = new HttpGet( "/api/playlist/detail?id=" + id);
             return httpClient.execute(baseHost, request, res -> {
                 String string = EntityUtils.toString(res.getEntity());
-                EntityUtils.consume(res.getEntity());
                 return om.readValue(string, PlayListBO.class);
             });
         } catch (Exception e) {

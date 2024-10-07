@@ -7,7 +7,6 @@ import com.bingchunmoli.api.netease.mapper.NeteaseMusicSongMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +20,6 @@ public class NeteaseMusicSongServiceImpl extends ServiceImpl<NeteaseMusicSongMap
     private final NeteaseMusicUserService neteaseMusicUserService;
 
     @Override
-    @Transactional
     public void saveBatchAndChild(List<NeteaseMusicSong> songs) {
         if (songs == null || songs.isEmpty()) {
             return;
@@ -43,6 +41,7 @@ public class NeteaseMusicSongServiceImpl extends ServiceImpl<NeteaseMusicSongMap
                 }
                 return true;
             }).toList();
+            ((NeteaseMusicSongService)AopContext.currentProxy()).saveBatch(songs);
             for (NeteaseMusicSong song : list) {
                 List<Integer> userIds = neteaseMusicUserService.getIdBatch(song.getArtists());
                 getBaseMapper().saveSongUser(song.getId(), userIds);
@@ -51,7 +50,3 @@ public class NeteaseMusicSongServiceImpl extends ServiceImpl<NeteaseMusicSongMap
 
     }
 }
-
-
-
-
