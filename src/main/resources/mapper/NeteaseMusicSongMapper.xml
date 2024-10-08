@@ -20,4 +20,8 @@
             (${item}, ${songId})
         </foreach>
     </insert>
+
+    <select id="selectRandomSong" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
+        SELECT id,third_id,`name`,album_id FROM netease_music_song as t1 WHERE t1.id>=(RAND()*(SELECT MAX(id) FROM netease_music_song))LIMIT 1
+    </select>
 </mapper>

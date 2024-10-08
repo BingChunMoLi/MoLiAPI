@@ -47,6 +47,10 @@ public class NeteaseMusicSongServiceImpl extends ServiceImpl<NeteaseMusicSongMap
                 getBaseMapper().saveSongUser(song.getId(), userIds);
             }
         }
+    }
 
+    @Override
+    public NeteaseMusicSong getRandomSong() {
+        return getBaseMapper().selectRandomSong();
     }
 }

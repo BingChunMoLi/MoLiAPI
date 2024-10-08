@@ -11,8 +11,10 @@ import java.util.List;
 public interface NeteaseMusicSongMapper extends BaseMapper<NeteaseMusicSong> {
 
     void saveSongUser(Integer songId, List<Integer> userIds);
+
+    /**
+     * 随机一首歌
+     * @return 歌曲信息
+     */
+    NeteaseMusicSong selectRandomSong();
 }
-
-
-
-

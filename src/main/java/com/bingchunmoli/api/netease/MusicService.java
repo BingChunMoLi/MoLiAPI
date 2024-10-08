@@ -151,4 +151,8 @@ public class MusicService {
             throw new RuntimeException(e);
         }
     }
+
+    public String getRandomMusicId() {
+        return String.valueOf(songService.getRandomSong().getThirdId());
+    }
 }
