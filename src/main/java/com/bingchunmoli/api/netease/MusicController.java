@@ -26,16 +26,26 @@ public class MusicController {
         return musicService.getPlayListInfo(id, cookie);
     }
 
+    /**
+     * 获取歌单详情
+     * @param id 歌单id
+     * @return 歌单详情的接口链接
+     */
     @GetMapping("{id}")
     public ResultVO<String> getMusicLink(@PathVariable String id){
         return ResultVO.ok("https://music.163.com/api/playlist/detail?id=" + id + "&offset=0&total=true&limit=1001");
     }
 
+    /**
+     * 获取随机歌曲
+     * @return
+     */
     @GetMapping("random")
-    public ResponseEntity<String> getRandomMusicLink(){
-        return ResponseEntity.noContent()
+    public ResponseEntity<ResultVO<String>> getRandomMusicLink(){
+        String url = "https://music.163.com/song/media/outer/url?id=" + musicService.getRandomMusicId() + ".mp3";
+        return ResponseEntity.ok()
                 .cacheControl(CacheControl.noStore())
-                .location(URI.create("https://music.163.com/api/playlist/detail?id=" + musicService.getRandomMusicId() + "&offset=0&total=true&limit=1001"))
-                .build();
+                .location(URI.create(url))
+                .body(ResultVO.ok(url));
     }
 }
