@@ -47,6 +47,12 @@ public class NeteaseMusicSong implements Serializable {
     @TableField(value = "album_id")
     private Integer albumId;
 
+    /**
+     * 歌单id
+     */
+    @TableField("playlist_id")
+    private Integer playlistId;
+
     @TableField(exist = false)
     private List<NeteaseMusicUser> artists;
 

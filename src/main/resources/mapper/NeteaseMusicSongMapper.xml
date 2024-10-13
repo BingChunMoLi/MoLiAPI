@@ -22,8 +22,21 @@
     </insert>
 
     <select id="selectRandomSong" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
-        SELECT id,third_id,`name`,album_id FROM netease_music_song
+        SELECT id, third_id, `name`, album_id, playlist_id FROM netease_music_song
         ORDER BY RAND()
         LIMIT 1
+    </select>
+
+    <select id="getSongUser" resultType="java.lang.Integer">
+        select user_id from netease_music_song_user
+        where song_id = #{id}
+    </select>
+
+    <select id="getMusicSongList" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicSongVO">
+        select s.id, s.third_id, s.`name`, album_id, s.playlist_id, a.pic_url, a.publish_time, a.type, mu.nickname
+        from netease_music_song s join netease_music_album a on a.id = s.album_id
+        join netease_music_song_user su on su.song_id = s.id
+        join api.netease_music_user mu on su.user_id = mu.id
+        where s.playlist_id = #{id}
     </select>
 </mapper>
