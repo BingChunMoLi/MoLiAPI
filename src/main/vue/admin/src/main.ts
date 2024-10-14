@@ -15,7 +15,7 @@ import type {Song} from './type/Song'
 const app = createApp(App)
 
 
-const songs: Array<Song> = await get('/music/1')
+const songs: Array<Song> = await get('music/1')
 const audios : Audio[] = [];
 songs.map((v: Song)=>audios.push({
     name: v.name,

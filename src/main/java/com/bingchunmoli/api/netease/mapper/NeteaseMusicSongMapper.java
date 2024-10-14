@@ -27,4 +27,6 @@ public interface NeteaseMusicSongMapper extends BaseMapper<NeteaseMusicSong> {
     List<Integer> getSongUser(Integer id);
 
     List<NeteaseMusicSongVO> getMusicSongList(String id);
+
+    String getNickname(String userId);
 }
