@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author BingChunMoLi
@@ -20,7 +21,7 @@ public class BaiduUploadServiceImpl implements UploadService {
         log.info("{},{},{},{}", SystemConfig.getBaiduPCSPath(), "upload", SystemConfig.getDownloadPath() + filePath, SystemConfig.getUploadPath() + filePath);
         String[] args = {SystemConfig.getBaiduPCSPath(), "upload", SystemConfig.getDownloadPath() + filePath, SystemConfig.getUploadPath() + filePath};
         ShellUtil.exec(SystemConfig.getBaiduPCSPath(), "upload", SystemConfig.getDownloadPath() + filePath, SystemConfig.getUploadPath() + filePath);
-        log.debug("BaiduUploadServiceImpl args: {}", args);
+        log.debug("BaiduUploadServiceImpl args: {}", Arrays.toString(args));
         return true;
     }
 }
