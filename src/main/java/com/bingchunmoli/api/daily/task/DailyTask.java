@@ -37,13 +37,6 @@ public class DailyTask {
     }
 
 
-    @Scheduled(cron = "0 0 8 * * *")
-    public void signupyun() throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
-        Account account = doGetAccount("upyun");
-        doSign(client, account);
-    }
-
     private Account doGetAccount(String type){
         LambdaQueryWrapper<Account> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Account::getType, type);
