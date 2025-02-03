@@ -25,7 +25,7 @@
         <h2.version>2.3.232</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <tencent-cloud-api.version>3.1.1149</tencent-cloud-api.version>
+        <tencent-cloud-api.version>3.1.1181</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
         <loki-logback.version>1.6.0</loki-logback.version>
         <firebase-admin.version>9.4.3</firebase-admin.version>
