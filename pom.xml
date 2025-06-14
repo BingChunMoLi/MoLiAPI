@@ -28,7 +28,7 @@
         <tencent-cloud-api.version>3.1.1251</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
         <loki-logback.version>1.6.0</loki-logback.version>
-        <firebase-admin.version>9.4.3</firebase-admin.version>
+        <firebase-admin.version>9.5.0</firebase-admin.version>
     </properties>
 
     <dependencies>
