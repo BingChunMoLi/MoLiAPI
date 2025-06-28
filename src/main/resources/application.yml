@@ -45,7 +45,7 @@ spring:
   application:
     name: MoLiApi
   profiles:
-    active: dev
+    active: default
   data:
     redis:
       database: 1
@@ -68,9 +68,6 @@ spring:
       cache:
         cachecontrol:
           max-age: 7d
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
 #  sql:
 #    init:
 #      schema-locations: classpath*:init/db/ddl.sql
