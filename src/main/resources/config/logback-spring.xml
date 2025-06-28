@@ -12,8 +12,7 @@
 
     <!-- 用来定义变量值的标签，<property> 有两个属性，name和value；其中name的值是变量的名称，value的值时变量定义的值。通过<property>定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。 -->
     <property name="app_name" value="api"/>
-    <property name="log_path" value="${user.home}/log/"/>
-    <springProperty scope="context" name="loki_url" source="loki.url" defaultValue="localhost"/>
+    <property name="log_path" value="log/"/>
 
     <!-- key: 标识此timestamp的名字; datePattern: 设置将当前时间（解析配置文件的时间）转换为字符串的模式，遵循java.txt.SimpleDateFormat的格式。 -->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
@@ -23,7 +22,7 @@
 
     <!-- 子节点appender：负责写日志的组件，它有两个必要属性name和class。name指定appender名称，class指定appender的全限定名 -->
     <!-- 控制台输出日志 -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)</pattern>
         </encoder>
@@ -63,7 +62,7 @@
         </encoder>
     </appender>
 
-    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
@@ -121,11 +120,12 @@
 
     <!-- 表示 >=WARN 级别的日志的输出方式 -->
     <root level="info">
-        <appender-ref ref="STDOUT"/> <!-- 控制台输出 -->
+        <appender-ref ref="stdout"/> <!-- 控制台输出 -->
     </root>
 
     <logger name="com.bingchunmoli" level="debug">
         <appender-ref ref="file" additivity="true"/>
+        <appender-ref ref="debug"/>
     </logger>
 
 </configuration>
