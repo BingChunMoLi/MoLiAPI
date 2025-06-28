@@ -12,14 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 
 
 /**
@@ -75,25 +71,6 @@ public class QqController {
     }
 
     /**
-     * 加密形式获取qq头像地址
-     * @param qq qq号码|3239720020
-     * @param size 大小(默认100)|100
-     * @return QQ空间头像
-     */
-    @GetMapping("qq/json")
-    @Operation(summary = "通过qq号通过加密形式获取qq头像地址")
-    public String getQqImageForJson(String qq, @RequestParam(required = false, defaultValue = "v") Integer size) {
-        if (size <= 0) {
-            return "没有这样的尺寸";
-        }
-        if (isQqImageSize(size)) {
-            return qqService.getQqImageForJson(qq, size);
-        }
-        log.debug("非法参数值 size:" + size);
-        return "没有这样的尺寸";
-    }
-
-    /**
      * QQ空间头像json形式
      * @param qq qq号码|3239720020
      * @return json
@@ -104,47 +81,6 @@ public class QqController {
         return qqService.getQzImageForJson(qq);
     }
 
-    /**
-     * 加密的qq头像地址
-     * @param qq qq号码|3239720020
-     * @param size 大小(默认100)|100
-     * @return qq头像地址
-     */
-    @Operation(summary = "根据qq号获取加密的qq头像地址,推荐使用post")
-    @RequestMapping(value = "qq/json/encrypt", method = {RequestMethod.GET, RequestMethod.POST})
-    public String getQqImageForJsonEncrypt(String qq, @RequestParam(required = false, defaultValue = "100") Integer size) {
-        if (size <= 0) {
-            return "没有这样的尺寸";
-        }
-        if (isQqImageSize(size)) {
-            return qqService.getQqImageForEncrypt(qq, size);
-        }
-        log.debug("非法参数值 size:" + size);
-        return "没有这样的尺寸";
-    }
-
-    /**
-     * 通过加密接口返回qq头像
-     * @param qq qq号码|3239720020
-     * @param size 大小(默认100)|100
-     * @return qq头像
-     */
-    @Operation(summary = "根据qq号加密获取qq头像,推荐使用post")
-    @RequestMapping(value = "qq/encrypt", produces = MediaType.IMAGE_JPEG_VALUE, method = {RequestMethod.GET, RequestMethod.POST})
-    public BufferedImage getQqImageForEncrypt(String qq, @RequestParam(required = false, defaultValue = "100") Integer size) {
-        if (size <= 0) {
-            return null;
-        }
-        if (isQqImageSize(size)) {
-            try {
-                return ImageIO.read(new URL(qqService.getQqImageForEncrypt(qq, size)));
-            } catch (IOException e) {
-                log.error("获取QQ头像失败(加密版)");
-            }
-        }
-        log.debug("非法参数值 size:" + size);
-        return null;
-    }
 
     private boolean isQqImageSize(Integer size) {
         return QQSizeEnum.SMALL.getSize().equals(size) || QQSizeEnum.ZHONG_SMALL.getSize().equals(size) || QQSizeEnum.ZHONG_BIG.getSize().equals(size) || QQSizeEnum.ZHONG.getSize().equals(size) || QQSizeEnum.BIG.getSize().equals(size);

@@ -276,3 +276,10 @@ CREATE TABLE if not exists `config`
     constraint config_uindex
         unique (`key`)
 );
+create table account
+(
+    id      int auto_increment
+        primary key,
+    type    varchar(20)  null comment '类型',
+    cookies varchar(800) null comment 'cookies'
+);

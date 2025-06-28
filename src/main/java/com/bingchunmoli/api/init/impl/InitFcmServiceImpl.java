@@ -42,11 +42,10 @@ public class InitFcmServiceImpl implements InitService {
                             .setProxy(new HttpHost("127.0.0.1", 7890))
                             .build()))
                     .build();
+            FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             log.error("初始化fcm异常", e);
-            return;
         }
-        FirebaseApp.initializeApp(options);
     }
 
     @Override

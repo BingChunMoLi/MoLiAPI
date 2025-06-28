@@ -3,7 +3,7 @@ package com.bingchunmoli.api.controller.advice;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;

@@ -5,30 +5,29 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.bingchunmoli</groupId>
     <artifactId>moliapi</artifactId>
-    <version>3.15.9</version>
+    <version>3.15.10</version>
     <name>MoLiApi</name>
     <description>MoLiApi</description>
 
     <properties>
         <java.version>17</java.version>
-        <mybatis-plus.version>3.5.8</mybatis-plus.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
-        <hutool.version>5.8.32</hutool.version>
+        <hutool.version>5.8.37</hutool.version>
         <zxing.version>3.5.3</zxing.version>
         <emoji.version>5.1.1</emoji.version>
-        <h2.version>2.3.232</h2.version>
         <ip-info.version>2.2.0</ip-info.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <tencent-cloud-api.version>3.1.1114</tencent-cloud-api.version>
+        <tencent-cloud-api.version>3.1.1289</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
-        <firebase-admin.version>9.3.0</firebase-admin.version>
-        <loki-logback.version>1.5.2</loki-logback.version>
+        <loki-logback.version>2.0.0</loki-logback.version>
+        <firebase-admin.version>9.5.0</firebase-admin.version>
     </properties>
 
     <dependencies>
@@ -102,8 +101,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-            <version>${h2.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jthinking.common</groupId>
@@ -168,12 +165,10 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
@@ -198,6 +193,10 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

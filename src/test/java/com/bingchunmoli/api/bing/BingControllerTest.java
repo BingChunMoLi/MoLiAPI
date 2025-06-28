@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -33,15 +33,15 @@ public class BingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @MockitoBean
     private BingService bingService;
-    @MockBean
+    @MockitoBean
     private BingImageMapper bingMapper;
-    @MockBean
+    @MockitoBean
     private DeviceService deviceService;
-    @MockBean
+    @MockitoBean
     private DeviceMapper deviceMapper;
-    @MockBean
+    @MockitoBean
     private RedisUtil redisUtil;
     @Autowired
     private ObjectMapper objectMapper;

@@ -39,7 +39,7 @@ public class DailyController {
     private final DailyLogService dailyLogService;
     private final DeviceService deviceService;
     private final ApplicationEventPublisher applicationEventPublisher;
-    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/", "https://www.bilibili.com/")));
+    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2&referer=%2F")));
 
     private static int getTenant(String tenant) {
         return tenant.equals("moli") ? 1 : 0;

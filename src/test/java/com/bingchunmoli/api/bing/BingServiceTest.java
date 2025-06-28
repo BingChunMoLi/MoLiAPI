@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -28,9 +28,9 @@ public class BingServiceTest {
     private ObjectMapper om;
     @Autowired
     private BingService bingService;
-    @MockBean
+    @MockitoBean
     private RedisUtil redisUtil;
-    @MockBean
+    @MockitoBean
     private BingImageMapper bingImageMapper;
     private BingImageVO cnBingImage;
     private BingImageVO enBingImage;

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author BingChunMoLi
@@ -21,7 +22,7 @@ public class OnedriveUploadServiceImpl implements UploadService {
         log.info("{},{},{},{}", SystemConfig.getRclonePath(), "copy", SystemConfig.getDownloadPath() + filePath, "onedrive:" + SystemConfig.getUploadPath() + filePath);
         String[] args = {SystemConfig.getRclonePath(), "copy", SystemConfig.getDownloadPath() + filePath, "onedrive:" + SystemConfig.getUploadPath() + filePath};
         ShellUtil.exec(SystemConfig.getRclonePath(), "copy", SystemConfig.getDownloadPath() + filePath, "onedrive:" + SystemConfig.getUploadPath() + filePath);
-        log.debug("OnedriveUploadServiceImpl args: {}", args);
+        log.debug("OnedriveUploadServiceImpl args: {}", Arrays.toString(args));
         return true;
     }
 }
