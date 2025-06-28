@@ -25,6 +25,9 @@ server:
   http2:
     enabled: true
 spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
   task:
     execution:
       pool:
