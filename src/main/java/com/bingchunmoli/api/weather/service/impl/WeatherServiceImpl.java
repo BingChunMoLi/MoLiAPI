@@ -46,7 +46,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
 
     @Override
     public String getWeatherByDay(Integer day, String location) throws JsonProcessingException {
-        if (location.contains(StrPool.COMMA) || IntegerUtil.isInteget(location)) {
+        if (location.contains(StrPool.COMMA) || IntegerUtil.isInteger(location)) {
             // 按经维度查询 或者 id查询
             return getWeatherByDayCommon(day, location);
         }

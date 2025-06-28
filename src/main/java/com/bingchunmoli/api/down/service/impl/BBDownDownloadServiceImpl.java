@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author BingChunMoLi
@@ -31,7 +32,7 @@ public class BBDownDownloadServiceImpl implements DownloadService {
         } else {
             args = new String[]{"sh", "-c", SystemConfig.getBBDownPath() + " --work-dir " + SystemConfig.getDownloadPath() + " https://www.bilibili.com/video/av" + media.getId()};
         }
-        log.debug("BBDownDownloadServiceImpl args: {}", args);
+        log.debug("BBDownDownloadServiceImpl args: {}", Arrays.toString(args));
         return ShellUtil.exec(args);
     }
 }

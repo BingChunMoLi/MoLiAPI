@@ -9,7 +9,7 @@ public class IntegerUtil {
      *
      * @param str 可能是数字的字符串
      */
-    public static Boolean isInteget(String str) {
+    public static Boolean isInteger(String str) {
         for (int i = 0; i < str.length(); i++) {
             int c = str.charAt(i);
             if (c < 48 || c > 57) {

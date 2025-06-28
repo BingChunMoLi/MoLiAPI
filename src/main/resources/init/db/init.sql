@@ -280,6 +280,13 @@ CREATE TABLE if not exists `config`
     constraint config_uindex
         unique (`key`)
 );
+create table account
+(
+    id      int auto_increment
+        primary key,
+    type    varchar(20)  null comment '类型',
+    cookies varchar(800) null comment 'cookies'
+);
 
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (1, '9818ecda-9cbf-4f2a-9af8-8136ef39cfcd', '与众不同的生活方式很累人呢，因为找不到借口。', 'a', '幸运星', null, '跳舞的果果', 0, 0, 'web', '1468605909', 22, 0, null, null, null) ;
 INSERT INTO yi_yan (id, uuid, hitokoto, type, `from`, from_who, creator, creator_uid, reviewer, commit_from, created_at, length, deleted, create_time, update_time, version) VALUES (2, '4e71bc61-9f2e-49e1-a62f-d4b8ad9716c6', '面对就好，去经历就好。', 'a', '花伞菌', null, 'umbrella', 0, 0, 'web', '1468605909', 11, 0, null, null, null) ;

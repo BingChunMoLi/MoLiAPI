@@ -92,6 +92,8 @@ public class Fav {
                 private Integer vipType;
                 @JsonProperty("vip_statue")
                 private Integer vipStatue;
+                @JsonProperty("jump_link")
+                private String jumpLink;
             }
 
             @NoArgsConstructor
@@ -161,6 +163,8 @@ public class Fav {
                 private String name;
                 @JsonProperty("face")
                 private String face;
+                @JsonProperty("jump_link")
+                private String jumpLink;
             }
 
             @NoArgsConstructor
