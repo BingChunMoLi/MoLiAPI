@@ -100,23 +100,6 @@
             <pattern>[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)</pattern>
         </encoder>
     </appender>
-    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
-        <http>
-            <url>${loki_url}</url>
-        </http>
-        <format>
-            <label>
-                <pattern>
-                    app=${app_name},date=%d{yyyy-MM-dd HH:mm:ss},host=${HOSTNAME},level=%level,class=%logger{36},thread=%thread,traceId=%X{traceId:-NONE}
-                </pattern>
-            </label>
-            <message>
-                <pattern>
-                    [%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)
-                </pattern>
-            </message>
-        </format>
-    </appender>
 
 
     <!--MyBatis log configure-->
@@ -147,7 +130,6 @@
 
     <springProfile name="prod">
         <root level="info">
-            <appender-ref ref="LOKI" />
             <appender-ref ref="ERROR"/> <!-- 文件输出 -->
         </root>
     </springProfile>
