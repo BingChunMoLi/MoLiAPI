@@ -163,6 +163,8 @@ public class Fav {
                 private String name;
                 @JsonProperty("face")
                 private String face;
+                @JsonProperty("jump_link")
+                private String jumpLink;
             }
 
             @NoArgsConstructor
