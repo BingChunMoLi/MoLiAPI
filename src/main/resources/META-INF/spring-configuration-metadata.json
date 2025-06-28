@@ -99,5 +99,8 @@
       "defaultValue": "devapi.qweather.com"
     }
   ],
-  "hints": []
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
 }
