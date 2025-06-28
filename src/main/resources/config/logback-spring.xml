@@ -128,9 +128,4 @@
         <appender-ref ref="file" additivity="true"/>
     </logger>
 
-    <springProfile name="prod">
-        <root level="info">
-            <appender-ref ref="ERROR"/> <!-- 文件输出 -->
-        </root>
-    </springProfile>
 </configuration>
