@@ -4,8 +4,6 @@
 - [Bing美图](bing)
 - [tencent](tencent.md)
     - [QQ头像](tencent.md#QQ头像)
-    - [QQ头像加密版](tencent.md#QQ头像加密版)
-    - [QQ头像加密JSON版](tencent.md#QQ头像加密JSON版)
     - [QQ空间头像](tencent.md#QQ空间头像)
     - [QQ空间头像JSON版](tencent.md#QQ空间头像JSON版)
 - [userAgent解析](ua)
