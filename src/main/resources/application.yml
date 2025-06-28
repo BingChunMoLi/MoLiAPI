@@ -35,7 +35,7 @@ spring:
       max-request-size: -1
   datasource:
     driver-class-name: org.h2.Driver
-    url: "jdbc:h2:mem:api;MODE=MySQL;DATABASE_TO_LOWER=TRUE;database_to_upper=false;CASE_INSENSITIVE_IDENTIFIERS=true;IFEXISTS=TRUE"
+    url: "jdbc:h2:mem:api;MODE=MySQL;DATABASE_TO_LOWER=TRUE;database_to_upper=false;CASE_INSENSITIVE_IDENTIFIERS=true;IFEXISTS=false"
     username: root
     password: root
     type: com.zaxxer.hikari.HikariDataSource
@@ -107,5 +107,3 @@ management:
         http:
           server:
             requests: true
-loki:
-  url: http://localhost:3100/loki/api/v1/push
