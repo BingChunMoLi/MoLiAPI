@@ -66,7 +66,7 @@
         </encoder>
     </appender>
 
-    <appender name="error_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -125,9 +125,11 @@
     <!-- 表示 >=WARN 级别的日志的输出方式 -->
     <root level="info">
         <appender-ref ref="stdout"/> <!-- 控制台输出 -->
-        <appender-ref ref="file"/>
-        <appender-ref ref="error_file"/>
     </root>
 
+    <logger name="com.bingchunmoli" level="debug">
+        <appender-ref ref="file" additivity="true"/>
+        <appender-ref ref="debug"/>
+    </logger>
 
 </configuration>
