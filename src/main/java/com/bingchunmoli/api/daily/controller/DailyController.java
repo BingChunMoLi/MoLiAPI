@@ -39,7 +39,7 @@ public class DailyController {
     private final DailyLogService dailyLogService;
     private final DeviceService deviceService;
     private final ApplicationEventPublisher applicationEventPublisher;
-    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2&referer=%2F")));
+    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2&referer=%2F", "https://hifiti.com/")));
 
     private static int getTenant(String tenant) {
         return tenant.equals("moli") ? 1 : 0;
@@ -96,14 +96,14 @@ public class DailyController {
         if (CollectionUtil.isEmpty(urls)) {
             return new ResultVO<>(CodeEnum.ERROR, null);
         }
-        HashMap<String, List<String>> collectMap = new HashMap<>();
+        Map<String, List<String>> collectMap = new HashMap<>();
         //反转map结构
         map.forEach((key, value) -> value.forEach(f -> {
             List<String> mapOrDefault = collectMap.getOrDefault(f, new ArrayList<>());
             mapOrDefault.add(key);
             collectMap.put(f, mapOrDefault);
         }));
-        ArrayList<DailyLogPO> list = new ArrayList<>();
+        List<DailyLogPO> list = new ArrayList<>();
         //循环构建DailyLog
         urls.forEach(v -> {
             Collection<String> tenants = collectMap.getOrDefault(v, List.of());
@@ -144,8 +144,8 @@ public class DailyController {
     @Operation(summary = "获取当天签到状态")
     public ResultVO<List<String>> getNowSign(@RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.list(new LambdaQueryWrapper<DailyLogPO>()
-                        .eq(DailyLogPO::getCreateTime, LocalDate.now())
-                        .eq(DailyLogPO::getTenant, getTenant(tenant)))
+                        .eq(DailyLogPO::getTenant, getTenant(tenant))
+                        .apply("DATE(create_time) = CURDATE()"))
                 .stream().map(DailyLogPO::getUrl)
                 .toList());
     }
