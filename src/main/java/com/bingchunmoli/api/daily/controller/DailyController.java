@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 /**
  * 每日签到网址(临时文本存储读取)
+ *
  * @author MoLi
  */
 @RestController
@@ -39,7 +40,8 @@ public class DailyController {
     private final DailyLogService dailyLogService;
     private final DeviceService deviceService;
     private final ApplicationEventPublisher applicationEventPublisher;
-    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1", "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2&referer=%2F")));
+    Map<String, Collection<String>> map = new HashMap<>(Map.of("moli", List.of("https://keylol.com/t735968-1-1",
+                                                                               "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2&referer=%2F")));
 
     private static int getTenant(String tenant) {
         return tenant.equals("moli") ? 1 : 0;
@@ -47,15 +49,16 @@ public class DailyController {
 
     /**
      * 添加签到网址列表
+     *
      * @param daily 一个网址
      * @return 存储的列表
      */
     @PutMapping
     @Operation(summary = "添加需要签到的网址")
-    public ResultVO<Collection<String>> addDaily(@RequestBody Daily daily){
+    public ResultVO<Collection<String>> addDaily(@RequestBody Daily daily) {
         if (map.containsKey(daily.getKey())) {
             map.get(daily.getKey()).add(daily.getValue());
-        }else {
+        } else {
             map.put(daily.getKey(), Stream.of(daily.getValue()).collect(Collectors.toList()));
         }
         return ResultVO.ok(map.get(daily.getKey()));
@@ -67,7 +70,7 @@ public class DailyController {
         dailies.forEach(daily -> {
             if (map.containsKey(daily.getKey())) {
                 map.get(daily.getKey()).add(daily.getValue());
-            }else {
+            } else {
                 map.put(daily.getKey(), Stream.of(daily.getValue()).collect(Collectors.toList()));
             }
         });
@@ -88,31 +91,32 @@ public class DailyController {
 
     /**
      * 签到回调
+     *
      * @return 是否成功
      */
     @PostMapping("signed")
     @Operation(summary = "签到后的回调，用于通知app")
-    public ResultVO<Boolean> signed(@RequestBody List<String> urls){
+    public ResultVO<Boolean> signed(@RequestBody List<String> urls) {
         if (CollectionUtil.isEmpty(urls)) {
             return new ResultVO<>(CodeEnum.ERROR, null);
         }
-        HashMap<String, List<String>> collectMap = new HashMap<>();
+        Map<String, List<String>> collectMap = new HashMap<>();
         //反转map结构
         map.forEach((key, value) -> value.forEach(f -> {
             List<String> mapOrDefault = collectMap.getOrDefault(f, new ArrayList<>());
             mapOrDefault.add(key);
             collectMap.put(f, mapOrDefault);
         }));
-        ArrayList<DailyLogPO> list = new ArrayList<>();
+        List<DailyLogPO> list = new ArrayList<>();
         //循环构建DailyLog
         urls.forEach(v -> {
             Collection<String> tenants = collectMap.getOrDefault(v, List.of());
             String tenant = tenants.stream().filter(k -> k.equalsIgnoreCase("moli")).findFirst().orElse("0");
             list.add(new DailyLogPO()
-                    .setType(1)
-                    .setUrl(v)
-                    .setTenant(getTenant(tenant))
-                    .setCreateTime(LocalDateTime.now()));
+                             .setType(1)
+                             .setUrl(v)
+                             .setTenant(getTenant(tenant))
+                             .setCreateTime(LocalDateTime.now()));
         });
         AppMessage appMessage = new AppMessage()
                 .setTitle("签到成功")
@@ -144,10 +148,10 @@ public class DailyController {
     @Operation(summary = "获取当天签到状态")
     public ResultVO<List<String>> getNowSign(@RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.list(new LambdaQueryWrapper<DailyLogPO>()
-                        .eq(DailyLogPO::getCreateTime, LocalDate.now())
-                        .eq(DailyLogPO::getTenant, getTenant(tenant)))
-                .stream().map(DailyLogPO::getUrl)
-                .toList());
+                                                        .eq(DailyLogPO::getTenant, getTenant(tenant))
+                                                        .apply("DATE(create_time) = CURDATE()"))
+                                          .stream().map(DailyLogPO::getUrl)
+                                          .toList());
     }
 
     /**
@@ -158,7 +162,8 @@ public class DailyController {
      */
     @GetMapping("query")
     @Operation(summary = "查询签到日历表")
-    public ResultVO<Map<LocalDate, List<DailyLog>>> querySign(DailyQuery dailyQuery, @RequestHeader(defaultValue = "moli") String tenant) {
+    public ResultVO<Map<LocalDate, List<DailyLog>>> querySign(DailyQuery dailyQuery,
+                                                              @RequestHeader(defaultValue = "moli") String tenant) {
         return ResultVO.ok(dailyLogService.querySign(dailyQuery, getTenant(tenant)));
     }
 }
