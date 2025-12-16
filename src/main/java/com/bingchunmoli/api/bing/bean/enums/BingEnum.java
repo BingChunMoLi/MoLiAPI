@@ -16,6 +16,6 @@ public enum BingEnum {
     CN_BING("bing:image:cn", 0),
     EN_BING("bing:image:en", 1),
     ALL_BING("bing:image:all", null);
-    private String key;
-    private Integer search;
+    private final String key;
+    private final Integer search;
 }

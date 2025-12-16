@@ -89,6 +89,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
             if (id == null) {
                 save(bingImage);
             } else {
+                saveCache(cnBingImageVO, enBingImageVO, bingImage);
                 return bingImage;
             }
         }
