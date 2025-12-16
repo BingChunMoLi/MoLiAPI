@@ -25,6 +25,11 @@ server:
   http2:
     enabled: true
 spring:
+  mvc:
+    apiversion:
+      default: 1.0.0
+      use:
+        header: moli-version
   flyway:
     enabled: true
     baseline-on-migrate: true

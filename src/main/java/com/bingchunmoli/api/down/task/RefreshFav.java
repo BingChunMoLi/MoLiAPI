@@ -13,14 +13,13 @@ import com.bingchunmoli.api.down.service.MediaService;
 import com.bingchunmoli.api.down.util.BiliUtil;
 import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.push.bean.MailMessage;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -51,7 +50,7 @@ public class RefreshFav {
 //
 //    }
     @Scheduled(cron = "0 0 0 1/3 * ?")
-    public synchronized void refreshInterface() throws JsonProcessingException {
+    public synchronized void refreshInterface() {
         //获取收藏
         Fav fav;
         try {

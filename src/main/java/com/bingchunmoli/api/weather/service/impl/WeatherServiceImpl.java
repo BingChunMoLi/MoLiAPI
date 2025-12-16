@@ -15,13 +15,12 @@ import com.bingchunmoli.api.weather.bean.WeatherVO;
 import com.bingchunmoli.api.weather.bean.enums.WeatherCacheKey;
 import com.bingchunmoli.api.weather.mapper.WeatherMapper;
 import com.bingchunmoli.api.weather.service.WeatherService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -45,7 +44,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     private final HttpServletRequest request;
 
     @Override
-    public String getWeatherByDay(Integer day, String location) throws JsonProcessingException {
+    public String getWeatherByDay(Integer day, String location) {
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteger(location)) {
             // 按经维度查询 或者 id查询
             return getWeatherByDayCommon(day, location);
@@ -55,7 +54,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     }
 
     @Override
-    public String getWeatherByNow(String address) throws JsonProcessingException {
+    public String getWeatherByNow(String address) {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         return Optional.ofNullable(redisCache).orElse(doGetWeatherByNow(redisCacheKey, address));
@@ -83,7 +82,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param location 地址
      * @return 天气信息
      */
-    private String getWeatherByDayCommon(Integer day, String location) throws JsonProcessingException {
+    private String getWeatherByDayCommon(Integer day, String location) {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
                 .add(String.valueOf(day)).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
@@ -98,7 +97,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param location      地址
      * @return 天气信息
      */
-    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) throws JsonProcessingException {
+    private String doGetWeatherByDay(String redisCacheKey, Integer day, String location) {
         String joiner = "https://" +
                 apiConfig.getWeatherUri() +
                 "/v7/weather/" +
@@ -120,7 +119,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      * @param location      地址
      * @return 天气
      */
-    private String doGetWeatherByNow(String redisCacheKey, String location) throws JsonProcessingException {
+    private String doGetWeatherByNow(String redisCacheKey, String location) {
         String requestUrl = "https://" +
                 apiConfig.getWeatherUri() +
                 "/v7/weather/now?key=" +
@@ -137,9 +136,8 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      *
      * @param location 地区名称
      * @return 地区Id
-     * @throws JsonProcessingException      JSON转换异常
      */
-    private String getLocationId(String location) throws JsonProcessingException {
+    private String getLocationId(String location) {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
         String redisCache = stringRedisUtil.get(redisCacheKey);
         String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));

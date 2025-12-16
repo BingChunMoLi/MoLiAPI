@@ -23,11 +23,11 @@
         <zxing.version>3.5.4</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <knife4j.version>4.5.0</knife4j.version>
         <tencent-cloud-api.version>3.1.1377</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
         <loki-logback.version>2.0.1</loki-logback.version>
         <firebase-admin.version>9.7.0</firebase-admin.version>
+        <springdoc.version>3.0.0</springdoc.version>
     </properties>
 
     <dependencies>
@@ -57,7 +57,7 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
@@ -102,11 +102,6 @@
             <groupId>com.jthinking.common</groupId>
             <artifactId>ip-info</artifactId>
             <version>${ip-info.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
         <dependency>
             <groupId>com.tencentcloudapi</groupId>
@@ -168,6 +163,32 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-properties-migrator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
     </dependencies>
 

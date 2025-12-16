@@ -11,11 +11,11 @@ import com.bingchunmoli.api.bing.mapper.BingImageMapper;
 import com.bingchunmoli.api.bing.service.BingService;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.utils.RedisUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.util.Random;
@@ -74,7 +74,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
         String bingResult = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=" + bingEnum.getSearch() + "&format=js");
         try {
             return om.readValue(bingResult, BingImageVO.class);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new ApiJsonProcessingException(e);
         }
     }
