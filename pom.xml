@@ -119,7 +119,7 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter-test</artifactId>
+            <artifactId>mybatis-plus-spring-boot4-starter-test</artifactId>
             <version>${mybatis-plus.version}</version>
             <scope>test</scope>
         </dependency>
