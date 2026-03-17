@@ -23,7 +23,7 @@
         <zxing.version>3.5.4</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <ip-info.version>2.2.0</ip-info.version>
-        <tencent-cloud-api.version>3.1.1401</tencent-cloud-api.version>
+        <tencent-cloud-api.version>3.1.1419</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
         <loki-logback.version>2.0.3</loki-logback.version>
         <firebase-admin.version>9.8.0</firebase-admin.version>
