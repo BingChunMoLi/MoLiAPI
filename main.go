@@ -3,21 +3,31 @@ package main
 import (
 	"bingchunmoli.com/moliapi/api"
 	"fmt"
-	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Welcome to moliapi!")
-	})
-	http.HandleFunc("/yiyan/random", api.YiYan)
-	http.HandleFunc("/img/random", api.Img)
+	r := gin.Default()
 
-	err := http.ListenAndServe(":80", nil)
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "Welcome to moliapi!")
+	})
+
+	r.GET("/yiyan/random", api.YiYan)
+	r.GET("/img/random", api.Img)
+	r.GET("/qrcode", api.QrCode)
+	r.GET("/ip", api.IpQuery)
+	r.GET("/bing/img", api.BingImg)
+	r.GET("/poetry", api.Poetry)
+	r.GET("/qq/avatar", api.QqAvatar)
+	r.GET("/qq/qzone_avatar", api.QzoneAvatar)
+	r.GET("/xunlei", api.XunleiConvert)
+	r.GET("/ua", api.UserAgent)
+
+	err := r.Run(":80")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	print("启动成功")
-
+	fmt.Println("启动成功")
 }
