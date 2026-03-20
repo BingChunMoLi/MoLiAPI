@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"bingchunmoli.com/moliapi/api"
+	"bingchunmoli.com/moliapi/tasks/cert"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,6 +26,11 @@ func main() {
 	r.GET("/qq/qzone_avatar", api.QzoneAvatar)
 	r.GET("/xunlei", api.XunleiConvert)
 	r.GET("/ua", api.UserAgent)
+	r.POST("/cert/update", api.UpdateCert)
+
+	cCron := cert.InitCron()
+	cCron.Start()
+	defer cCron.Stop()
 
 	port := os.Getenv("PORT")
 	if port == "" {
