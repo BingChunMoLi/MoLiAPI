@@ -81,19 +81,17 @@ func (u *AliyunUpdater) updateOSS(cert []byte, key []byte, target TargetConfig) 
 		return err
 	}
 
-	bucket, err := client.Bucket(target.Bucket)
-	if err != nil {
-		return err
+	// For OSS, we use PutBucketCnameWithCertificate from the client.
+	// PutBucketCname is an alias for PutBucketCnameXml in the SDK.
+	certConf := oss.PutBucketCname{
+		Cname: target.Domain,
+		CertificateConfiguration: &oss.CertificateConfiguration{
+			Certificate: string(cert),
+			PrivateKey:  string(key),
+			Force:       true,
+		},
 	}
-
-	// For OSS, we use PutBucketCname with the certificate info.
-	certConf := oss.CertificateConfiguration{
-		Certificate: string(cert),
-		PrivateKey:  string(key),
-		PreviousCertId: "",
-		Force: true,
-	}
-	err = bucket.PutBucketCnameWithCertificate(target.Domain, certConf)
+	err = client.PutBucketCnameWithCertificate(target.Bucket, certConf)
 	if err != nil {
 		log.Printf("PutBucketCnameWithCertificate error: %v", err)
 		return err

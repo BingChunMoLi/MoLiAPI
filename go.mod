@@ -13,6 +13,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.61
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/teo v1.3.57
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.73
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

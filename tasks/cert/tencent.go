@@ -48,10 +48,10 @@ func (u *TencentUpdater) updateCDN(cert []byte, key []byte, target TargetConfig)
 	request.Domain = common.StringPtr(target.Domain)
 	request.Https = &cdn.Https{
 		Switch: common.StringPtr("on"),
-		CertInfo: &cdn.ServerCertInfo{
+		CertInfo: &cdn.ServerCert{
 			Certificate: common.StringPtr(string(cert)),
 			PrivateKey:  common.StringPtr(string(key)),
-			Message:     common.StringPtr(target.Domain + "-cert"),
+			CertName:    common.StringPtr(target.Domain + "-cert"),
 		},
 	}
 
@@ -70,15 +70,12 @@ func (u *TencentUpdater) updateTEO(cert []byte, key []byte, target TargetConfig)
 	request := teo.NewModifyHostsCertificateRequest()
 	request.ZoneId = common.StringPtr(target.ZoneID)
 	request.Hosts = common.StringPtrs([]string{target.Domain})
-	request.Mode = common.StringPtr("custom")
+	request.Mode = common.StringPtr("sslcert") // Set to sslcert to use ServerCertInfo
 	
-	// Try creating a ServerCertInfo. If CertId is strictly required, users might need to upload it via SSL API first.
-	request.ServerCertInfo = []*teo.ServerCertInfo{
-		{
-			Alias: common.StringPtr(target.Domain + "-cert"),
-			// Type: common.StringPtr("default"),
-		},
-	}
+	// TEO ModifyHostsCertificate usually requires a CertId which you get from the SSL API.
+	// This SDK doesn't allow direct cert upload in this request.
+	// For now, keeping the structure as placeholders or until we can add SSL API support to upload the cert first.
+	// request.ServerCertInfo = []*teo.ServerCertInfo{{...}}
 
 	_, err := client.ModifyHostsCertificate(request)
 	return err
@@ -100,19 +97,17 @@ func (u *TencentUpdater) updateCOS(cert []byte, key []byte, target TargetConfig)
 		},
 	})
 
-	certOpt := &cos.PutBucketDomainCertificateOptions{
-		DomainCertificate: &cos.BucketDomainCertificateInfo{
-			Status: "ENABLED",
+	certOpt := &cos.BucketPutDomainCertificateOptions{
+		CertificateInfo: &cos.BucketDomainCertificateInfo{
 			CertType: "CustomCert",
-			CustomCert: &cos.BucketCustomCertInfo{
-				Cert: string(cert),
+			CustomCert: &cos.BucketDomainCustomCert{
+				Cert:       string(cert),
 				PrivateKey: string(key),
 			},
 		},
+		DomainList: []string{target.Domain},
 	}
 
-	// The domain name must be passed as an argument or in the query parameter depending on COS Go SDK version.
-	// Standard COS PutDomainCertificate usually requires the domain name.
 	_, err := client.Bucket.PutDomainCertificate(context.Background(), certOpt)
 	return err
 }
