@@ -36,6 +36,30 @@ func TestYiYan(t *testing.T) {
 	}
 }
 
+func TestPoetryText(t *testing.T) {
+	err := os.Chdir("..")
+	if err != nil {
+		t.Fatalf("Failed to change working directory: %v", err)
+	}
+	defer os.Chdir("api")
+
+	r := setupRouter()
+	r.GET("/poetry", Poetry)
+
+	req, _ := http.NewRequest("GET", "/poetry?type=text", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status %d, got %d", http.StatusOK, w.Code)
+	}
+
+	body := w.Body.String()
+	if body == "" {
+		t.Error("Expected non-empty body")
+	}
+}
+
 func TestPoetry(t *testing.T) {
 	err := os.Chdir("..")
 	if err != nil {

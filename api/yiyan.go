@@ -91,5 +91,12 @@ func Poetry(c *gin.Context) {
 	}
 
 	randIndex := rand.Intn(len(yiYans))
-	c.JSON(http.StatusOK, yiYans[randIndex])
+	y := yiYans[randIndex]
+
+	if c.Query("type") == "text" {
+		c.String(http.StatusOK, "%s —— %s", y.Hitokoto, y.From)
+		return
+	}
+
+	c.JSON(http.StatusOK, y)
 }
