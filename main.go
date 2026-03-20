@@ -5,16 +5,22 @@ import (
 	"os"
 
 	"bingchunmoli.com/moliapi/api"
+	"bingchunmoli.com/moliapi/internal/metrics"
 	"bingchunmoli.com/moliapi/tasks/cert"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
+	r.Use(metrics.Middleware())
 
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Welcome to moliapi!")
 	})
+
+	r.StaticFile("/dashboard", "./ui/dashboard.html")
+	r.GET("/api/stats", api.GetStats)
+	r.GET("/api/certs", api.GetCertStatus)
 
 	r.GET("/yiyan/random", api.YiYan)
 	r.GET("/img/random", api.Img)

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>moliapi Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes pulse-bg {
+            0% { background-color: rgba(34, 197, 94, 0.1); }
+            50% { background-color: rgba(34, 197, 94, 0.2); }
+            100% { background-color: rgba(34, 197, 94, 0.1); }
+        }
+        .monitor-card { background: #1e293b; border: 1px solid #334155; }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen p-4 font-mono">
+    <div class="max-w-7xl mx-auto">
+        <header class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">MOLI-API MONITOR</h1>
+            <div id="clock" class="text-xl text-emerald-500"></div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="monitor-card p-6 rounded-lg shadow-xl">
+                <h2 class="text-slate-400 text-sm mb-2 uppercase tracking-widest">Request Latency (Avg)</h2>
+                <p id="avg-latency" class="text-4xl font-bold text-emerald-400">0.00 <span class="text-xl">ms</span></p>
+            </div>
+            <div class="monitor-card p-6 rounded-lg shadow-xl">
+                <h2 class="text-slate-400 text-sm mb-2 uppercase tracking-widest">Total Requests (Last 1k)</h2>
+                <p id="total-reqs" class="text-4xl font-bold text-cyan-400">0</p>
+            </div>
+            <div class="monitor-card p-6 rounded-lg shadow-xl">
+                <h2 class="text-slate-400 text-sm mb-2 uppercase tracking-widest">Success Rate</h2>
+                <p id="success-rate" class="text-4xl font-bold text-amber-400">0.0 <span class="text-xl">%</span></p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="monitor-card p-6 rounded-lg">
+                <h3 class="text-slate-400 mb-4 font-bold">Latency Time Series</h3>
+                <canvas id="latencyChart" height="200"></canvas>
+            </div>
+            <div class="monitor-card p-6 rounded-lg">
+                <h3 class="text-slate-400 mb-4 font-bold">Request Distribution by Path</h3>
+                <canvas id="pathChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Certificate Status Section -->
+        <div class="monitor-card rounded-lg overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-slate-700 bg-slate-800/50 flex justify-between items-center">
+                <h3 class="font-bold text-emerald-400 uppercase tracking-widest">Cloud Certificates Status</h3>
+                <button onclick="triggerUpdate()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1 rounded text-xs transition-colors">TRIGGER UPDATE</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-900/50 text-slate-500 text-xs uppercase">
+                            <th class="px-6 py-3">Domain</th>
+                            <th class="px-6 py-3">Provider</th>
+                            <th class="px-6 py-3">Service</th>
+                            <th class="px-6 py-3">Expiry</th>
+                            <th class="px-6 py-3">Days Left</th>
+                            <th class="px-6 py-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cert-table" class="text-sm">
+                        <!-- Content via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctxLatency = document.getElementById('latencyChart').getContext('2d');
+        const ctxPath = document.getElementById('pathChart').getContext('2d');
+        
+        const latencyChart = new Chart(ctxLatency, {
+            type: 'line',
+            data: { labels: [], datasets: [{ label: 'Latency (ms)', data: [], borderColor: '#10b981', tension: 0.4, fill: true, backgroundColor: 'rgba(16, 185, 129, 0.1)' }] },
+            options: { scales: { y: { beginAtZero: true, grid: { color: '#334155' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+        });
+
+        const pathChart = new Chart(ctxPath, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: ['#10b981', '#06b6d4', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] }] },
+            options: { plugins: { legend: { position: 'right', labels: { color: '#94a3b8', font: { family: 'monospace' } } } } }
+        });
+
+        async function fetchData() {
+            try {
+                // Fetch Metrics
+                const mResp = await fetch('/api/stats');
+                const metrics = await mResp.json();
+                updateMetricsUI(metrics);
+
+                // Fetch Certs
+                const cResp = await fetch('/api/certs');
+                const certs = await cResp.json();
+                updateCertTable(certs);
+            } catch (e) { console.error(e); }
+        }
+
+        function updateMetricsUI(data) {
+            if (!data || data.length === 0) return;
+            
+            const total = data.length;
+            const avg = data.reduce((a, b) => a + b.duration, 0) / total;
+            const success = data.filter(d => d.status < 400).length;
+
+            document.getElementById('avg-latency').innerHTML = `${avg.toFixed(2)} <span class="text-xl">ms</span>`;
+            document.getElementById('total-reqs').innerText = total;
+            document.getElementById('success-rate').innerHTML = `${((success / total) * 100).toFixed(1)} <span class="text-xl">%</span>`;
+
+            // Update Latency Chart
+            const last50 = data.slice(-50);
+            latencyChart.data.labels = last50.map((_, i) => i);
+            latencyChart.data.datasets[0].data = last50.map(d => d.duration);
+            latencyChart.update('none');
+
+            // Update Path Chart
+            const pathCounts = {};
+            data.forEach(d => pathCounts[d.path] = (pathCounts[d.path] || 0) + 1);
+            pathChart.data.labels = Object.keys(pathCounts);
+            pathChart.data.datasets[0].data = Object.values(pathCounts);
+            pathChart.update('none');
+        }
+
+        function updateCertTable(certs) {
+            const table = document.getElementById('cert-table');
+            table.innerHTML = certs.map(c => `
+                <tr class="border-t border-slate-700 hover:bg-slate-800/30">
+                    <td class="px-6 py-4 font-bold text-slate-300">${c.domain}</td>
+                    <td class="px-6 py-4"><span class="bg-slate-700 px-2 py-1 rounded text-xs">${c.provider.toUpperCase()}</span></td>
+                    <td class="px-6 py-4 text-slate-400">${c.service.toUpperCase()}</td>
+                    <td class="px-6 py-4 text-xs text-slate-500">${c.exists ? new Date(c.expiry).toLocaleDateString() : 'N/A'}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="${c.days_left < 15 ? 'text-red-400' : 'text-emerald-400'}">${c.days_left}d</span>
+                            <div class="w-16 bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-full" style="width: ${Math.min(100, (c.days_left/90)*100)}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full ${c.exists ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500'}"></span>
+                            ${c.exists ? 'ACTIVE' : 'MISSING'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function triggerUpdate() {
+            if (!confirm('Manual trigger certificate update?')) return;
+            const resp = await fetch('/cert/update', { method: 'POST' });
+            const data = await resp.json();
+            alert(data.status || data.error);
+        }
+
+        setInterval(fetchData, 2000);
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+        fetchData();
+    </script>
+</body>
+</html>
