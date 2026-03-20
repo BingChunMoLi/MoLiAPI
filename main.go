@@ -11,7 +11,12 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	if os.Getenv("GIN_MODE") == "" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	r := gin.New()
+	r.Use(gin.Recovery())
 	r.Use(metrics.Middleware())
 
 	r.GET("/", func(c *gin.Context) {
