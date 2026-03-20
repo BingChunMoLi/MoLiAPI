@@ -65,6 +65,13 @@ func BingImg(c *gin.Context) {
 	}
 
 	imgUrl := "https://cn.bing.com" + data.Images[0].Url
+
+	format := c.Query("format")
+	if format == "json" {
+		c.JSON(http.StatusOK, gin.H{"url": imgUrl})
+		return
+	}
+
 	// 重定向到图片地址
 	c.Redirect(http.StatusFound, imgUrl)
 }

@@ -1,8 +1,10 @@
 package main
 
 import (
-	"bingchunmoli.com/moliapi/api"
 	"fmt"
+	"os"
+
+	"bingchunmoli.com/moliapi/api"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,7 +26,11 @@ func main() {
 	r.GET("/xunlei", api.XunleiConvert)
 	r.GET("/ua", api.UserAgent)
 
-	err := r.Run(":80")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	err := r.Run(":" + port)
 	if err != nil {
 		fmt.Println(err)
 		return

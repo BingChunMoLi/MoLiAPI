@@ -8,4 +8,8 @@ FROM gcr.io/distroless/static-debian12
 WORKDIR /app
 COPY --from=builder /build/moliapi .
 COPY --from=builder /build/yiyan ./yiyan/
+
+ENV PORT=8080
+EXPOSE ${PORT}
+
 ENTRYPOINT ["./moliapi"]

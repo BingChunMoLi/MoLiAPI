@@ -24,6 +24,24 @@ func TestBingImg(t *testing.T) {
 	}
 }
 
+func TestBingImgJson(t *testing.T) {
+	r := setupRouter()
+	r.GET("/bing/img", BingImg)
+
+	req, _ := http.NewRequest("GET", "/bing/img?format=json", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status %d (OK), got %d", http.StatusOK, w.Code)
+	}
+
+	contentType := w.Header().Get("Content-Type")
+	if contentType != "application/json; charset=utf-8" {
+		t.Errorf("Expected Content-Type application/json; charset=utf-8, got %s", contentType)
+	}
+}
+
 func TestImg(t *testing.T) {
 	r := setupRouter()
 	r.GET("/img/random", Img)
