@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.utils.IntegerUtil;
 import com.bingchunmoli.api.utils.SendMailUtil;
-import com.bingchunmoli.api.utils.StringRedisUtil;
 import com.bingchunmoli.api.weather.bean.WeatherSub;
 import com.bingchunmoli.api.weather.bean.WeatherSubscribeParam;
 import com.bingchunmoli.api.weather.bean.WeatherVO;
@@ -38,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> implements WeatherService {
     private final ApiConfig apiConfig;
-    private final StringRedisUtil stringRedisUtil;
     private final ObjectMapper om;
     private final SendMailUtil sendMailUtil;
     private final HttpServletRequest request;
@@ -56,8 +54,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     @Override
     public String getWeatherByNow(String address) {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
-        String redisCache = stringRedisUtil.get(redisCacheKey);
-        return Optional.ofNullable(redisCache).orElse(doGetWeatherByNow(redisCacheKey, address));
+        return doGetWeatherByNow(redisCacheKey, address);
     }
 
     @Override
@@ -85,8 +82,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     private String getWeatherByDayCommon(Integer day, String location) {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_DAY.getKey(), ":" + location)
                 .add(String.valueOf(day)).toString();
-        String redisCache = stringRedisUtil.get(redisCacheKey);
-        return Optional.ofNullable(redisCache).orElse(doGetWeatherByDay(redisCacheKey, day, location));
+        return doGetWeatherByDay(redisCacheKey, day, location);
     }
 
     /**
@@ -106,9 +102,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
                 apiConfig.getWeatherKey() +
                 "&location=" +
                 getLocationId(location);
-        String res = HttpUtil.get(joiner);
-        stringRedisUtil.setEx(redisCacheKey, res, 12, TimeUnit.HOURS);
-        return res;
+        return HttpUtil.get(joiner);
     }
 
 
@@ -126,9 +120,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
                 apiConfig.getWeatherKey() +
                 "&location=" +
                 getLocationId(location);
-        String res = HttpUtil.get(requestUrl);
-        stringRedisUtil.setEx(redisCacheKey, res, 1, TimeUnit.HOURS);
-        return res;
+        return HttpUtil.get(requestUrl);
     }
 
     /**
@@ -139,8 +131,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
      */
     private String getLocationId(String location) {
         String redisCacheKey = new StringJoiner(":", WeatherCacheKey.LOOKUP.getKey(), location).toString();
-        String redisCache = stringRedisUtil.get(redisCacheKey);
-        String res = Optional.ofNullable(redisCache).orElse(doGetLocationId(redisCacheKey, location));
+        String res = doGetLocationId(redisCacheKey, location);
         WeatherVO weatherVO = om.readValue(res, WeatherVO.class);
         if (String.valueOf(HttpStatus.OK.value()).equalsIgnoreCase(weatherVO.getCode())) {
             return weatherVO.getLocation().get(0).getId();
@@ -165,9 +156,7 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
                 apiConfig.getWeatherKey() +
                 "&location=" +
                 URLEncoder.encode(location, StandardCharsets.UTF_8);
-        String res = HttpUtil.get(requestUrl);
-        stringRedisUtil.setEx(redisCacheKey, res, 24, TimeUnit.HOURS);
-        return res;
+        return HttpUtil.get(requestUrl);
     }
 
 }

@@ -78,7 +78,6 @@ com.bingchunmoli.api.thunder.service.impl.ThunderDownloadProtocolServiceImpl=org
 com.bingchunmoli.api.ua.UserAgentController=org.springframework.stereotype.Component
 com.bingchunmoli.api.utils.RedisUtil=org.springframework.stereotype.Component
 com.bingchunmoli.api.utils.SendMailUtil=org.springframework.stereotype.Component
-com.bingchunmoli.api.utils.StringRedisUtil=org.springframework.stereotype.Component
 com.bingchunmoli.api.weather.controller.WeatherController=org.springframework.stereotype.Component
 com.bingchunmoli.api.weather.service.impl.WeatherServiceImpl=org.springframework.stereotype.Component
 com.bingchunmoli.api.weather.task.WeatherNotionTask=org.springframework.stereotype.Component
