@@ -6,6 +6,7 @@ import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.exception.ApiException;
 import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
+import com.bingchunmoli.api.exception.ApiMessageException;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.exception.system.ApiSystemException;
 import com.bingchunmoli.api.exception.system.ApiUserNonFoundException;
@@ -121,6 +122,12 @@ public class ExceptionControllerAdvice {
         ResultVO<String> result = new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
         result.setMsg("空指针异常");
         return result;
+    }
+
+    @ExceptionHandler
+    public ResultVO<String> apiMessageException(ApiMessageException e) {
+        log.warn("未找到开启推送的通道推送失败: {}", e.getMessage());
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
     }
 
     @ExceptionHandler
