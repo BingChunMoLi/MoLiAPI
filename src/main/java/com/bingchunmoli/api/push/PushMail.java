@@ -26,4 +26,8 @@ public class PushMail implements Push {
         return PushMessageEnum.MAIL_MESSAGE.equals(message.getType());
     }
 
+    @Override
+    public boolean isEnable() {
+        return !sendMailUtil.checkEnable();
+    }
 }

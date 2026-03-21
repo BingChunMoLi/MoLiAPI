@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -27,6 +28,7 @@ import java.io.InputStream;
 @Profile("!test")
 @RequiredArgsConstructor
 @ConditionalOnResource(resources = "classpath:google-service.json")
+@ConditionalOnClass(name = "com.google.firebase.FirebaseApp")
 public class InitFcmServiceImpl implements InitService {
     @Value("classpath:google-service.json")
     private Resource resource;

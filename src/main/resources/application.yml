@@ -101,7 +101,9 @@ logging:
   config: classpath:config/logback-spring.xml
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
-management:
+  structured:
+    format:
+      file: ecs
   tracing:
     sampling:
       probability: 1.0

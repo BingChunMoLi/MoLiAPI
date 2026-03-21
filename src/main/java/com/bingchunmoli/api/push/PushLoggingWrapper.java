@@ -43,4 +43,9 @@ public class PushLoggingWrapper implements Push {
     public boolean support(Message message) {
         return push.support(message);
     }
+
+    @Override
+    public boolean isEnable() {
+        return push.isEnable();
+    }
 }
