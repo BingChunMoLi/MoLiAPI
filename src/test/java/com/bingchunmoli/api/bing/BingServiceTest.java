@@ -8,7 +8,6 @@ import com.bingchunmoli.api.bing.service.BingService;
 import com.bingchunmoli.api.bing.service.impl.BingServiceImpl;
 import com.bingchunmoli.api.utils.RedisUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.util.Assert;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 

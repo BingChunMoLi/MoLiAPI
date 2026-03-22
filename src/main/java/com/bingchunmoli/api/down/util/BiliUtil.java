@@ -1,16 +1,12 @@
 package com.bingchunmoli.api.down.util;
 
-import com.bingchunmoli.api.down.bean.Fav;
-import com.bingchunmoli.api.down.bean.FavPO;
-import com.bingchunmoli.api.down.bean.Media;
-import com.bingchunmoli.api.down.bean.MediaPO;
-import com.bingchunmoli.api.down.bean.UserPO;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bingchunmoli.api.down.bean.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;

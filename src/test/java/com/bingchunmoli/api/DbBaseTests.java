@@ -3,6 +3,7 @@ package com.bingchunmoli.api;
 import com.baomidou.mybatisplus.test.autoconfigure.MybatisPlusTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author moli
  */
 @MybatisPlusTest
+@ContextConfiguration(classes = DbBaseTests.class)
 public class DbBaseTests {
 
     @Autowired
