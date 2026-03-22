@@ -6,13 +6,13 @@ import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.exception.ApiException;
 import com.bingchunmoli.api.exception.ApiFileIsEmptyException;
 import com.bingchunmoli.api.exception.ApiJsonProcessingException;
+import com.bingchunmoli.api.exception.ApiMessageException;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.exception.system.ApiSystemException;
 import com.bingchunmoli.api.exception.system.ApiUserNonFoundException;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import com.bingchunmoli.api.push.bean.MailMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 统一异常处理
@@ -123,6 +125,12 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler
+    public ResultVO<String> apiMessageException(ApiMessageException e) {
+        log.warn("未找到开启推送的通道推送失败: {}", e.getMessage());
+        return new ResultVO<>(CodeEnum.FAILURE, getExceptionJsonMessage());
+    }
+
+    @ExceptionHandler
     public ResultVO<String> defaultException(Exception e) {
         log.error(getExceptionErrorLogMessage("未分类异常"), e);
         if (mailEnable) {
@@ -133,7 +141,7 @@ public class ExceptionControllerAdvice {
                     .build();
             try {
                 errMailMessage.setBody("defaultException: " + e.getLocalizedMessage() + " message: " + e.getMessage() + "\n stackTrace: " + om.writeValueAsString(e.getStackTrace()));
-            } catch (JsonProcessingException ex) {
+            } catch (JacksonException ex) {
                 log.error("defaultException: JsonProcessingException: ", ex);
             }
             applicationEventPublisher.publishEvent(new MessageEven(this, errMailMessage));

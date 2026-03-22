@@ -3,7 +3,6 @@ package com.bingchunmoli.api.netease;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.netease.bean.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

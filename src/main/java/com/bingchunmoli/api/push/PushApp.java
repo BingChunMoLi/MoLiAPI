@@ -9,10 +9,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Notification;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@ConditionalOnClass(name = "com.google.firebase.messaging.FirebaseMessaging")
 public class PushApp implements Push {
 
     @Override
@@ -40,5 +42,10 @@ public class PushApp implements Push {
     @Override
     public boolean support(Message message) {
         return PushMessageEnum.APP_MESSAGE.equals(message.getType());
+    }
+
+    @Override
+    public boolean isEnable() {
+        return !com.google.firebase.FirebaseApp.getApps().isEmpty();
     }
 }

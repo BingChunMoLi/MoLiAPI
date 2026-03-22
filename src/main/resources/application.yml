@@ -25,6 +25,11 @@ server:
   http2:
     enabled: true
 spring:
+  mvc:
+    apiversion:
+      default: 1.0.0
+      use:
+        header: moli-version
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -96,7 +101,9 @@ logging:
   config: classpath:config/logback-spring.xml
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
-management:
+  structured:
+    format:
+      file: ecs
   tracing:
     sampling:
       probability: 1.0

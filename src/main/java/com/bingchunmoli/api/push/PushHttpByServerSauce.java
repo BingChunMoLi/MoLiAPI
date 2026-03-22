@@ -32,6 +32,11 @@ public class PushHttpByServerSauce extends PushHttp {
     }
 
     @Override
+    public boolean isEnable() {
+        return cn.hutool.core.util.StrUtil.isNotBlank(apiConfig.getServerSauceKey());
+    }
+
+    @Override
     protected SendParam buildSend(Message message) {
         if (message instanceof HttpMessage httpMessage) {
             String url = "https://sctapi.ftqq.com/" +

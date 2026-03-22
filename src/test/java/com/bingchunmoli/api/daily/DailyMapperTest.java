@@ -1,13 +1,18 @@
 package com.bingchunmoli.api.daily;
 
 import com.baomidou.mybatisplus.test.autoconfigure.MybatisPlusTest;
+import com.bingchunmoli.api.DbBaseTests;
 import com.bingchunmoli.api.daily.bean.DailyLogPO;
 import com.bingchunmoli.api.daily.bean.DailyQuery;
 import com.bingchunmoli.api.daily.mapper.DailyLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.Assert;
 
@@ -21,9 +26,16 @@ import java.util.List;
 @MybatisPlusTest
 @TestPropertySource(properties = {"spring.sql.init.data-locations=classpath*:dailyData.sql", "spring.sql.init.schema-locations=classpath*:init/db/ddl.sql"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ContextConfiguration(classes = DailyMapperTest.TestConfig.class)
 public class DailyMapperTest {
     @Autowired
     private DailyLogMapper dailyLogMapper;
+
+    @Configuration
+    @EnableAutoConfiguration // 开启自动配置（如 DataSource, MybatisPlusAutoConfiguration）
+    @MapperScan("com.bingchunmoli.api.daily.mapper") // 扫描你的 Mapper 接口所在包
+    static class TestConfig {
+    }
 
     @Test
     void getStartAndEndTimeTest() {

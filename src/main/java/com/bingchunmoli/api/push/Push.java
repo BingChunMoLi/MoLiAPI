@@ -19,4 +19,11 @@ public interface Push {
      */
     boolean support(Message message);
 
+    /**
+     * 当前推送渠道是否已开启并配置正确
+     * @return true即为已开启并配置正确
+     */
+    default boolean isEnable() {
+        return true;
+    }
 }
