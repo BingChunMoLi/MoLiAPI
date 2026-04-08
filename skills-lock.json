@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "mysql": {
+      "source": "planetscale/database-skills",
+      "sourceType": "github",
+      "computedHash": "6cb0725d61db4940f9eab79436753fe4ecb261f57ae8a08b2ac28676f82cbecc"
+    }
+  }
+}

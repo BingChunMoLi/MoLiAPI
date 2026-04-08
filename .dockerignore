@@ -1,0 +1,16 @@
+# .dockerignore
+target/
+#.git/
+.idea/
+*.iml
+logs/
+clear.sql
+deploy.sh
+docker-compose.yml
+docker
+.editorconfig
+.gitignore
+checkstyle.xml
+Dockerfile
+run.sh
+scipixa.xml
