@@ -110,7 +110,7 @@ logging:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: prometheus,loggers
   metrics:
     distribution:
       percentiles-histogram:

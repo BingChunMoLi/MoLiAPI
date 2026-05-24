@@ -35,9 +35,6 @@ public class SystemAuthenticationInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
-        if (!request.getRequestURI().startsWith("/system")) {
-            return true;
-        }
         Integer userId = (Integer) request.getSession().getAttribute("user");
         if (userId == null || userId < 1) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

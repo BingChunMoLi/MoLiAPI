@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日志等级管理 - MoLiApi</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 1.5rem; margin-top: 0; }
+        .login-form {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        input, select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        button:hover { opacity: 0.9; }
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .search-input { flex: 1; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th { background-color: #f3f4f6; font-weight: 600; }
+        .level-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .level-ERROR { color: #dc2626; }
+        .level-WARN { color: #d97706; }
+        .level-INFO { color: #059669; }
+        .level-DEBUG { color: #2563eb; }
+        .level-TRACE { color: #7c3aed; }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <!-- 登录界面 -->
+        <div v-if="!isLoggedIn && !loading" class="card login-form">
+            <h1>系统管理登录</h1>
+            <div class="form-group">
+                <label>用户名</label>
+                <input v-model="loginData.name" type="text" placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input v-model="loginData.password" type="password" placeholder="请输入密码" @keyup.enter="handleLogin">
+            </div>
+            <button @click="handleLogin" style="width: 100%">登录</button>
+            <p v-if="error" style="color: red; margin-top: 10px;">{{ error }}</p>
+        </div>
+
+        <!-- 日志管理界面 -->
+        <div v-if="isLoggedIn" class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>日志等级动态调整</h1>
+                <button @click="handleLogout" style="background-color: var(--text-muted)">退出登录</button>
+            </div>
+            
+            <div class="toolbar">
+                <input v-model="searchText" class="search-input" type="text" placeholder="搜索 Logger 名称 (例如: com.bingchunmoli)">
+                <button @click="fetchLoggers">刷新列表</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Logger 名称</th>
+                        <th>当前等级 (Effective)</th>
+                        <th>操作 (Configured)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="logger in filteredLoggers" :key="logger.name">
+                        <td style="word-break: break-all; font-family: monospace;">{{ logger.name }}</td>
+                        <td>
+                            <span :class="'level-badge level-' + logger.effectiveLevel">{{ logger.effectiveLevel }}</span>
+                        </td>
+                        <td>
+                            <select :value="logger.configuredLevel || ''" @change="updateLevel(logger.name, $event.target.value)">
+                                <option value="">(Inherited)</option>
+                                <option v-for="level in levels" :key="level" :value="level">{{ level }}</option>
+                                <option value="OFF">OFF</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div v-if="loading" class="loading-overlay">
+            加载中...
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        createApp({
+            setup() {
+                const isLoggedIn = ref(false);
+                const loading = ref(true);
+                const error = ref('');
+                const loggers = ref({});
+                const levels = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR'];
+                const searchText = ref('');
+                const loginData = ref({ name: '', password: '' });
+
+                const fetchLoggers = async () => {
+                    loading.value = true;
+                    try {
+                        const res = await fetch('/actuator/loggers');
+                        if (res.status === 401) {
+                            isLoggedIn.value = false;
+                        } else if (res.ok) {
+                            const data = await res.json();
+                            loggers.value = data.loggers;
+                            isLoggedIn.value = true;
+                        }
+                    } catch (e) {
+                        error.value = '获取日志列表失败';
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                const handleLogin = async () => {
+                    loading.value = true;
+                    error.value = '';
+                    try {
+                        const res = await fetch('/user/login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(loginData.value)
+                        });
+                        const data = await res.json();
+                        if (data.code === '00000' || data.data === true) {
+                            await fetchLoggers();
+                        } else {
+                            error.value = data.msg || '登录失败';
+                        }
+                    } catch (e) {
+                        error.value = '登录请求出错';
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                const handleLogout = () => {
+                    isLoggedIn.value = false;
+                    location.reload();
+                };
+
+                const updateLevel = async (name, level) => {
+                    try {
+                        const res = await fetch(`/actuator/loggers/${name}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ configuredLevel: level || null })
+                        });
+                        if (res.ok) {
+                            await fetchLoggers();
+                        } else {
+                            alert('更新失败');
+                        }
+                    } catch (e) {
+                        alert('更新请求出错');
+                    }
+                };
+
+                const filteredLoggers = computed(() => {
+                    const result = [];
+                    const search = searchText.value.toLowerCase();
+                    for (const name in loggers.value) {
+                        if (name.toLowerCase().includes(search)) {
+                            result.push({ name, ...loggers.value[name] });
+                        }
+                    }
+                    return result.sort((a, b) => a.name.localeCompare(b.name));
+                });
+
+                onMounted(() => {
+                    fetchLoggers();
+                });
+
+                return {
+                    isLoggedIn, loading, error, loggers, levels, searchText, loginData,
+                    filteredLoggers, handleLogin, handleLogout, fetchLoggers, updateLevel
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
