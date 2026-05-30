@@ -1,5 +1,10 @@
 @import './base.css';
 
+#app {
+    min-height: 100vh;
+    width: 100%;
+}
+
 a,
 .green {
     text-decoration: none;
@@ -14,9 +19,3 @@ a,
     }
 }
 
-@media (min-width: 1024px) {
-    body {
-        display: flex;
-        place-items: center;
-    }
-}

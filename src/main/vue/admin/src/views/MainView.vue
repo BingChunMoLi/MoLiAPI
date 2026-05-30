@@ -1,180 +1,125 @@
 <script lang="ts" setup>
 import router from '@/router'
 import type {ResultVO} from '@/type/ResultVO'
-import type {FormInstance} from 'element-plus'
-import {reactive, ref} from 'vue'
+import {computed, ref} from 'vue'
+import {RouterView, useRoute} from 'vue-router'
 
-let flag = false;
+const route = useRoute()
+const checking = ref(true)
+
+const activeMenu = computed(() => route.path)
+
 fetch(import.meta.env.VITE_API_BASE_URL + 'user/init', {
-  method: 'get',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
-    .then((r) => r.json() as Promise<ResultVO<Boolean>>)
-    .then((res) => {
-      if (res && res.code === '00000' && res.data === true) {
-        ElMessage('前往初始化注册用户')
-        flag = true;
-        router.push({path: '/init'})
-      }
-    })
-    .catch((r) => {
-      console.error(r)
-      ElMessage.error('Oops, network error')
-    })
-
-function getSystemConfig() {
-  fetch(import.meta.env.VITE_API_BASE_URL + 'system', {
-    method: 'get',
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
     }
-  })
-      .then((r) => {
-        if (r.status === 200 && r.ok) {
-          return r.json() as Promise<ResultVO<ApiConfig>>
-        } else {
-          if (r.status === 401) {
-            if (!flag) {
-              router.push({path: '/login'});
-          }
-          }
-        }
-      })
-      .then((res) => {
-        if (res && res.code === '00000') {
-          form = Object.assign(form, res.data)
-        }
-      })
-      .catch((r) => {
-        console.log(r)
-      })
-}
-
-if (!flag) {
-  getSystemConfig()
-}
-
-interface ApiConfig {
-  weatherKey: string
-  weatherUri: string
-  weatherGeoUri: string
-  serverSauceKey: string
-  pcPath: string
-  mobilePath: string
-  path1080: string
-  uploadTempPath: string
-  uploadTempSecret: string
-  certificatePath: string
-  privateKeyPath: string
-  domain: string
-  playListId: Array<string>
-  cookies: string
-}
-
-let form = reactive<ApiConfig>({
-  weatherKey: '',
-  weatherUri: '',
-  weatherGeoUri: '',
-  serverSauceKey: '',
-  pcPath: '',
-  mobilePath: '',
-  path1080: '',
-  uploadTempPath: '',
-  uploadTempSecret: '',
-  certificatePath: '',
-  privateKeyPath: '',
-  domain: '',
-  playListId: [],
-  cookies: ''
 })
-const ruleFormRef = ref<FormInstance>()
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  getSystemConfig()
-}
+    .then((response) => response.json() as Promise<ResultVO<boolean>>)
+    .then((res) => {
+        if (res && res.code === '00000' && res.data) {
+            ElMessage.info('首次启动，请先创建管理员账号')
+            router.push({path: '/init'})
+            return
+        }
+        checking.value = false
+    })
+    .catch((error) => {
+        checking.value = false
+        console.error(error)
+        ElMessage.error('无法连接后端服务')
+    })
 
-const submitForm = (formEl: FormInstance | undefined) => {
-  fetch(import.meta.env.VITE_API_BASE_URL + 'system', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(form),
-  })
-      .then((r) => {
-        if (r.status === 200 && r.ok) {
-          return r.json() as Promise<ResultVO<Boolean>>
-        } else {
-          if (r.status === 401) {
-            if (!flag) {
-              router.push({path: '/login'});
-            }
-          }
-        }
-      })
-      .then((res) => {
-        if (res && res.code === '00000') {
-          console.log(res.data)
-        }
-      })
-      .catch((r) => {
-        console.log(r)
-      })
+const handleSelect = (index: string) => {
+    router.push(index)
 }
 </script>
 
 <template>
-  <main>
-    <el-form ref="ruleFormRef" :model="form" status-icon>
-      <el-form-item label="和风天气key" prop="weatherKey">
-        <el-input v-model="form.weatherKey" placeholder="Please input weatherKey"/>
-      </el-form-item>
-      <el-form-item label="和风天气请求uri" prop="weatherUri">
-        <el-input v-model="form.weatherUri" placeholder="Please input weatherUri"/>
-      </el-form-item>
-      <el-form-item label="和风天气请求地区ApiUri" prop="weatherGeoUri">
-        <el-input v-model="form.weatherGeoUri" placeholder="Please input weatherGeoUri"/>
-      </el-form-item>
-      <el-form-item label="server酱key" prop="serverSauceKey">
-        <el-input v-model="form.serverSauceKey" placeholder="Please input serverSauceKey"/>
-      </el-form-item>
-      <el-form-item label="pc图片路径" prop="pcPath">
-        <el-input v-model="form.pcPath" placeholder="Please input pcPath"/>
-      </el-form-item>
-      <el-form-item label="mobile图片路径" prop="mobilePath">
-        <el-input v-model="form.mobilePath" placeholder="Please input mobilePath"/>
-      </el-form-item>
-      <el-form-item label="1080p" prop="path1080">
-        <el-input v-model="form.path1080" placeholder="Please input path1080"/>
-      </el-form-item>
-      <el-form-item label="上传临时文件的路径" prop="uploadTempPath">
-        <el-input v-model="form.uploadTempPath" placeholder="Please input uploadTempPath"/>
-      </el-form-item>
-      <el-form-item label="上传临时文件的密钥" prop="uploadTempSecret">
-        <el-input v-model="form.uploadTempSecret" placeholder="Please input uploadTempSecret"/>
-      </el-form-item>
-      <el-form-item label="证书路径(为腾讯CDN自动更新)" prop="certificatePath">
-        <el-input v-model="form.certificatePath" placeholder="Please input certificatePath"/>
-      </el-form-item>
-      <el-form-item label="私钥路径(为腾讯CDN自动更新)" prop="password">
-        <el-input v-model="form.privateKeyPath" placeholder="Please input privateKeyPath"/>
-      </el-form-item>
-      <el-form-item label="域名" prop="domain">
-        <el-input v-model="form.domain" placeholder="Please input domain"/>
-      </el-form-item>
-      <!-- <el-form-item label="定时任务歌单id" prop="playListId"> -->
-      <!-- <el-input v-model="form.playListId" placeholder="Please input playListId"/> -->
-      <!-- </el-form-item> -->
-      <el-form-item label="歌单用的cookies，" prop="cookies">
-        <el-input v-model="form.cookies" placeholder="Please input cookies"/>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">修改</el-button>
-        <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
-      </el-form-item>
-    </el-form>
-  </main>
+  <el-container class="admin-shell" v-loading="checking">
+    <el-aside class="admin-aside" width="220px">
+      <div class="brand">
+        <span class="brand-title">MoLiAPI</span>
+        <span class="brand-subtitle">后台管理</span>
+      </div>
+      <el-menu :default-active="activeMenu" class="admin-menu" @select="handleSelect">
+        <el-menu-item index="/system">系统配置</el-menu-item>
+        <el-menu-item index="/daily">每日签到</el-menu-item>
+        <el-menu-item index="/navigation">导航管理</el-menu-item>
+      </el-menu>
+    </el-aside>
+    <el-container>
+      <el-header class="admin-header">
+        <div>
+          <h1>{{ route.meta.title ?? '后台管理' }}</h1>
+          <span>配置、签到和导航数据集中管理</span>
+        </div>
+      </el-header>
+      <el-main class="admin-main">
+        <RouterView/>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
+
+<style scoped>
+.admin-shell {
+    min-height: 100vh;
+    background: #f5f7fb;
+}
+
+.admin-aside {
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 72px;
+    padding: 0 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.brand-title {
+    color: #1f2937;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.brand-subtitle {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.admin-menu {
+    border-right: 0;
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    height: 72px;
+    padding: 0 28px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-header h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.admin-header span {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.admin-main {
+    padding: 24px;
+}
+</style>

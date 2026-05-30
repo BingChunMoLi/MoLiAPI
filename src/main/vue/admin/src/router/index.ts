@@ -6,7 +6,28 @@ const router = createRouter({
         {
             path: '/',
             name: 'main',
-            component: () => import('@/views/MainView.vue')
+            component: () => import('@/views/MainView.vue'),
+            redirect: '/system',
+            children: [
+                {
+                    path: 'system',
+                    name: 'system',
+                    meta: {title: '系统配置'},
+                    component: () => import('@/views/SystemView.vue')
+                },
+                {
+                    path: 'daily',
+                    name: 'daily',
+                    meta: {title: '每日签到'},
+                    component: () => import('@/views/DailyView.vue')
+                },
+                {
+                    path: 'navigation',
+                    name: 'navigation',
+                    meta: {title: '导航管理'},
+                    component: () => import('@/views/NavigationView.vue')
+                }
+            ]
         },
         {
             path: '/login',
@@ -17,11 +38,6 @@ const router = createRouter({
             path: '/init',
             name: 'init',
             component: () => import('@/views/InitView.vue')
-        },
-        {
-            path: '/daily',
-            name: 'daily',
-            component: () => import('@/views/DailyView.vue')
         }
     ]
 })

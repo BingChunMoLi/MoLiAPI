@@ -1,104 +1,139 @@
+<script lang="ts" setup>
+import router from '@/router'
+import type {ResultVO} from '@/type/ResultVO'
+import type {FormInstance, FormRules} from 'element-plus'
+import {reactive, ref} from 'vue'
+
+interface RuleForm {
+    name: string
+    password: string
+}
+
+const user = reactive<RuleForm>({
+    name: 'username',
+    password: ''
+})
+
+const loading = ref(false)
+const ruleFormRef = ref<FormInstance>()
+
+const rules = reactive<FormRules<RuleForm>>({
+    name: [
+        {required: true, message: '请输入用户名', trigger: 'blur'},
+        {min: 3, max: 15, message: '长度应为 3 到 15 个字符', trigger: 'blur'}
+    ],
+    password: [
+        {required: true, message: '请输入密码', trigger: 'blur'},
+        {min: 5, max: 15, message: '长度应为 5 到 15 个字符', trigger: 'blur'}
+    ]
+})
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+    if (!formEl) {
+        return
+    }
+    await formEl.validate(async (valid) => {
+        if (!valid) {
+            return
+        }
+        loading.value = true
+        try {
+            const response = await fetch(import.meta.env.VITE_API_BASE_URL + 'user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                cache: 'no-cache',
+                credentials: 'include',
+                body: JSON.stringify(user)
+            })
+            const res = await response.json() as ResultVO<boolean>
+            if (res && res.code === '00000' && res.data) {
+                ElMessage.success('登录成功')
+                router.push({path: '/'})
+                return
+            }
+            ElMessage.error(res.msg || '登录失败')
+        } catch (error) {
+            console.error(error)
+            ElMessage.error('无法连接后端服务')
+        } finally {
+            loading.value = false
+        }
+    })
+}
+
+const resetForm = (formEl: FormInstance | undefined) => {
+    if (!formEl) {
+        return
+    }
+    formEl.resetFields()
+}
+</script>
+
 <template>
-  <div class="login-container">
-    <el-form ref="ruleFormRef" :model="user" :rules="rules" class="login-form" status-icon>
-      <el-form-item label="Username" prop="name">
-        <el-input v-model="user.name" class="input-field" placeholder="Please input username"/>
+  <div class="auth-page">
+    <el-form ref="ruleFormRef" :model="user" :rules="rules" class="auth-form" label-position="top" status-icon>
+      <div class="auth-title">
+        <h1>MoLiAPI</h1>
+        <span>后台管理登录</span>
+      </div>
+      <el-form-item label="用户名" prop="name">
+        <el-input v-model="user.name" placeholder="请输入用户名"/>
       </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="user.password" class="input-field" placeholder="Please input password" show-password
-                  type="password" @keyup.enter.native="submitForm(ruleFormRef)"/>
+      <el-form-item label="密码" prop="password">
+        <el-input
+            v-model="user.password"
+            placeholder="请输入密码"
+            show-password
+            type="password"
+            @keyup.enter="submitForm(ruleFormRef)"
+        />
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">Login</el-button>
-        <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
-      </el-form-item>
+      <div class="form-actions">
+        <el-button :loading="loading" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
+        <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+      </div>
     </el-form>
   </div>
 </template>
 
-<script lang="ts" setup>
-import {reactive, ref} from 'vue'
-import type {FormInstance, FormRules} from 'element-plus'
-import {ElMessage} from 'element-plus'
-import router from '@/router'
-
-const user = reactive<RuleForm>({
-  name: 'username',
-  password: ''
-})
-
-interface RuleForm {
-  name: string
-  password: string
-}
-
-const ruleFormRef = ref<FormInstance>()
-
-const rules = reactive<FormRules<RuleForm>>({
-  name: [
-    {required: true, message: 'Please input username', trigger: 'blur'},
-    {min: 3, max: 15, message: 'Length should be 3 to 15', trigger: 'blur'}
-  ],
-  password: [
-    {required: true, message: 'Please select password', trigger: 'blur'},
-    {min: 5, max: 15, message: 'Length should be 5 to 15', trigger: 'blur'}
-  ]
-})
-
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      fetch(import.meta.env.VITE_API_BASE_URL + 'user/login', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        cache: 'no-cache',
-        body: JSON.stringify(user)
-      })
-          .then((r) => r.json())
-          .then((res) => {
-            if (res && res.code === '00000' && res.data === true) {
-              router.push({path: '/'})
-            } else {
-              ElMessage.error('Oops, ' + res.msg)
-            }
-          })
-          .catch((r) => {
-            console.error(r)
-            ElMessage.error('Oops, network error')
-          })
-    } else {
-      console.log('error submit!')
-    }
-  })
-}
-
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
-</script>
-
 <style scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    background: #f5f7fb;
 }
 
-.login-form {
-  width: 300px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+.auth-form {
+    width: min(100%, 360px);
+    padding: 26px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
 }
 
-.input-field {
-  width: 100%;
+.auth-title {
+    margin-bottom: 22px;
 }
 
+.auth-title h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.auth-title span {
+    color: #6b7280;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
 </style>
