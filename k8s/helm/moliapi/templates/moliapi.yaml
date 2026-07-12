@@ -1,0 +1,178 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: {{ include "moliapi.fullname" . }}-data
+    annotations:
+        helm.sh/resource-policy: keep
+    labels:
+        {{- include "moliapi.labels" . | nindent 8 }}
+spec:
+    accessModes:
+        - ReadWriteOnce
+    {{- if .Values.persistence.storageClass }}
+    # 留空时由集群默认 StorageClass 动态分配。
+    storageClassName: {{ .Values.persistence.storageClass | quote }}
+    {{- end }}
+    resources:
+        requests:
+            storage: {{ .Values.persistence.size }}
+---
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ include "moliapi.fullname" . }}
+    labels:
+        {{- include "moliapi.labels" . | nindent 8 }}
+spec:
+    replicas: {{ .Values.replicaCount }}
+    selector:
+        matchLabels:
+            {{- include "moliapi.selectorLabels" . | nindent 12 }}
+    template:
+        metadata:
+            labels:
+                {{- include "moliapi.selectorLabels" . | nindent 16 }}
+                app.kubernetes.io/part-of: moliapi
+        spec:
+            {{- with .Values.imagePullSecrets }}
+            imagePullSecrets:
+                {{- toYaml . | nindent 16 }}
+            {{- end }}
+            securityContext:
+                fsGroup: 10001
+                fsGroupChangePolicy: OnRootMismatch
+                seccompProfile:
+                    type: RuntimeDefault
+            {{- if or .Values.mysql.enabled .Values.redis.enabled }}
+            initContainers:
+                {{- if .Values.mysql.enabled }}
+                - name: wait-for-mysql
+                  image: {{ .Values.initImage }}
+                  command:
+                      - sh
+                      - -ec
+                      - until nc -z {{ include "moliapi.mysqlHost" . }} 3306; do sleep 2; done
+                  securityContext:
+                      runAsNonRoot: true
+                      runAsUser: 10001
+                      runAsGroup: 10001
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop: ["ALL"]
+                  resources:
+                      requests: {cpu: 10m, memory: 16Mi}
+                      limits: {cpu: 50m, memory: 32Mi}
+                {{- end }}
+                {{- if .Values.redis.enabled }}
+                - name: wait-for-redis
+                  image: {{ .Values.initImage }}
+                  command:
+                      - sh
+                      - -ec
+                      - until nc -z {{ include "moliapi.redisHost" . }} 6379; do sleep 2; done
+                  securityContext:
+                      runAsNonRoot: true
+                      runAsUser: 10001
+                      runAsGroup: 10001
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop: ["ALL"]
+                  resources:
+                      requests: {cpu: 10m, memory: 16Mi}
+                      limits: {cpu: 50m, memory: 32Mi}
+                {{- end }}
+            {{- end }}
+            containers:
+                - name: moliapi
+                  image: {{ printf "%s:%s" .Values.image.repository .Values.image.tag }}
+                  imagePullPolicy: {{ .Values.image.pullPolicy }}
+                  ports:
+                      - name: http
+                        containerPort: 8090
+                        protocol: TCP
+                  envFrom:
+                      - configMapRef:
+                            name: {{ include "moliapi.fullname" . }}-config
+                  env:
+                      - name: SPRING_DATASOURCE_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ include "moliapi.secretName" . }}
+                                key: MYSQL_PASSWORD
+                      - name: SPRING_DATA_REDIS_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ include "moliapi.secretName" . }}
+                                key: REDIS_PASSWORD
+                      - name: JVM_OPTS
+                        value: {{ .Values.jvmOpts | quote }}
+                  startupProbe:
+                      httpGet:
+                          path: /actuator/health/liveness
+                          port: http
+                      periodSeconds: 10
+                      timeoutSeconds: 3
+                      failureThreshold: 30
+                  readinessProbe:
+                      httpGet:
+                          path: /actuator/health/readiness
+                          port: http
+                      periodSeconds: 10
+                      timeoutSeconds: 3
+                      failureThreshold: 6
+                  livenessProbe:
+                      httpGet:
+                          path: /actuator/health/liveness
+                          port: http
+                      periodSeconds: 20
+                      timeoutSeconds: 3
+                      failureThreshold: 3
+                  resources:
+                      {{- toYaml .Values.resources | nindent 22 }}
+                  securityContext:
+                      runAsNonRoot: true
+                      runAsUser: 10001
+                      runAsGroup: 10001
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop: ["ALL"]
+                  volumeMounts:
+                      - name: data
+                        mountPath: /soft/.api
+                      - name: logs
+                        mountPath: /soft/log
+                      - name: temp
+                        mountPath: /tmp
+            volumes:
+                - name: data
+                  {{- if .Values.persistence.enabled }}
+                  persistentVolumeClaim:
+                      claimName: {{ include "moliapi.fullname" . }}-data
+                  {{- else }}
+                  emptyDir: {}
+                  {{- end }}
+                - name: logs
+                  emptyDir: {}
+                - name: temp
+                  emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: {{ include "moliapi.fullname" . }}
+    labels:
+        {{- include "moliapi.labels" . | nindent 8 }}
+spec:
+    type: ClusterIP
+    selector:
+        {{- include "moliapi.selectorLabels" . | nindent 8 }}
+    ports:
+        - name: http
+          port: 8090
+          targetPort: http
+          protocol: TCP

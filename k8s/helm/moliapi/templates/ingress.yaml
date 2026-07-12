@@ -1,0 +1,30 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: {{ include "moliapi.fullname" . }}
+    labels:
+        {{- include "moliapi.labels" . | nindent 8 }}
+spec:
+    {{- if .Values.ingress.className }}
+    # 多个 Ingress Controller 共存时必须指定 className。
+    ingressClassName: {{ .Values.ingress.className | quote }}
+    {{- end }}
+    {{- if and .Values.ingress.tls.enabled .Values.ingress.tls.secretName }}
+    tls:
+        - hosts:
+              - {{ .Values.ingress.host | quote }}
+          secretName: {{ .Values.ingress.tls.secretName }}
+    {{- end }}
+    rules:
+        - host: {{ .Values.ingress.host | quote }}
+          http:
+              paths:
+                  - path: {{ .Values.ingress.path }}
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: {{ include "moliapi.fullname" . }}
+                            port:
+                                number: 8090
+{{- end }}

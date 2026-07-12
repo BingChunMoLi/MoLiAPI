@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: moliapi-config
+data:
+    # 同时启用生产配置模板和 JSON 控制台日志，便于 kubectl logs 查看。
+    SPRING_PROFILES_ACTIVE: template,json-console
+    # Kubernetes Service 名称可直接作为集群内 DNS 地址。
+    SPRING_DATASOURCE_URL: jdbc:mysql://moliapi-mysql:3306/api?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8
+    SPRING_DATASOURCE_USERNAME: moliapi
+    SPRING_DATA_REDIS_HOST: moliapi-redis
+    SPRING_DATA_REDIS_PORT: "6379"
+    # health 用于容器探针，prometheus 供可选的指标系统采集。
+    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
+    MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+    # 应用生成的数据写入 PVC，而不是容器临时文件系统。
+    MOLI_PATH: /soft/.api/

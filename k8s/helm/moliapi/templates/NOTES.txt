@@ -1,0 +1,12 @@
+MoLiAPI 资源已渲染到 Namespace {{ .Release.Namespace }}。
+
+确认预先创建了 Secret：
+  kubectl get secret {{ include "moliapi.secretName" . }} -n {{ .Release.Namespace }}
+
+查看 Pod 状态：
+  kubectl get pods -n {{ .Release.Namespace }}
+
+查看应用日志：
+  kubectl logs -n {{ .Release.Namespace }} deployment/{{ include "moliapi.fullname" . }} -f
+
+Ingress 域名：{{ .Values.ingress.host }}

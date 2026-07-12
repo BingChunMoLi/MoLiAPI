@@ -21,6 +21,11 @@ docker-compose:
 docker-compose up -d
 ```
 
+## Kubernetes
+
+项目提供 Kustomize 和 Helm 两种部署方式，并支持最小化与全量指标监控模式。详见
+[Kubernetes 部署文档](k8s/README.md)。
+
 ## 已支持接口:
 1. Bing美图
 2. emoji表情处理

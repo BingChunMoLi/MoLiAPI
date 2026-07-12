@@ -1,0 +1,170 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: moliapi-data
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            # 按实际图片、上传文件和工具数据规模调整容量。
+            storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: moliapi
+spec:
+    # 当前应用包含定时任务和单写 PVC，默认保持一个副本。
+    replicas: 1
+    selector:
+        matchLabels:
+            app.kubernetes.io/name: moliapi
+    template:
+        metadata:
+            labels:
+                app.kubernetes.io/name: moliapi
+        spec:
+            securityContext:
+                fsGroup: 10001
+                fsGroupChangePolicy: OnRootMismatch
+                seccompProfile:
+                    type: RuntimeDefault
+            initContainers:
+                - name: wait-for-mysql
+                  image: busybox:1.37.0
+                  command:
+                      - sh
+                      - -ec
+                      - until nc -z moliapi-mysql 3306; do sleep 2; done
+                  securityContext:
+                      runAsNonRoot: true
+                      runAsUser: 10001
+                      runAsGroup: 10001
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop:
+                              - ALL
+                  resources:
+                      requests:
+                          cpu: 10m
+                          memory: 16Mi
+                      limits:
+                          cpu: 50m
+                          memory: 32Mi
+                - name: wait-for-redis
+                  image: busybox:1.37.0
+                  command:
+                      - sh
+                      - -ec
+                      - until nc -z moliapi-redis 6379; do sleep 2; done
+                  securityContext:
+                      runAsNonRoot: true
+                      runAsUser: 10001
+                      runAsGroup: 10001
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop:
+                              - ALL
+                  resources:
+                      requests:
+                          cpu: 10m
+                          memory: 16Mi
+                      limits:
+                          cpu: 50m
+                          memory: 32Mi
+            containers:
+                - name: moliapi
+                  # 发布新版本时修改镜像标签；不要使用 latest。
+                  image: bingchunmoli/moliapi:v3.15.11
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                      - name: http
+                        containerPort: 8090
+                        protocol: TCP
+                  envFrom:
+                      - configMapRef:
+                            name: moliapi-config
+                  env:
+                      - name: SPRING_DATASOURCE_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: moliapi-secrets
+                                key: MYSQL_PASSWORD
+                      - name: SPRING_DATA_REDIS_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: moliapi-secrets
+                                key: REDIS_PASSWORD
+                      - name: JVM_OPTS
+                        value: -XX:MaxRAMPercentage=75.0 -Dmoli.path=/soft/.api/
+                  # startupProbe 给 Flyway 和 Spring Boot 足够的启动时间。
+                  startupProbe:
+                      httpGet:
+                          path: /actuator/health/liveness
+                          port: http
+                      periodSeconds: 10
+                      timeoutSeconds: 3
+                      failureThreshold: 30
+                  readinessProbe:
+                      httpGet:
+                          path: /actuator/health/readiness
+                          port: http
+                      periodSeconds: 10
+                      timeoutSeconds: 3
+                      failureThreshold: 6
+                  livenessProbe:
+                      httpGet:
+                          path: /actuator/health/liveness
+                          port: http
+                      periodSeconds: 20
+                      timeoutSeconds: 3
+                      failureThreshold: 3
+                  # requests 用于调度，limits 防止单个容器占满节点。
+                  resources:
+                      requests:
+                          cpu: 200m
+                          memory: 512Mi
+                      limits:
+                          cpu: "1"
+                          memory: 1Gi
+                  securityContext:
+                      runAsNonRoot: true
+                      runAsUser: 10001
+                      runAsGroup: 10001
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop:
+                              - ALL
+                  volumeMounts:
+                      - name: data
+                        mountPath: /soft/.api
+                      - name: logs
+                        mountPath: /soft/log
+                      - name: temp
+                        mountPath: /tmp
+            volumes:
+                - name: data
+                  persistentVolumeClaim:
+                      claimName: moliapi-data
+                - name: logs
+                  emptyDir: {}
+                - name: temp
+                  emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: moliapi
+spec:
+    type: ClusterIP
+    selector:
+        app.kubernetes.io/name: moliapi
+    ports:
+        - name: http
+          port: 8090
+          targetPort: http
+          protocol: TCP

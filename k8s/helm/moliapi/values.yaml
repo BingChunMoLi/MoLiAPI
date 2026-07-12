@@ -1,0 +1,112 @@
+# 资源名称默认固定为 moliapi，便于与 Kustomize 方式保持一致。
+nameOverride: ""
+fullnameOverride: moliapi
+
+# 必须预先创建该 Secret；Chart 不会生成或保存任何密码。
+existingSecret: moliapi-secrets
+imagePullSecrets: []
+
+image:
+    # 应用镜像仓库与版本均可覆盖；不要使用 latest。
+    repository: bingchunmoli/moliapi
+    tag: v3.15.11
+    pullPolicy: IfNotPresent
+
+# 当前应用包含定时任务和单写 PVC，默认保持一个副本。
+replicaCount: 1
+initImage: busybox:1.37.0
+jvmOpts: -XX:MaxRAMPercentage=75.0 -Dmoli.path=/soft/.api/
+resources:
+    requests:
+        cpu: 200m
+        memory: 512Mi
+    limits:
+        cpu: "1"
+        memory: 1Gi
+
+persistence:
+    enabled: true
+    size: 5Gi
+    # 留空时使用集群默认 StorageClass。
+    storageClass: ""
+
+ingress:
+    enabled: true
+    # 集群只有一个默认 Ingress Controller 时可留空。
+    className: ""
+    host: moliapi.local
+    path: /
+    tls:
+        enabled: false
+        # 启用 TLS 时填写已存在的证书 Secret 名称。
+        secretName: ""
+
+mysql:
+    enabled: true
+    image: mysql:8.4.10
+    database: api
+    username: moliapi
+    persistence:
+        size: 10Gi
+        storageClass: ""
+    resources:
+        requests:
+            cpu: 200m
+            memory: 512Mi
+        limits:
+            cpu: "1"
+            memory: 1Gi
+
+redis:
+    enabled: true
+    image: redis:7.4.9-alpine
+    persistence:
+        size: 2Gi
+        storageClass: ""
+    resources:
+        requests:
+            cpu: 50m
+            memory: 128Mi
+        limits:
+            cpu: 500m
+            memory: 512Mi
+
+# 关闭内置数据库时必须填写外部服务地址，密码仍从 existingSecret 读取。
+external:
+    mysql:
+        host: ""
+        port: 3306
+    redis:
+        host: ""
+        port: 6379
+
+# 指标组件默认关闭；集群已有托管监控时无需重复部署。
+prometheus:
+    enabled: false
+    image: prom/prometheus:v3.12.0
+    retention: 15d
+    persistence:
+        size: 10Gi
+        storageClass: ""
+    resources:
+        requests:
+            cpu: 100m
+            memory: 256Mi
+        limits:
+            cpu: "1"
+            memory: 1Gi
+
+grafana:
+    enabled: false
+    image: grafana/grafana:13.0.2
+    adminUser: admin
+    persistence:
+        size: 5Gi
+        storageClass: ""
+    resources:
+        requests:
+            cpu: 100m
+            memory: 256Mi
+        limits:
+            cpu: "1"
+            memory: 512Mi

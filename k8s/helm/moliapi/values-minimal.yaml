@@ -1,0 +1,9 @@
+# 最小化模式：应用、MySQL 和 Redis。
+mysql:
+    enabled: true
+redis:
+    enabled: true
+prometheus:
+    enabled: false
+grafana:
+    enabled: false

@@ -1,0 +1,9 @@
+# 全量模式：在最小化模式上增加 Prometheus 和 Grafana。
+mysql:
+    enabled: true
+redis:
+    enabled: true
+prometheus:
+    enabled: true
+grafana:
+    enabled: true

@@ -1,41 +1,23 @@
-# Compiled class file
+# Compiled output
 *.class
-
-# Log file
-*.log
-/api
-
-# BlueJ files
-*.ctxt
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+build/
+out/
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# Maven
+!.mvn/wrapper/maven-wrapper.jar
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Logs and diagnostics
+*.log
+logs/
+hs_err_pid*
+replay_pid*
 
-# Package Files #
+# Archives and packaged artifacts
 *.jar
 *.war
 *.nar
@@ -44,17 +26,83 @@ target/
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# IDE and editor state
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+.mtj.tmp/
+HELP.md
 
+# Local environment and secret files
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.keystore
+*.jks
+
+# Spring local profiles and private config
 src/main/resources/application-*.yml
+src/main/resources/application-*.yaml
+src/main/resources/application-*.properties
 !src/main/resources/application-template.yml
+!src/main/resources/application-h2.yml
+!src/main/resources/application-docker_compose.yml
+src/main/resources/google-service.json
+
+# Project-private source/config overlays
 src/main/java/com/bingchunmoli/api/me/
 src/test/java/com/bingchunmoli/api/me/
 src/main/resources/mapper/FavMapper.xml
+/api/
 deploy.bat
-!src/main/resources/application-h2.yml
-!src/main/resources/application-docker_compose.yml
-/src/main/resources/google-service.json
+
+# Docker compose runtime state
+docker-compose/config/
+docker-compose/mysql/data/
+docker-compose/mysql/log/
+docker-compose/redis/data/
+docker-compose/grafana-data/
+docker-compose/prometheus-data/
+docker-compose/promtail/log/
+docker-compose/nginx/logs/
+docker-compose/nginx/ssl/
+docker-compose/nginx/conf.d/
+
+# Uploads, caches, and temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Frontend dependencies and build artifacts
+node_modules/
+src/main/vue/admin/node_modules/
+src/main/vue/admin/dist/
+src/main/vue/admin/coverage/
+
+# Local AI scratch files
+.agents/*.local.md
+context.local.md
 
 .env.local
+
+# Local Kubernetes credentials and overrides
+k8s/**/secret.yaml
+k8s/**/secret.env
+k8s/**/values.local.yaml

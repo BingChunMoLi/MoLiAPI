@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: moliapi
+resources:
+    - namespace.yaml
+    - application-config.yaml
+    - moliapi.yaml
+    - mysql.yaml
+    - redis.yaml
+    - ingress.yaml
+labels:
+    - pairs:
+          app.kubernetes.io/part-of: moliapi
+      includeSelectors: false

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: moliapi
+spec:
+    # 如集群有多个 Ingress Controller，在此增加 ingressClassName，例如 nginx。
+    rules:
+        # 将 moliapi.local 替换为实际域名，并把 DNS 指向 Ingress Controller。
+        - host: moliapi.local
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: moliapi
+                            port:
+                                number: 8090
+    # 启用 HTTPS 时增加 tls，并引用已存在的证书 Secret；不要把证书提交到仓库。

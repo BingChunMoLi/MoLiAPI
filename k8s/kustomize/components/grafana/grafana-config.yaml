@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: moliapi-grafana-datasources
+data:
+    datasources.yml: |
+        apiVersion: 1
+        datasources:
+            - name: Prometheus
+              type: prometheus
+              access: proxy
+              url: http://moliapi-prometheus:9090
+              isDefault: true
+              editable: false

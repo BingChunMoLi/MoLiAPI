@@ -1,0 +1,9 @@
+apiVersion: 1
+datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      # Grafana 通过 Kubernetes Service DNS 访问 Prometheus。
+      url: http://moliapi-prometheus:9090
+      isDefault: true
+      editable: false

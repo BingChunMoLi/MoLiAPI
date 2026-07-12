@@ -1,0 +1,17 @@
+global:
+    # 所有目标的默认抓取周期；缩短周期会增加存储和网络开销。
+    scrape_interval: 15s
+    evaluation_interval: 15s
+
+scrape_configs:
+    - job_name: prometheus
+      static_configs:
+          - targets:
+                - localhost:9090
+    - job_name: moliapi
+      # Spring Boot Actuator 暴露的 Prometheus 指标路径。
+      metrics_path: /actuator/prometheus
+      static_configs:
+          - targets:
+                # moliapi 是同一 Namespace 中的 Kubernetes Service DNS 名称。
+                - moliapi:8090

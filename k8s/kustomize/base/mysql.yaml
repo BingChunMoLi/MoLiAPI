@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: moliapi-mysql
+spec:
+    clusterIP: None
+    selector:
+        app.kubernetes.io/name: moliapi-mysql
+    ports:
+        - name: mysql
+          port: 3306
+          targetPort: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: moliapi-mysql
+spec:
+    serviceName: moliapi-mysql
+    replicas: 1
+    selector:
+        matchLabels:
+            app.kubernetes.io/name: moliapi-mysql
+    template:
+        metadata:
+            labels:
+                app.kubernetes.io/name: moliapi-mysql
+        spec:
+            securityContext:
+                runAsUser: 999
+                runAsGroup: 999
+                fsGroup: 999
+                fsGroupChangePolicy: OnRootMismatch
+                seccompProfile:
+                    type: RuntimeDefault
+            containers:
+                - name: mysql
+                  # 固定补丁版本，升级前应先备份并阅读 MySQL 发布说明。
+                  image: mysql:8.4.10
+                  imagePullPolicy: IfNotPresent
+                  args:
+                      - --innodb-buffer-pool-size=80M
+                      - --character-set-server=utf8mb4
+                      - --collation-server=utf8mb4_0900_ai_ci
+                      - --default-time-zone=+08:00
+                      - --lower-case-table-names=1
+                      - --binlog-expire-logs-seconds=259200
+                      - --max-binlog-size=1024M
+                  ports:
+                      - name: mysql
+                        containerPort: 3306
+                  env:
+                      - name: MYSQL_DATABASE
+                        value: api
+                      - name: MYSQL_USER
+                        value: moliapi
+                      - name: MYSQL_ROOT_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: moliapi-secrets
+                                key: MYSQL_ROOT_PASSWORD
+                      - name: MYSQL_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: moliapi-secrets
+                                key: MYSQL_PASSWORD
+                  startupProbe:
+                      exec:
+                          command:
+                              - sh
+                              - -ec
+                              - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                      failureThreshold: 30
+                  readinessProbe:
+                      exec:
+                          command:
+                              - sh
+                              - -ec
+                              - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                      failureThreshold: 6
+                  livenessProbe:
+                      exec:
+                          command:
+                              - sh
+                              - -ec
+                              - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent
+                      periodSeconds: 20
+                      timeoutSeconds: 5
+                      failureThreshold: 3
+                  resources:
+                      requests:
+                          cpu: 200m
+                          memory: 512Mi
+                      limits:
+                          cpu: "1"
+                          memory: 1Gi
+                  securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                          drop:
+                              - ALL
+                  volumeMounts:
+                      - name: data
+                        mountPath: /var/lib/mysql
+    volumeClaimTemplates:
+        - metadata:
+              name: data
+          spec:
+              accessModes:
+                  - ReadWriteOnce
+              resources:
+                  requests:
+                      # 数据库容量只能扩容，缩容需要迁移数据。
+                      storage: 10Gi

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ include "moliapi.fullname" . }}-config
+    labels:
+        {{- include "moliapi.labels" . | nindent 8 }}
+data:
+    SPRING_PROFILES_ACTIVE: template,json-console
+    SPRING_DATASOURCE_URL: {{ printf "jdbc:mysql://%s:%v/%s?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8" (include "moliapi.mysqlHost" .) (ternary 3306 .Values.external.mysql.port .Values.mysql.enabled) .Values.mysql.database | quote }}
+    SPRING_DATASOURCE_USERNAME: {{ .Values.mysql.username | quote }}
+    SPRING_DATA_REDIS_HOST: {{ include "moliapi.redisHost" . | quote }}
+    SPRING_DATA_REDIS_PORT: {{ ternary 6379 .Values.external.redis.port .Values.redis.enabled | quote }}
+    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
+    MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+    MOLI_PATH: /soft/.api/
