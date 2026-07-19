@@ -7,8 +7,10 @@ import com.bingchunmoli.api.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +20,7 @@ import tools.jackson.databind.ObjectMapper;
 
 @AutoConfigureMybatisPlus
 @WebMvcTest(VersionController.class)
+@Import(VersionController.class)
 public class VersionControllerTest {
 
     @Autowired
@@ -28,6 +31,10 @@ public class VersionControllerTest {
     private String version;
     @MockitoBean
     private RedisUtil redisUtil;
+
+    @SpringBootConfiguration
+    static class TestApplication {
+    }
 
     @Test
     void getVersion() throws Exception {
