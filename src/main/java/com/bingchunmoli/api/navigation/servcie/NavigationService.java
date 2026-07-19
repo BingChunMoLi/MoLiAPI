@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.navigation.servcie;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import com.bingchunmoli.api.navigation.bean.Navigation;
 import com.bingchunmoli.api.navigation.bean.NavigationPO;
 

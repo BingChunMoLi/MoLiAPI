@@ -3,6 +3,7 @@ package com.bingchunmoli.api.img.task;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bingchunmoli.api.app.DeviceService;
+import com.bingchunmoli.api.app.bean.AppPushTarget;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.even.MessageEven;
@@ -75,7 +76,13 @@ public class ImgTask {
                 .setTitle("随机图定时任务 更新成功")
                 .setBody(body)
                 .setAppMessageEnum(AppMessageEnum.TOPIC);
-        deviceService.getDefaultToken().ifPresentOrElse(appMessage::setDeviceToken, appMessage::setDefaultTopic);
+        deviceService.getDefaultPushTarget().ifPresentOrElse(target -> setPushTarget(appMessage, target),
+                appMessage::setDefaultTopic);
         applicationEventPublisher.publishEvent(new MessageEven(this, appMessage));
+    }
+
+    private void setPushTarget(final AppMessage appMessage, final AppPushTarget target) {
+        appMessage.setDeviceToken(target.token())
+                .setPushType(target.pushType());
     }
 }

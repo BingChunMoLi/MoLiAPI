@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.netease;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicPlaylist;
 import com.bingchunmoli.api.netease.mapper.NeteaseMusicPlaylistMapper;
 import org.springframework.stereotype.Service;

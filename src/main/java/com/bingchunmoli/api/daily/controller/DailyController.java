@@ -3,6 +3,7 @@ package com.bingchunmoli.api.daily.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.app.DeviceService;
+import com.bingchunmoli.api.app.bean.AppPushTarget;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.daily.bean.Daily;
@@ -118,9 +119,15 @@ public class DailyController {
                 .setTitle("签到成功")
                 .setBody(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .setAppMessageEnum(AppMessageEnum.DEVICE_ID);
-        deviceService.getDefaultToken().ifPresentOrElse(appMessage::setDeviceToken, appMessage::setDefaultTopic);
+        deviceService.getDefaultPushTarget().ifPresentOrElse(target -> setPushTarget(appMessage, target),
+                appMessage::setDefaultTopic);
         applicationEventPublisher.publishEvent(new MessageEven(this, appMessage));
         return ResultVO.ok(dailyLogService.saveBatch(list));
+    }
+
+    private void setPushTarget(final AppMessage appMessage, final AppPushTarget target) {
+        appMessage.setDeviceToken(target.token())
+                .setPushType(target.pushType());
     }
 
     /**

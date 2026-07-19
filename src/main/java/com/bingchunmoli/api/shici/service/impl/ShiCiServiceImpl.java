@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.shici.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import com.bingchunmoli.api.shici.mapper.ShiCiMapper;
 import com.bingchunmoli.api.shici.service.ShiCiService;

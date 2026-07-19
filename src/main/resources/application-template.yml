@@ -34,6 +34,11 @@ moli:
     certificatePath: #证书路径
     privateKeyPath: #私钥路径
     domain: #更新的域名
+  push:
+    huawei:
+      enabled: false
+      clientId: # AppGallery Connect OAuth client ID
+      clientSecret: # AppGallery Connect OAuth client secret
   init:
     sqlPath: "classpath:/init/db/"
     yiYanJsonPath: "classpath:/init/data/"

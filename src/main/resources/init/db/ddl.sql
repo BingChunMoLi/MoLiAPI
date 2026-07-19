@@ -119,6 +119,8 @@ CREATE TABLE IF NOT EXISTS device
     id         int auto_increment
         primary key,
     token      varchar(300) null,
+    hms_token  varchar(300) null,
+    push_type  varchar(10)  null default 'FCM',
     name       varchar(10)  null comment '设备名称',
     model      varchar(30)  null comment '设备型号',
     android_id varchar(60)  null comment '安卓Id'

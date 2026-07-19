@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.config.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.config.bean.Config;
 import com.bingchunmoli.api.config.mapper.ConfigMapper;

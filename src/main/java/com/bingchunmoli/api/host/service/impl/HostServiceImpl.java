@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.host.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.host.bean.Host;
 import com.bingchunmoli.api.host.bean.HostTypeEnum;
 import com.bingchunmoli.api.host.mapper.HostMapper;

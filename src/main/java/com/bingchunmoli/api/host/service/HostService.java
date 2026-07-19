@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.host.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import com.bingchunmoli.api.host.bean.Host;
 
 import java.util.List;

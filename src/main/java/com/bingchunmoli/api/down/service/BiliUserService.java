@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.down.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import com.bingchunmoli.api.down.bean.UserPO;
 
 import java.util.Collection;

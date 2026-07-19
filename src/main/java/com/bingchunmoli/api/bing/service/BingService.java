@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.bing.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;

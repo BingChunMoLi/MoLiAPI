@@ -20,6 +20,11 @@ moli:
     domain: #更新的域名
     play-list-id:
     cookies:
+  push:
+    huawei:
+      enabled: false
+      client-id:
+      client-secret:
 server:
   port: 8090
   http2:

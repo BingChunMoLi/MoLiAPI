@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.down.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.down.bean.FavPO;
 import com.bingchunmoli.api.down.mapper.FavDao;
 import com.bingchunmoli.api.down.service.FavService;

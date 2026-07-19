@@ -3,7 +3,7 @@ package com.bingchunmoli.api.bing.service.impl;
 import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.bean.BingImageVO;
 import com.bingchunmoli.api.bing.bean.enums.BingEnum;

@@ -7,13 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 /**
  * 图片转换器及拦截器注册
@@ -31,8 +29,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
      * 图片转换器
      */
     @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new BufferedImageHttpMessageConverter());
+    public void configureMessageConverters(final HttpMessageConverters.ServerBuilder builder) {
+        builder.addCustomConverter(new BufferedImageHttpMessageConverter());
     }
 
     /**

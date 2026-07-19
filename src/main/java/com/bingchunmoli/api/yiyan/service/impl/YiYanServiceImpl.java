@@ -1,7 +1,7 @@
 package com.bingchunmoli.api.yiyan.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.mapper.YiYanMapper;

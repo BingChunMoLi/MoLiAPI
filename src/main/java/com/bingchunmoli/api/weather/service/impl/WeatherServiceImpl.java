@@ -4,7 +4,7 @@ import cn.hutool.core.text.StrPool;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.utils.IntegerUtil;
 import com.bingchunmoli.api.utils.SendMailUtil;

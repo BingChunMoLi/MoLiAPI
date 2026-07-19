@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.weather.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import com.bingchunmoli.api.weather.bean.WeatherSub;
 import com.bingchunmoli.api.weather.bean.WeatherSubscribeParam;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,6 @@
 package com.bingchunmoli.api.daily.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.daily.bean.DailyLog;
 import com.bingchunmoli.api.daily.bean.DailyLogPO;
 import com.bingchunmoli.api.daily.bean.DailyQuery;
