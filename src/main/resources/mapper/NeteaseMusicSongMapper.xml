@@ -32,10 +32,10 @@
         </foreach>
     </insert>
 
-    <select id="selectRandomSong" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
+    <select id="selectSongAtOffset" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
         SELECT id, third_id, `name`, album_id, playlist_id FROM netease_music_song
-        ORDER BY RAND()
-        LIMIT 1
+        ORDER BY id
+        LIMIT 1 OFFSET #{offset}
     </select>
 
     <select id="getSongUser" resultType="java.lang.Integer">

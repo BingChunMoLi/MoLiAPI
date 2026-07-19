@@ -11,6 +11,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -18,43 +19,61 @@ import java.util.stream.Collectors;
 */
 @Service
 @RequiredArgsConstructor
-public class NeteaseMusicSongServiceImpl extends ServiceImpl<NeteaseMusicSongMapper, NeteaseMusicSong> implements NeteaseMusicSongService{
+public class NeteaseMusicSongServiceImpl extends ServiceImpl<NeteaseMusicSongMapper, NeteaseMusicSong>
+        implements NeteaseMusicSongService {
     private final NeteaseMusicUserService neteaseMusicUserService;
 
     @Override
-    public void saveBatchAndChild(List<NeteaseMusicSong> songs) {
+    public void saveBatchAndChild(final List<NeteaseMusicSong> songs) {
         if (songs == null || songs.isEmpty()) {
             return;
         }
-        List<NeteaseMusicSong> dbSongs = list(new LambdaQueryWrapper<NeteaseMusicSong>()
+
+        final List<NeteaseMusicSong> dbSongs = list(new LambdaQueryWrapper<NeteaseMusicSong>()
                 .in(NeteaseMusicSong::getThirdId, songs.stream().map(NeteaseMusicSong::getThirdId).toList()));
         if (dbSongs == null || dbSongs.isEmpty()) {
-            ((NeteaseMusicSongService)AopContext.currentProxy()).saveBatch(songs);
-            for (NeteaseMusicSong song : songs) {
-                List<Integer> userIds = neteaseMusicUserService.getIdBatch(song.getArtists());
+            ((NeteaseMusicSongService) AopContext.currentProxy()).saveBatch(songs);
+            for (final NeteaseMusicSong song : songs) {
+                final List<Integer> userIds = neteaseMusicUserService.getIdBatch(song.getArtists());
                 getBaseMapper().saveSongUser(song.getId(), userIds);
             }
-        }else {
-            ((NeteaseMusicSongService) AopContext.currentProxy()).updateBatchById(songs.stream().filter(v -> v.getId() != null).collect(Collectors.toList()));
-            ((NeteaseMusicSongService) AopContext.currentProxy()).saveBatch(songs.stream().filter(v -> v.getId() == null).collect(Collectors.toList()));
-            for (NeteaseMusicSong song : songs) {
-                List<Integer> userIds = neteaseMusicUserService.getIdBatch(song.getArtists());
-                List<Integer> alreadyExistsUserIds = getBaseMapper().getSongUser(song.getId());
-                List<Integer> saveUserIds = alreadyExistsUserIds.stream().filter(v -> !userIds.contains(v)).toList();
-                if (CollUtil.isNotEmpty(saveUserIds)) {
-                    getBaseMapper().saveSongUser(song.getId(), saveUserIds);
-                }
+            return;
+        }
+
+        final List<NeteaseMusicSong> existingSongs = songs.stream()
+                .filter(song -> song.getId() != null)
+                .collect(Collectors.toList());
+        final List<NeteaseMusicSong> newSongs = songs.stream()
+                .filter(song -> song.getId() == null)
+                .collect(Collectors.toList());
+        ((NeteaseMusicSongService) AopContext.currentProxy()).updateBatchById(existingSongs);
+        ((NeteaseMusicSongService) AopContext.currentProxy()).saveBatch(newSongs);
+
+        for (final NeteaseMusicSong song : songs) {
+            final List<Integer> userIds = neteaseMusicUserService.getIdBatch(song.getArtists());
+            final List<Integer> alreadyExistsUserIds = getBaseMapper().getSongUser(song.getId());
+            final List<Integer> saveUserIds = alreadyExistsUserIds.stream()
+                    .filter(userId -> !userIds.contains(userId))
+                    .toList();
+            if (CollUtil.isNotEmpty(saveUserIds)) {
+                getBaseMapper().saveSongUser(song.getId(), saveUserIds);
             }
         }
     }
 
     @Override
     public NeteaseMusicSong getRandomSong() {
-        return getBaseMapper().selectRandomSong();
+        final long songCount = count();
+        if (songCount == 0) {
+            return null;
+        }
+
+        final long offset = ThreadLocalRandom.current().nextLong(songCount);
+        return getBaseMapper().selectSongAtOffset(offset);
     }
 
     @Override
-    public List<NeteaseMusicSongVO> getMusicSongList(String id) {
+    public List<NeteaseMusicSongVO> getMusicSongList(final String id) {
         return getBaseMapper().getMusicSongList(id);
     }
 }

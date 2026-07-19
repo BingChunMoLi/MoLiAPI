@@ -30,6 +30,9 @@ public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements
         if (list == null) {
             list = list();
         }
+        if (list.isEmpty()) {
+            return null;
+        }
         return list.get(new Random().nextInt(list.size()));
     }
 

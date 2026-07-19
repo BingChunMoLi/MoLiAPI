@@ -60,6 +60,7 @@ src/main/resources/application-*.yaml
 src/main/resources/application-*.properties
 !src/main/resources/application-template.yml
 !src/main/resources/application-h2.yml
+!src/main/resources/application-sqlite.yml
 !src/main/resources/application-docker_compose.yml
 src/main/resources/google-service.json
 
@@ -89,6 +90,9 @@ temp/
 *.bak
 *.swp
 *.swo
+*.db
+*.db-shm
+*.db-wal
 
 # Frontend dependencies and build artifacts
 node_modules/

@@ -3,6 +3,7 @@ package com.bingchunmoli.api.netease.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicSong;
 import com.bingchunmoli.api.netease.bean.NeteaseMusicSongVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface NeteaseMusicSongMapper extends BaseMapper<NeteaseMusicSong> {
      * 随机一首歌
      * @return 歌曲信息
      */
-    NeteaseMusicSong selectRandomSong();
+    NeteaseMusicSong selectSongAtOffset(@Param("offset") final long offset);
 
     /**
      * 获取该歌单的用户

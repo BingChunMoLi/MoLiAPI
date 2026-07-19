@@ -16,6 +16,22 @@ or
 java -jar -Dspring.profiles.active=h2 moliapi.jar
 ```
 
+## Database profiles
+
+H2 is the default in-memory database for local development and tests:
+
+```shell
+java -jar moliapi.jar --spring.profiles.active=h2
+```
+
+SQLite stores data in `moliapi.db` by default. Set `MOLI_SQLITE_PATH` to use another database file:
+
+```shell
+java -jar moliapi.jar --spring.profiles.active=sqlite
+```
+
+MySQL deployments continue to use the datasource settings from `application-template.yml`.
+
 docker-compose:
 ```shell
 docker-compose up -d

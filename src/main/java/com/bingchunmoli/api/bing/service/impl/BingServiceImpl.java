@@ -18,6 +18,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +35,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     public BingImage getAllBingImage() {
         BingImage t = redisUtil.getObject(BingEnum.ALL_BING.getKey());
         if (t == null) {
-            Long id = baseMapper.getIdByCreateDate(LocalDate.now());
+            final Long id = getIdByCreateDate(LocalDate.now());
             if (id == null) {
                 return getBingImageByRemote();
             }
@@ -70,8 +71,10 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
     }
 
     @Override
-    public BingImageVO getBingImageByRemote(BingEnum bingEnum) {
-        String bingResult = HttpUtil.get("https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch=" + bingEnum.getSearch() + "&format=js");
+    public BingImageVO getBingImageByRemote(final BingEnum bingEnum) {
+        final String bingResult = HttpUtil.get(
+                "https://www.bing.com/HPImageArchive.aspx?n=1&mkt=$PSCulture&idx=0&ensearch="
+                        + bingEnum.getSearch() + "&format=js");
         try {
             return om.readValue(bingResult, BingImageVO.class);
         } catch (JacksonException e) {
@@ -85,7 +88,7 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
         BingImageVO enBingImageVO = getBingImageByRemote(BingEnum.EN_BING);
         BingImage bingImage = new BingImage(cnBingImageVO, enBingImageVO);
         synchronized (BingServiceImpl.class) {
-            Long id = baseMapper.getIdByCreateDate(LocalDate.now());
+            final Long id = getIdByCreateDate(LocalDate.now());
             if (id == null) {
                 save(bingImage);
             } else {
@@ -109,6 +112,11 @@ public class BingServiceImpl extends ServiceImpl<BingImageMapper, BingImage> imp
         redisUtil.setObject(BingEnum.CN_BING.getKey(), cnBingImageVO, 1, TimeUnit.DAYS);
         redisUtil.setObject(BingEnum.EN_BING.getKey(), enBingImageVO, 1, TimeUnit.DAYS);
         redisUtil.setObject(BingEnum.ALL_BING.getKey(), bingImage, 1, TimeUnit.DAYS);
+    }
+
+    private Long getIdByCreateDate(final LocalDate date) {
+        final LocalDateTime startTime = date.atStartOfDay();
+        return baseMapper.getIdByCreateTimeRange(startTime, startTime.plusDays(1));
     }
 
 }

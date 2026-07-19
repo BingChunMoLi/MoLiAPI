@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 /**
@@ -125,7 +126,11 @@ public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements
     @Override
     public YiYan findRandomYiYan() {
         if (list.isEmpty()) {
-            return baseMapper.findRandom();
+            final long recordCount = count();
+            if (recordCount == 0) {
+                return null;
+            }
+            return baseMapper.findAtOffset(ThreadLocalRandom.current().nextLong(recordCount));
         }
         return list.get(new Random().nextInt(list.size()));
     }

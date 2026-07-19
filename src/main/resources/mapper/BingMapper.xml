@@ -3,7 +3,11 @@
 <mapper namespace="com.bingchunmoli.api.bing.mapper.BingImageMapper">
 
 
-    <select id="getIdByCreateDate" resultType="java.lang.Long">
-        select id from bing_image where date_format(create_time,'%Y-%m-%d') = #{date}
+    <select id="getIdByCreateTimeRange" resultType="java.lang.Long">
+        select id
+        from bing_image
+        where create_time &gt;= #{startTime}
+          and create_time &lt; #{endTime}
+        limit 1
     </select>
 </mapper>
