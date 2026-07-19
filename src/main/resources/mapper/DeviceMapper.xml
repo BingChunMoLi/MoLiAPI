@@ -15,7 +15,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,token,hms_token,push_type,`name`,
+        id,token,hms_token,push_type,name,
         model,android_id
     </sql>
 </mapper>

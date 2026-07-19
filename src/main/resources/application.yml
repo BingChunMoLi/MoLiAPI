@@ -86,6 +86,7 @@ mybatis-plus:
   global-config:
     banner: off
     db-config:
+      column-format: "`%s`"
       id-type: auto
       logic-delete-field: deleted
       logic-delete-value: 1

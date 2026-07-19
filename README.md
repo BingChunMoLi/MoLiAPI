@@ -30,6 +30,12 @@ SQLite stores data in `moliapi.db` by default. Set `MOLI_SQLITE_PATH` to use ano
 java -jar moliapi.jar --spring.profiles.active=sqlite
 ```
 
+PostgreSQL uses `MOLI_POSTGRESQL_URL`, `MOLI_POSTGRESQL_USERNAME`, and `MOLI_POSTGRESQL_PASSWORD`:
+
+```shell
+java -jar moliapi.jar --spring.profiles.active=postgresql
+```
+
 MySQL deployments continue to use the datasource settings from `application-template.yml`.
 
 docker-compose:

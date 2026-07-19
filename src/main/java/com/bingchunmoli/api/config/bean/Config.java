@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
-@TableName(value = "`config`")
+@TableName(value = "config")
 public class Config implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -24,12 +24,12 @@ public class Config implements Serializable {
     /**
      * 配置的key
      */
-    @TableField(value = "`key`")
+    @TableField(value = "key", keepGlobalFormat = true)
     private String key;
     /**
      * 配置的值
      */
-    @TableField(value = "`value`")
+    @TableField(value = "value", keepGlobalFormat = true)
     private String value;
     /**
      * 创建时间

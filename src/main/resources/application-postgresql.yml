@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${MOLI_POSTGRESQL_URL:jdbc:postgresql://localhost:5432/moliapi}
+    username: ${MOLI_POSTGRESQL_USERNAME:moliapi}
+    password: ${MOLI_POSTGRESQL_PASSWORD:}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1
+      pool-name: moliApi-postgresql
+  flyway:
+    locations: classpath:db/migration-postgresql
+mybatis-plus:
+  global-config:
+    db-config:
+      column-format: '"%s"'

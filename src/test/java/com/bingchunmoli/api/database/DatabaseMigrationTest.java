@@ -4,6 +4,7 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -28,6 +29,20 @@ class DatabaseMigrationTest {
         final String databasePath = tempDirectory.resolve("migration-test.db").toString();
         final String url = "jdbc:sqlite:" + databasePath;
         assertMigration(url, "org.sqlite.JDBC", "classpath:db/migration-sqlite", 1);
+    }
+
+    @Test
+    void migratesPostgreSQLCompatibleSchema() {
+        final String url = "jdbc:h2:mem:postgresql-migration-test;MODE=PostgreSQL;"
+                + "DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1";
+        assertMigration(url, "org.h2.Driver", "classpath:db/migration-postgresql", 1);
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "moli.test.postgresql.url", matches = ".+")
+    void migratesPostgreSQLDatabase() {
+        final String url = System.getProperty("moli.test.postgresql.url");
+        assertMigration(url, "org.postgresql.Driver", "classpath:db/migration-postgresql", 1);
     }
 
     private void assertMigration(final String url, final String driverClassName, final String location,

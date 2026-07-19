@@ -19,7 +19,7 @@
     </resultMap>
 
     <select id="getNavigationsList" resultMap="navigation">
-        select navigation.id, title, des, `url`, icon, tenant, tag_name, is_open, is_private, pwd
+        select navigation.id, title, des, url, icon, tenant, tag_name, is_open, is_private, pwd
         from navigation
                  left join navigation_tag on navigation.id = navigation_tag.navigation_id
                  left join tag on tag.id = navigation_tag.tag_id

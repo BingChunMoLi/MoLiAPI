@@ -26,7 +26,7 @@
     </resultMap>
     <select id="getStartAndEndTime" resultMap="dailyQuery">
         SELECT
-        `url`,
+        url,
         (
         SELECT MIN(daily_log.create_time) from daily_log
         <where>
@@ -52,7 +52,7 @@
             </if>
             and tenant = #{tenant}
         </where>
-        group by `url`
+        group by url
     </select>
 
 

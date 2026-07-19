@@ -23,7 +23,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,third_id,`name`,album_id
+        id,third_id,name,album_id
     </sql>
     <insert id="saveSongUser">
         insert into netease_music_song_user(user_id, song_id) values
@@ -33,7 +33,7 @@
     </insert>
 
     <select id="selectSongAtOffset" resultType="com.bingchunmoli.api.netease.bean.NeteaseMusicSong">
-        SELECT id, third_id, `name`, album_id, playlist_id FROM netease_music_song
+        SELECT id, third_id, name, album_id, playlist_id FROM netease_music_song
         ORDER BY id
         LIMIT 1 OFFSET #{offset}
     </select>
@@ -44,7 +44,7 @@
     </select>
 
     <select id="getMusicSongList" resultMap="NeteaseMusicSongVO">
-        select s.id, s.third_id, s.`name`, album_id, s.playlist_id, a.pic_url, a.publish_time, a.type, su.user_id
+        select s.id, s.third_id, s.name, album_id, s.playlist_id, a.pic_url, a.publish_time, a.type, su.user_id
         from netease_music_song s join netease_music_album a on a.id = s.album_id
                                   left join netease_music_song_user su on su.song_id = s.id
         where s.playlist_id = #{id}

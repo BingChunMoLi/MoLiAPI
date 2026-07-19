@@ -44,7 +44,7 @@ public class YiYan implements Serializable {
 
     private String type;
 
-    @TableField("`from`")
+    @TableField(value = "from", keepGlobalFormat = true)
     private String from;
 
     private String fromWho;
