@@ -28,7 +28,7 @@
         <loki-logback.version>2.0.3</loki-logback.version>
         <firebase-admin.version>9.10.0</firebase-admin.version>
         <springdoc.version>3.0.3</springdoc.version>
-        <sqlite-jdbc.version>3.53.1.0</sqlite-jdbc.version>
+        <sqlite-jdbc.version>3.53.2.0</sqlite-jdbc.version>
     </properties>
 
     <dependencies>
