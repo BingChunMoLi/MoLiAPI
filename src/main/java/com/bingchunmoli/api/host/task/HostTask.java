@@ -7,6 +7,7 @@ import com.bingchunmoli.api.host.bean.Host;
 import com.bingchunmoli.api.host.service.HostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "host", havingValue = "true")
 @RequiredArgsConstructor
 public class HostTask {
     private static final String NEO_HOST = " https://raw.githubusercontent.com/neoFelhz/neohosts/gh-pages/basic/hosts";

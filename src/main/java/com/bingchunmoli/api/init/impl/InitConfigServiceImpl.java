@@ -6,6 +6,7 @@ import com.bingchunmoli.api.config.service.ConfigService;
 import com.bingchunmoli.api.init.InitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -21,6 +22,7 @@ import java.util.Locale;
  */
 @Slf4j
 @Service
+@ConditionalOnProperty(prefix = "moli.features", name = "startup-initialization", havingValue = "true")
 @RequiredArgsConstructor
 public class InitConfigServiceImpl implements InitService {
     private final ConfigService configService;

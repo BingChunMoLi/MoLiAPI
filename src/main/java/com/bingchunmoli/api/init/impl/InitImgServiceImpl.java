@@ -4,7 +4,7 @@ import com.bingchunmoli.api.img.task.ImgTask;
 import com.bingchunmoli.api.init.InitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@Profile({"!test", "!dev"})
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "image", havingValue = "true")
 @RequiredArgsConstructor
 public class InitImgServiceImpl implements InitService {
     private final ImgTask imgTask;

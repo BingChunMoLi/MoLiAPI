@@ -40,19 +40,16 @@ moli:
       clientId: # AppGallery Connect OAuth client ID
       clientSecret: # AppGallery Connect OAuth client secret
   init:
-    sqlPath: "classpath:/init/db/"
-    yiYanJsonPath: "classpath:/init/data/"
+    yi-yan-json-path: "classpath:/init/yiyan/*.json"
   bili:
     BBDownPath: ${moli.utilPath}BBDown
-    downloadPath: /soft/bili/video/
+    downloadPath: ${moli.path}bili/video/
     baiduPCSPath: ${moli.utilPath}BaiduPCS-Go
-    uploadPath: /soft/bili/fav/
+    uploadPath: ${moli.path}bili/fav/
     rclonePath: ${moli.utilPath}rclone
     youGetPath: ${moli.utilPath}YouGet
-    utilPath: ${moli.path}/util/
-    downloadAudioPath: ${moli.basePath}/audio
-    basePath: /soft/config
+    utilPath: ${moli.path}util/
+    downloadAudioPath: ${moli.path}bili/audio/
+    basePath: ${moli.path}config/
     play-list-id: 8792430274
     cookies:
-loki:
-  url: http://loki:3100/loki/api/v1/push

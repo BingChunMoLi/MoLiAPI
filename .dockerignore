@@ -4,6 +4,10 @@ target/
 .idea/
 *.iml
 logs/
+runtime/
+docker-compose/
+k8s/
+docs/
 clear.sql
 deploy.sh
 docker-compose.yml

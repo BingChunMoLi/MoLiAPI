@@ -11,6 +11,7 @@ import com.bingchunmoli.api.img.service.ImgService;
 import com.bingchunmoli.api.push.bean.AppMessage;
 import com.bingchunmoli.api.push.bean.enums.AppMessageEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +27,7 @@ import java.util.List;
  * @author BingChunMoLi
  */
 @Component
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "image", havingValue = "true")
 @RequiredArgsConstructor
 public class ImgTask {
     private final ApiConfig apiConfig;

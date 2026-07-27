@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,14 +33,13 @@ import tools.jackson.databind.ObjectMapper;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "spring.mail", name = {"enable, username, defaultTo"})
 public class ExceptionControllerAdvice {
     private final ApplicationEventPublisher applicationEventPublisher;
     @Value("${spring.mail.enable:false}")
     private boolean mailEnable;
-    @Value("${spring.mail.defaultTo}")
+    @Value("${spring.mail.defaultTo:}")
     private String defaultTo;
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.username:}")
     private String mailFrom;
 
     private final ObjectMapper om;
@@ -163,9 +161,9 @@ public class ExceptionControllerAdvice {
 
     private String getExceptionJsonMessage(){
         return "{" +
-                RequestTraceIdInterceptor.TRACE_ID +
+                RequestTraceIdInterceptor.REQUEST_ID +
                 ": " +
-                MDC.get(RequestTraceIdInterceptor.TRACE_ID) +
+                MDC.get(RequestTraceIdInterceptor.REQUEST_ID) +
                 "}";
     }
 }

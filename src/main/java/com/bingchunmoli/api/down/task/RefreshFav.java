@@ -15,6 +15,7 @@ import com.bingchunmoli.api.even.MessageEven;
 import com.bingchunmoli.api.push.bean.MailMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "bilibili", havingValue = "true")
 @RequiredArgsConstructor
 public class RefreshFav {
 

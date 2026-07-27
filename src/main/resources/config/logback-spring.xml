@@ -8,14 +8,14 @@
     scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
     debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
 -->
-<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<configuration>
 
     <!-- 用来定义变量值的标签 -->
-    <property name="APP_NAME" value="api"/>
-    <property name="LOG_PATH" value="log/"/>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="MoLiApi"/>
+    <springProperty scope="context" name="LOG_PATH" source="logging.file.path" defaultValue="log"/>
     <!-- 开发环境使用的控制台彩色日志模式 -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="[%X{traceId:-NONE}]%black %magenta(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %green(%-5level) [%file.%method:%line] %green(%X{RequestId}) %boldMagenta(%logger{}) - %cyan(%msg%n)"/>
+              value="[%X{traceId:-NONE},%X{spanId:-NONE},%X{requestId:-NONE}] %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{80} - %msg%n"/>
 
     <!-- key: 标识此timestamp的名字; datePattern: 设置将当前时间转换为字符串的模式 -->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
@@ -23,23 +23,27 @@
     <!-- 每个logger都关联到logger上下文 -->
     <contextName>${APP_NAME}</contextName>
 
-    <!-- ==================== 1. 控制台输出日志 (保持文本格式不变) ==================== -->
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
+    <springProfile name="!container &amp; !json-console">
+        <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
 
-    <!-- ==================== 1.1 控制台输出日志 (JSON 格式) ==================== -->
-    <appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
-            <format>ecs</format>
-        </encoder>
-    </appender>
+    <springProfile name="container | json-console">
+        <appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
+                <format>${CONSOLE_LOG_STRUCTURED_FORMAT}</format>
+                <charset>${CONSOLE_LOG_CHARSET}</charset>
+            </encoder>
+        </appender>
+    </springProfile>
 
-    <!-- ==================== 2. 文件输出日志 (改成 JSON 格式) ==================== -->
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- 容器环境只写标准输出；非容器环境保留滚动文件日志。 -->
+    <springProfile name="file-log">
+        <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志文件的路径及文件名 -->
         <File>${LOG_PATH}/${APP_NAME}.log</File>
         <!-- 如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true -->
@@ -56,12 +60,12 @@
 
         <!-- 使用 Spring Boot 原生结构化日志编码器输出 JSON -->
         <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
-            <format>ecs</format>
+            <format>${FILE_LOG_STRUCTURED_FORMAT}</format>
+            <charset>${FILE_LOG_CHARSET}</charset>
         </encoder>
-    </appender>
+        </appender>
 
-    <!-- ==================== 3. ERROR 文件输出日志 (改成 JSON 格式) ==================== -->
-    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -79,9 +83,11 @@
 
         <!-- 使用 Spring Boot 原生结构化日志编码器输出 JSON -->
         <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
-            <format>ecs</format>
+            <format>${FILE_LOG_STRUCTURED_FORMAT}</format>
+            <charset>${FILE_LOG_CHARSET}</charset>
         </encoder>
-    </appender>
+        </appender>
+    </springProfile>
 
 
     <!--MyBatis log configure-->
@@ -102,24 +108,23 @@
     <logger name="com.baomidou.mybatisplus.extension" level="WARN"/>
 
     <!-- 表示 >=info 级别的日志输出到控制台 (这里开发环境看到的就是彩色文本) -->
-    <springProfile name="!json-console">
+    <springProfile name="!container &amp; !json-console">
         <root level="info">
             <appender-ref ref="stdout"/>
         </root>
     </springProfile>
 
-    <!-- docker下可选择配置 SPRING_PROFILES_ACTIVE=json-console 开启 json 控制台日志 -->
-    <springProfile name="json-console">
+    <springProfile name="file-log">
+        <logger name="com.bingchunmoli" level="debug" additivity="true">
+            <appender-ref ref="file"/>
+            <appender-ref ref="debug"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="container | json-console">
         <root level="info">
             <appender-ref ref="stdout_json"/>
         </root>
     </springProfile>
-
-    <!-- 业务日志输出到文件 (文件里存的是 JSON) -->
-    <!-- 注意：修复了 additivity 属性的位置，它属于 logger 标签而不是 appender-ref -->
-    <logger name="com.bingchunmoli" level="debug" additivity="true">
-        <appender-ref ref="file"/>
-        <appender-ref ref="debug"/>
-    </logger>
 
 </configuration>

@@ -29,10 +29,20 @@ public class MoLiApiInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Collection<InitService> initServices = initServiceMap.values().stream().sorted(Comparator.comparingInt(InitService::getOrder)).toList();
-        for (InitService service : initServices) {
+        final Collection<InitService> initServices = initServiceMap.values().stream()
+                .sorted(Comparator.comparingInt(InitService::getOrder))
+                .toList();
+        if (initServices.isEmpty()) {
+            return;
+        }
+        for (final InitService service : initServices) {
             service.init();
         }
-        applicationEventPublisher.publishEvent(new MessageEven(this, new AppMessage().setAppMessageEnum(AppMessageEnum.TOPIC).setTopic("api").setTitle("系统初始化完成").setBody("系统初始化完成, 初始化当前时间:" + LocalDateTime.now())));
+        final AppMessage message = new AppMessage()
+                .setAppMessageEnum(AppMessageEnum.TOPIC)
+                .setTopic("api")
+                .setTitle("系统初始化完成")
+                .setBody("系统初始化完成, 初始化当前时间:" + LocalDateTime.now());
+        applicationEventPublisher.publishEvent(new MessageEven(this, message));
     }
 }

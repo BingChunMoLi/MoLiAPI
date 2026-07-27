@@ -2,6 +2,7 @@ package com.bingchunmoli.api.netease;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bingchunmoli.api.config.ApiConfig;
+import com.bingchunmoli.api.config.FeatureProperties;
 import com.bingchunmoli.api.netease.bean.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class MusicService {
     private final ObjectMapper om;
     private final ApiConfig apiConfig;
+    private final FeatureProperties featureProperties;
     private final NeteaseMusicPlaylistService playlistService;
     private final NeteaseMusicAlbumServiceImpl albumService;
     private final NeteaseMusicSongService songService;
@@ -78,6 +80,9 @@ public class MusicService {
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void savePlayList() {
+        if (!featureProperties.getTasks().getNeteaseMusic()) {
+            return;
+        }
         if (apiConfig.getPlayListId() == null || apiConfig.getPlayListId().isEmpty()) {
             log.info("playListId is empty ignore");
             return;

@@ -142,16 +142,12 @@ spec:
                   volumeMounts:
                       - name: data
                         mountPath: /soft/.api
-                      - name: logs
-                        mountPath: /soft/log
                       - name: temp
                         mountPath: /tmp
             volumes:
                 - name: data
                   persistentVolumeClaim:
                       claimName: moliapi-data
-                - name: logs
-                  emptyDir: {}
                 - name: temp
                   emptyDir: {}
 ---

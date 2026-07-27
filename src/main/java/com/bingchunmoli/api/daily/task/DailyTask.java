@@ -5,6 +5,7 @@ import com.bingchunmoli.api.daily.bean.Account;
 import com.bingchunmoli.api.daily.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.net.http.HttpResponse;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "daily", havingValue = "true")
 @RequiredArgsConstructor
 public class DailyTask {
     private final AccountService accountService;

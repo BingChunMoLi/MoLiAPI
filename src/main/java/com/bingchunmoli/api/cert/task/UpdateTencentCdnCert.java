@@ -17,6 +17,7 @@ import com.tencentcloudapi.common.provider.ProfileCredentialsProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "tencent-cdn-certificate", havingValue = "true")
 @RequiredArgsConstructor
 public class UpdateTencentCdnCert {
     private final ApiConfig apiConfig;

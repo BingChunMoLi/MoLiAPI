@@ -5,11 +5,25 @@ metadata:
     labels:
         {{- include "moliapi.labels" . | nindent 8 }}
 data:
-    SPRING_PROFILES_ACTIVE: template,json-console
+    SPRING_PROFILES_ACTIVE: template,container
+    SPRING_CONFIG_ADDITIONAL_LOCATION: optional:file:/soft/.api/config/
+    MOLI_ENVIRONMENT: {{ .Values.logging.environment | quote }}
+    MOLI_CONSOLE_LOG_FORMAT: {{ .Values.logging.consoleFormat | quote }}
     SPRING_DATASOURCE_URL: {{ printf "jdbc:mysql://%s:%v/%s?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8" (include "moliapi.mysqlHost" .) (ternary 3306 .Values.external.mysql.port .Values.mysql.enabled) .Values.mysql.database | quote }}
     SPRING_DATASOURCE_USERNAME: {{ .Values.mysql.username | quote }}
     SPRING_DATA_REDIS_HOST: {{ include "moliapi.redisHost" . | quote }}
     SPRING_DATA_REDIS_PORT: {{ ternary 6379 .Values.external.redis.port .Values.redis.enabled | quote }}
     MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
     MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+    MOLI_FEATURES_STARTUP_INITIALIZATION: {{ .Values.features.startupInitialization | quote }}
+    MOLI_FEATURES_YI_YAN_PRELOAD: {{ .Values.features.yiYanPreload | quote }}
+    MOLI_FEATURES_SCHEDULING: {{ .Values.features.scheduling | quote }}
+    MOLI_FEATURES_TASKS_BING: {{ .Values.features.tasks.bing | quote }}
+    MOLI_FEATURES_TASKS_WEATHER_NOTIFICATION: {{ .Values.features.tasks.weatherNotification | quote }}
+    MOLI_FEATURES_TASKS_DAILY: {{ .Values.features.tasks.daily | quote }}
+    MOLI_FEATURES_TASKS_IMAGE: {{ .Values.features.tasks.image | quote }}
+    MOLI_FEATURES_TASKS_HOST: {{ .Values.features.tasks.host | quote }}
+    MOLI_FEATURES_TASKS_BILIBILI: {{ .Values.features.tasks.bilibili | quote }}
+    MOLI_FEATURES_TASKS_NETEASE_MUSIC: {{ .Values.features.tasks.neteaseMusic | quote }}
+    MOLI_FEATURES_TASKS_TENCENT_CDN_CERTIFICATE: {{ .Values.features.tasks.tencentCdnCertificate | quote }}
     MOLI_PATH: /soft/.api/

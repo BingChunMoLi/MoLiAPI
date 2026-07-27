@@ -5,6 +5,7 @@ import com.bingchunmoli.api.bing.bean.BingImage;
 import com.bingchunmoli.api.bing.service.BingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.resilience.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "moli.features.tasks", name = "bing", havingValue = "true")
 @RequiredArgsConstructor
 public class BingTask {
     private final BingService bingService;

@@ -144,8 +144,6 @@ spec:
                   volumeMounts:
                       - name: data
                         mountPath: /soft/.api
-                      - name: logs
-                        mountPath: /soft/log
                       - name: temp
                         mountPath: /tmp
             volumes:
@@ -156,8 +154,6 @@ spec:
                   {{- else }}
                   emptyDir: {}
                   {{- end }}
-                - name: logs
-                  emptyDir: {}
                 - name: temp
                   emptyDir: {}
 ---

@@ -2,6 +2,7 @@ package com.bingchunmoli.api.yiyan.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
+import com.bingchunmoli.api.config.FeatureProperties;
 import com.bingchunmoli.api.exception.ApiInitException;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.mapper.YiYanMapper;
@@ -37,12 +38,17 @@ import java.util.stream.Stream;
 public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements YiYanService {
     private final ObjectMapper objectMapper;
     private final ResourcePatternResolver resourceLoader;
+    private final FeatureProperties featureProperties;
     private final List<YiYan> list = new ArrayList<>(500);
-    @Value("${moli.init.yiYanJsonPath}")
+    @Value("${moli.init.yi-yan-json-path:}")
     private String yiYanJsonPath;
 
     @PostConstruct
     public void init() {
+        if (!featureProperties.getYiYanPreload()) {
+            log.info("一言文件预加载未启用");
+            return;
+        }
         if (StrUtil.isEmpty(yiYanJsonPath)) {
             log.info("没有配置yiYanJsonPath, 跳过初始化一言json文件");
             return;
@@ -132,7 +138,7 @@ public class YiYanServiceImpl extends ServiceImpl<YiYanMapper, YiYan> implements
             }
             return baseMapper.findAtOffset(ThreadLocalRandom.current().nextLong(recordCount));
         }
-        return list.get(new Random().nextInt(list.size()));
+        return list.get(ThreadLocalRandom.current().nextInt(list.size()));
     }
 
     /**

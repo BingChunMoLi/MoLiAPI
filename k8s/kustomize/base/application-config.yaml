@@ -3,8 +3,11 @@ kind: ConfigMap
 metadata:
     name: moliapi-config
 data:
-    # 同时启用生产配置模板和 JSON 控制台日志，便于 kubectl logs 查看。
-    SPRING_PROFILES_ACTIVE: template,json-console
+    # 同时启用生产配置模板和容器 JSON 控制台日志，便于 kubectl logs 查看。
+    SPRING_PROFILES_ACTIVE: template,container
+    SPRING_CONFIG_ADDITIONAL_LOCATION: optional:file:/soft/.api/config/
+    MOLI_ENVIRONMENT: kubernetes
+    MOLI_CONSOLE_LOG_FORMAT: ecs
     # Kubernetes Service 名称可直接作为集群内 DNS 地址。
     SPRING_DATASOURCE_URL: jdbc:mysql://moliapi-mysql:3306/api?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8
     SPRING_DATASOURCE_USERNAME: moliapi
@@ -13,5 +16,16 @@ data:
     # health 用于容器探针，prometheus 供可选的指标系统采集。
     MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
     MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+    MOLI_FEATURES_STARTUP_INITIALIZATION: "false"
+    MOLI_FEATURES_YI_YAN_PRELOAD: "false"
+    MOLI_FEATURES_SCHEDULING: "false"
+    MOLI_FEATURES_TASKS_BING: "false"
+    MOLI_FEATURES_TASKS_WEATHER_NOTIFICATION: "false"
+    MOLI_FEATURES_TASKS_DAILY: "false"
+    MOLI_FEATURES_TASKS_IMAGE: "false"
+    MOLI_FEATURES_TASKS_HOST: "false"
+    MOLI_FEATURES_TASKS_BILIBILI: "false"
+    MOLI_FEATURES_TASKS_NETEASE_MUSIC: "false"
+    MOLI_FEATURES_TASKS_TENCENT_CDN_CERTIFICATE: "false"
     # 应用生成的数据写入 PVC，而不是容器临时文件系统。
     MOLI_PATH: /soft/.api/

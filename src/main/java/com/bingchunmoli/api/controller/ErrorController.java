@@ -48,7 +48,8 @@ public class ErrorController implements org.springframework.boot.webmvc.error.Er
         Object message = request.getAttribute("javax.servlet.error.message");
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Object path = request.getAttribute("javax.servlet.error.request_uri");
-        log.error("错误状态码: {}, 错误消息: {}, 错误路径: {}, traceId: {}, 响应状态码: {}", statusCode, message, path, MDC.get(RequestTraceIdInterceptor.TRACE_ID), response.getStatus());
+        log.error("错误状态码: {}, 错误消息: {}, 错误路径: {}, requestId: {}, 响应状态码: {}",
+                statusCode, message, path, MDC.get(RequestTraceIdInterceptor.REQUEST_ID), response.getStatus());
         if (statusCode == null) {
             statusCode = response.getStatus();
         }
@@ -89,7 +90,8 @@ public class ErrorController implements org.springframework.boot.webmvc.error.Er
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Object message = request.getAttribute("javax.servlet.error.message");
         Object path = request.getAttribute("javax.servlet.error.request_uri");
-        log.error("错误状态码: {},错误消息: {}, 错误路径: {}, traceId: {}, 响应状态码: {}", statusCode, message, path, MDC.get(RequestTraceIdInterceptor.TRACE_ID), response.getStatus());
+        log.error("错误状态码: {},错误消息: {}, 错误路径: {}, requestId: {}, 响应状态码: {}",
+                statusCode, message, path, MDC.get(RequestTraceIdInterceptor.REQUEST_ID), response.getStatus());
         if(statusCode == null){
             return new ResultVO<>(CodeEnum.FAILURE, message);
         } else if (statusCode >= HttpStatus.BAD_REQUEST.value() && statusCode <= HttpStatus.INTERNAL_SERVER_ERROR.value()) {

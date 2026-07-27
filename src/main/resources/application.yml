@@ -2,9 +2,23 @@ moli:
   version: @version@
   path: ${user.home}/
   init:
-    sql-path: classpath:/init/db/init.sql
-    yi-yan-json-path: classpath:/init/data/
-    yiYanJsonPath: classpath:/init/data/
+    yi-yan-json-path: classpath:/init/yiyan/*.json
+  firebase:
+    credentials-location: classpath:google-service.json
+  features:
+    startup-initialization: false
+    yi-yan-preload: false
+    firebase: false
+    scheduling: false
+    tasks:
+      bing: false
+      weather-notification: false
+      daily: false
+      image: false
+      host: false
+      bilibili: false
+      netease-music: false
+      tencent-cdn-certificate: false
   apiConfig:
     weather-key: #开发版和风天气的key(商业版需要更换weatherUri和weatherGeoUri到商业版域名)
     weather-uri: devapi.qweather.com
@@ -48,6 +62,7 @@ spring:
       max-request-size: -1
   application:
     name: MoLiApi
+    version: ${moli.version}
   profiles:
     active: h2
   data:
@@ -92,6 +107,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 logging:
+  file:
+    path: ${MOLI_LOG_PATH:${moli.path}logs}
   charset:
     file: utf-8
     console: utf-8
@@ -100,7 +117,13 @@ logging:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   structured:
     format:
-      file: ecs
+      console: ${MOLI_CONSOLE_LOG_FORMAT:ecs}
+      file: ${MOLI_FILE_LOG_FORMAT:ecs}
+    ecs:
+      service:
+        environment: ${MOLI_ENVIRONMENT:${spring.profiles.active:default}}
+
+management:
   tracing:
     sampling:
       probability: 1.0

@@ -128,6 +128,20 @@ helm upgrade --install moliapi k8s/helm/moliapi `
 
 ## 常用配置
 
+### 功能开关
+
+Kubernetes 默认关闭启动初始化、一言预加载和全部定时任务。通过 ConfigMap 或 Helm values 生成的额外环境
+变量按需开启，例如：
+
+```yaml
+MOLI_FEATURES_SCHEDULING: "true"
+MOLI_FEATURES_TASKS_BING: "true"
+MOLI_FEATURES_TASKS_TENCENT_CDN_CERTIFICATE: "false"
+```
+
+只打开任务开关不会执行任务，必须同时启用 `MOLI_FEATURES_SCHEDULING`。开启依赖第三方平台的任务前，应先
+通过 Secret 或外部配置提供对应密钥。
+
 ### 镜像
 
 - Kustomize：修改相应 workload YAML 中的 `image`；

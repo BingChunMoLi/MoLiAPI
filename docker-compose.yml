@@ -1,152 +1,141 @@
-version: "3.8"
 services:
   mysql:
-    image: mysql
+    image: mysql:8.4.10
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
       MYSQL_DATABASE: api
+      MYSQL_USER: moliapi
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
     restart: unless-stopped
     volumes:
-      - ./docker-compose/mysql/data/:/var/lib/mysql
-      - ./docker-compose/mysql/log/:/var/log/mysql
-      - ./docker-compose/mysql/conf:/etc/mysql/conf.d
-      - ./src/main/resources/db/migration/:/docker-entrypoint-initdb.d/
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "3306:3306"
-    command: [
-      'mysqld',
-      '--innodb-buffer-pool-size=80M',
-      '--character-set-server=utf8mb4',
-      '--collation-server=utf8mb4_unicode_ci',
-      '--default-time-zone=+8:00',
-      '--lower-case-table-names=1'
-    ]
-    networks:
-      - moliapi
+      - mysql-data:/var/lib/mysql
+      - ./docker-compose/mysql/conf:/etc/mysql/conf.d:ro
+    command:
+      - --innodb-buffer-pool-size=256M
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+08:00
+      - --lower-case-table-names=1
+      - --binlog-expire-logs-seconds=259200
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
   redis:
-    image: redis
-    ports:
-      - "6379:6379"
-    restart: unless-stopped
-    volumes:
-      - ./docker-compose/redis/conf/:/etc/redis/
-      - ./docker-compose/redis/data:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
-  moliapi:
-    container_name: moliapi
-    image: bingchunmoli/moliapi
+    image: redis:7.4.9-alpine
     restart: unless-stopped
     environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_DB: api
-      JVM_OPTS: "-Dspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-        -Dspring.datasource.url=jdbc:mysql://mysql:3306/api?serverTimezone=UTC&allowMultiQueries=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
-        -Dspring.datasource.username=root
-        -Dspring.datasource.password=password
-        -Dspring.profiles.active=template
-      "
-    ports:
-      - "8090:8090"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}
+    command:
+      - sh
+      - -ec
+      - exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"
     volumes:
-      - ./docker-compose/config:/soft/.api/
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+  moliapi:
+    image: ${MOLIAPI_IMAGE:-bingchunmoli/moliapi:v3.15.11}
+    build:
+      context: .
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: template,container
+      SPRING_CONFIG_ADDITIONAL_LOCATION: optional:file:/soft/.api/config/
+      MOLI_ENVIRONMENT: ${MOLI_ENVIRONMENT:-docker}
+      MOLI_CONSOLE_LOG_FORMAT: ${MOLI_CONSOLE_LOG_FORMAT:-ecs}
+      SPRING_DATASOURCE_USERNAME: moliapi
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: "6379"
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
+      MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+      MOLI_FEATURES_STARTUP_INITIALIZATION: "false"
+      MOLI_FEATURES_YI_YAN_PRELOAD: ${MOLI_YI_YAN_PRELOAD:-false}
+      MOLI_FEATURES_SCHEDULING: ${MOLI_SCHEDULING_ENABLED:-false}
+      MOLI_FEATURES_TASKS_BING: ${MOLI_TASK_BING_ENABLED:-false}
+      MOLI_FEATURES_TASKS_WEATHER_NOTIFICATION: ${MOLI_TASK_WEATHER_NOTIFICATION_ENABLED:-false}
+      MOLI_FEATURES_TASKS_DAILY: ${MOLI_TASK_DAILY_ENABLED:-false}
+      MOLI_FEATURES_TASKS_IMAGE: ${MOLI_TASK_IMAGE_ENABLED:-false}
+      MOLI_FEATURES_TASKS_HOST: ${MOLI_TASK_HOST_ENABLED:-false}
+      MOLI_FEATURES_TASKS_BILIBILI: ${MOLI_TASK_BILIBILI_ENABLED:-false}
+      MOLI_FEATURES_TASKS_NETEASE_MUSIC: ${MOLI_TASK_NETEASE_MUSIC_ENABLED:-false}
+      MOLI_FEATURES_TASKS_TENCENT_CDN_CERTIFICATE: ${MOLI_TASK_TENCENT_CDN_CERTIFICATE_ENABLED:-false}
+      MOLI_PATH: /soft/.api/
+      JVM_OPTS: -XX:MaxRAMPercentage=75.0
+    ports:
+      - "127.0.0.1:8090:8090"
+    volumes:
+      - moliapi-data:/soft/.api
+      - ./runtime/config:/soft/.api/config:ro
     depends_on:
-      - mysql
-      - redis
-      - loki
-  loki:
-    container_name: loki
-    image: grafana/loki
-    restart: unless-stopped
-    ports:
-      - "3100:3100"
-    volumes:
-      - ./docker-compose/local-config.yml:/etc/loki/local-config.yml
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
-  grafana:
-    container_name: grafana
-    restart: unless-stopped
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    user: '1000:1000'
-    volumes:
-      - ./docker-compose/grafana-data:/var/lib/grafana
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
-  promtail:
-    container_name: promtail
-    image: grafana/promtail:2.9.0
-    restart: unless-stopped
-    volumes:
-      - ./docker-compose/promtail/log:/var/log
-      - ./docker-compose/promtail/promtail-config.yml:/etc/promtail/config.yml
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8090/actuator/health/liveness || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 60s
+
   prometheus:
-    container_name: prometheus
-    image: prom/prometheus
+    image: prom/prometheus:v3.12.0
     restart: unless-stopped
+    profiles: ["observability"]
     ports:
-      - '9090:9090'
-    user: "0"
+      - "127.0.0.1:9090:9090"
     volumes:
-      - ./docker-compose/prometheus-data:/prometheus
-      - ./docker-compose/prometheus.yml:/etc/prometheus/prometheus.yml
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
-  nginx-prometheus-exporter:
-    container_name: nginx-prometheus-exporter
-    image: nginx/nginx-prometheus-exporter
-    restart: unless-stopped
-    ports:
-      - '9113:9113'
-    command: [ "--nginx.scrape-uri=http://nginx/nginx_status" ]
-    volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
+      - prometheus-data:/prometheus
+      - ./docker-compose/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
-      - nginx
+      moliapi:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:13.0.2
+    restart: unless-stopped
+    profiles: ["observability"]
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
   nginx:
-    container_name: nginx
-    image: nginx
+    image: nginx:1.28.0-alpine
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - ./docker-compose/nginx/html:/usr/share/nginx/html
-      - ./docker-compose/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./docker-compose/nginx/logs:/var/log/nginx
-      - ./docker-compose/nginx/conf.d:/etc/nginx/conf.d
-      - ./docker-compose/nginx/ssl:/etc/nginx/ssl
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - moliapi
+      - ./docker-compose/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker-compose/nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
-      - moliapi
-networks:
-  moliapi:
-    driver: bridge
+      moliapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1/nginx-health || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  moliapi-data:
+  mysql-data:
+  redis-data:
+  prometheus-data:
+  grafana-data:

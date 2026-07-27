@@ -76,13 +76,7 @@ src/main/resources/mapper/FavMapper.xml
 deploy.bat
 
 # Docker compose runtime state
-docker-compose/config/
-docker-compose/mysql/data/
-docker-compose/mysql/log/
-docker-compose/redis/data/
-docker-compose/grafana-data/
-docker-compose/prometheus-data/
-docker-compose/promtail/log/
+runtime/
 docker-compose/nginx/logs/
 docker-compose/nginx/ssl/
 docker-compose/nginx/conf.d/

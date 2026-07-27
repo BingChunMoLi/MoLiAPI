@@ -16,6 +16,9 @@ image:
 replicaCount: 1
 initImage: busybox:1.37.0
 jvmOpts: -XX:MaxRAMPercentage=75.0 -Dmoli.path=/soft/.api/
+logging:
+    environment: kubernetes
+    consoleFormat: ecs
 resources:
     requests:
         cpu: 200m
@@ -23,6 +26,20 @@ resources:
     limits:
         cpu: "1"
         memory: 1Gi
+
+features:
+    startupInitialization: false
+    yiYanPreload: false
+    scheduling: false
+    tasks:
+        bing: false
+        weatherNotification: false
+        daily: false
+        image: false
+        host: false
+        bilibili: false
+        neteaseMusic: false
+        tencentCdnCertificate: false
 
 persistence:
     enabled: true
