@@ -6,6 +6,7 @@ import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.bingchunmoli.api.config.ApiConfig;
+import com.bingchunmoli.api.exception.ApiJsonProcessingException;
 import com.bingchunmoli.api.utils.IntegerUtil;
 import com.bingchunmoli.api.utils.SendMailUtil;
 import com.bingchunmoli.api.weather.bean.WeatherSub;
@@ -19,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.net.URLEncoder;
@@ -42,19 +45,17 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
     private final HttpServletRequest request;
 
     @Override
-    public String getWeatherByDay(Integer day, String location) {
+    public JsonNode getWeatherByDay(final Integer day, final String location) {
         if (location.contains(StrPool.COMMA) || IntegerUtil.isInteger(location)) {
-            // 按经维度查询 或者 id查询
-            return getWeatherByDayCommon(day, location);
+            return readResponse(getWeatherByDayCommon(day, location));
         }
-        //按城市名查询，需要查询城市id
-        return getWeatherByDayCommon(day, getLocationId(location));
+        return readResponse(getWeatherByDayCommon(day, getLocationId(location)));
     }
 
     @Override
-    public String getWeatherByNow(String address) {
-        String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
-        return doGetWeatherByNow(redisCacheKey, address);
+    public JsonNode getWeatherByNow(final String address) {
+        final String redisCacheKey = new StringJoiner(":", WeatherCacheKey.BY_NOW.getKey(), ":" + address).toString();
+        return readResponse(doGetWeatherByNow(redisCacheKey, address));
     }
 
     @Override
@@ -157,6 +158,14 @@ public class WeatherServiceImpl extends ServiceImpl<WeatherMapper, WeatherSub> i
                 "&location=" +
                 URLEncoder.encode(location, StandardCharsets.UTF_8);
         return HttpUtil.get(requestUrl);
+    }
+
+    private JsonNode readResponse(final String response) {
+        try {
+            return om.readTree(response);
+        } catch (JacksonException e) {
+            throw new ApiJsonProcessingException(e);
+        }
     }
 
 }

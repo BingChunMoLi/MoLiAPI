@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.thunder.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.thunder.bean.DownloadProtocolConstant;
 import com.bingchunmoli.api.thunder.service.ThunderDownloadProtocolService;
@@ -29,14 +30,14 @@ public class ThunderDownloadProtocolController {
      */
     @GetMapping("toRaw")
     @Operation(summary = "原始请求连接转换至迅雷私有链接")
-    public String toRaw(String thunderURL){
+    public ResultVO<String> toRaw(final String thunderURL){
         if (StrUtil.isBlank(thunderURL)) {
             throw new ApiParamException("请求参数为空");
         }
         if (!(thunderURL.startsWith(DownloadProtocolConstant.THUNDER.getProtocol()))) {
             throw new ApiParamException("请求参数错误，迅雷链接不正确, 识别的迅雷链接为:thunder://");
         }
-        return thunderDownloadProtocolService.toRaw(thunderURL);
+        return ResultVO.ok(thunderDownloadProtocolService.toRaw(thunderURL));
     }
 
     /**
@@ -46,10 +47,10 @@ public class ThunderDownloadProtocolController {
      */
     @GetMapping("toThunder")
     @Operation(summary = "迅雷私有链接转换为原始链接")
-    public String toThunder(String rawURL){
+    public ResultVO<String> toThunder(final String rawURL){
         if (StrUtil.isBlank(rawURL)) {
             throw new ApiParamException("请求参数为空");
         }
-        return thunderDownloadProtocolService.toThunder(rawURL);
+        return ResultVO.ok(thunderDownloadProtocolService.toThunder(rawURL));
     }
 }

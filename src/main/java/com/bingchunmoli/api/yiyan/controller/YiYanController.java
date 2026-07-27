@@ -1,5 +1,6 @@
 package com.bingchunmoli.api.yiyan.controller;
 
+import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.yiyan.bean.YiYan;
 import com.bingchunmoli.api.yiyan.service.YiYanService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 /**
  * 一言
@@ -33,8 +32,8 @@ public class YiYanController {
      */
     @GetMapping("{id}")
     @Operation(summary = "获取指定一言")
-    public Optional<YiYan> getYiYan(@PathVariable Integer id) {
-        return yiYanService.getOptById(id);
+    public ResultVO<YiYan> getYiYan(@PathVariable final Integer id) {
+        return ResultVO.ok(yiYanService.getOptById(id).orElse(null));
     }
 
     /**
@@ -44,7 +43,7 @@ public class YiYanController {
      */
     @GetMapping("random")
     @Operation(summary = "获取随机一言")
-    public YiYan getRandomYiYan() {
-        return yiYanService.findRandomYiYan();
+    public ResultVO<YiYan> getRandomYiYan() {
+        return ResultVO.ok(yiYanService.findRandomYiYan());
     }
 }

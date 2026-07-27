@@ -4,6 +4,7 @@ package com.bingchunmoli.api.controller;
 import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.bean.enums.NotSupportHttpCode;
+import com.bingchunmoli.api.controller.advice.RawResponse;
 import com.bingchunmoli.api.interceptor.RequestTraceIdInterceptor;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ public class ErrorController implements org.springframework.boot.webmvc.error.Er
      * @return ModelAndView视图
      */
     @Operation(summary = "错误的http状态码生成错误的消息图片")
+    @RawResponse
     @RequestMapping(value = "/error", produces = MediaType.IMAGE_JPEG_VALUE)
     public BufferedImage handleError(HttpServletRequest request, HttpServletResponse response) {
         Object message = request.getAttribute("javax.servlet.error.message");

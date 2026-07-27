@@ -1,6 +1,8 @@
 package com.bingchunmoli.api.tencent.controller;
 
 
+import com.bingchunmoli.api.bean.ResultVO;
+import com.bingchunmoli.api.controller.advice.RawResponse;
 import com.bingchunmoli.api.exception.ApiParamException;
 import com.bingchunmoli.api.tencent.bean.enums.QQSizeEnum;
 import com.bingchunmoli.api.tencent.bean.enums.QZSizeEnum;
@@ -37,6 +39,7 @@ public class QqController {
      * @return qq头像
      */
     @GetMapping(value = "qq", produces = MediaType.IMAGE_JPEG_VALUE)
+    @RawResponse
     @Operation(summary = "根据qq号获取qq头像图片")
     public BufferedImage getQqImage(String qq, @RequestParam(required = false, defaultValue = "140") Integer size) {
         if (size <= 0) {
@@ -58,6 +61,7 @@ public class QqController {
      * @return QQ空间头像
      */
     @GetMapping(value = "qz", produces = MediaType.IMAGE_JPEG_VALUE)
+    @RawResponse
     @Operation(summary = "根据qq获取qq空间头像")
     public BufferedImage getQzImage(String qq, @RequestParam(required = false, defaultValue = "100") Integer size) {
         if (size <= 0) {
@@ -77,8 +81,8 @@ public class QqController {
      */
     @GetMapping("qz/json")
     @Operation(summary = "根据qq获取qq空间头像的json链接形式")
-    public String getQzImageForJson(String qq) {
-        return qqService.getQzImageForJson(qq);
+    public ResultVO<String> getQzImageForJson(final String qq) {
+        return ResultVO.ok(qqService.getQzImageForJson(qq));
     }
 
 

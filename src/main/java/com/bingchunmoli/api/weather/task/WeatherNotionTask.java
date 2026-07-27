@@ -6,7 +6,6 @@ import com.bingchunmoli.api.weather.bean.WeatherDailyBean;
 import com.bingchunmoli.api.weather.bean.WeatherSub;
 import com.bingchunmoli.api.weather.bean.enums.Code;
 import com.bingchunmoli.api.weather.service.WeatherService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +14,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,26 +39,25 @@ public class WeatherNotionTask {
 
     @Scheduled(cron = "0 30 18 * * ?")
     public void notion() {
-        List<WeatherSub> list = weatherService.list();
-        Map<String, WeatherDailyBean> notifiedLocationMap = getNotifiedLocation(list);
-        try {
-            notionMessage(notifiedLocationMap, list);
-        } catch (JsonProcessingException e) {
-            throw new ApiTaskException(e);
-        }
+        final List<WeatherSub> list = weatherService.list();
+        final Map<String, WeatherDailyBean> notifiedLocationMap = getNotifiedLocation(list);
+        notionMessage(notifiedLocationMap, list);
     }
 
     @Async
-    public void notionMessage(Map<String, WeatherDailyBean> notifiedLocationMap,
-                               List<WeatherSub> list) throws JsonProcessingException {
-        Map<String, List<WeatherSub>> messageMap = list.stream().collect(Collectors.groupingBy(WeatherSub::getLocation));
-        for (Map.Entry<String, WeatherDailyBean> entry : notifiedLocationMap.entrySet()) {
-            List<WeatherSub> weatherSub = messageMap.get(entry.getKey());
-            WeatherDailyBean value = entry.getValue();
+    public void notionMessage(
+            final Map<String, WeatherDailyBean> notifiedLocationMap,
+            final List<WeatherSub> list
+    ) {
+        final Map<String, List<WeatherSub>> messageMap = list.stream()
+                .collect(Collectors.groupingBy(WeatherSub::getLocation));
+        for (final Map.Entry<String, WeatherDailyBean> entry : notifiedLocationMap.entrySet()) {
+            final List<WeatherSub> weatherSub = messageMap.get(entry.getKey());
+            final WeatherDailyBean value = entry.getValue();
             if (log.isDebugEnabled()) {
                 log.debug("key: {}, message: {}", entry.getKey(), entry.getValue());
             }
-            Context context = new Context();
+            final Context context = new Context();
             weatherSub.forEach(v -> {
                 context.setLocale(Locale.CHINA);
                 context.setVariable("email", v.getEmail());
@@ -76,19 +75,18 @@ public class WeatherNotionTask {
         }
     }
 
-    private Map<String, WeatherDailyBean> getNotifiedLocation(List<WeatherSub> list) {
-        List<String> locationList = list.stream().map(WeatherSub::getLocation).distinct().toList();
-        HashMap<String, WeatherDailyBean> map = new HashMap<>();
-        for (String location : locationList) {
-            String weather;
-            WeatherDailyBean weatherDailyBean;
+    private Map<String, WeatherDailyBean> getNotifiedLocation(final List<WeatherSub> list) {
+        final List<String> locationList = list.stream().map(WeatherSub::getLocation).distinct().toList();
+        final HashMap<String, WeatherDailyBean> map = new HashMap<>();
+        for (final String location : locationList) {
+            final JsonNode weather = weatherService.getWeatherByDay(3, location);
+            final WeatherDailyBean weatherDailyBean;
             try {
-                weather = weatherService.getWeatherByDay(3, location);
                 if (log.isDebugEnabled()) {
                     log.debug("location: {}, weather: {}", location, weather);
                 }
-                weatherDailyBean = om.readValue(weather, WeatherDailyBean.class);
-            } catch (UnsupportedEncodingException | JsonProcessingException e) {
+                weatherDailyBean = om.treeToValue(weather, WeatherDailyBean.class);
+            } catch (JacksonException e) {
                 throw new ApiTaskException(e);
             }
             if (!Code.OK.getCode().equalsIgnoreCase(weatherDailyBean.getCode())) {

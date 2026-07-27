@@ -1,6 +1,7 @@
 package com.bingchunmoli.api.shici.controller;
 
 
+import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.shici.bean.ShiCi;
 import com.bingchunmoli.api.shici.service.ShiCiService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,8 +30,8 @@ public class ShiCiController {
      */
     @GetMapping("{id}")
     @Operation(summary = "获取指定诗词")
-    public ShiCi getShiCi(@PathVariable Integer id) {
-        return shiCiService.getById(id);
+    public ResultVO<ShiCi> getShiCi(@PathVariable final Integer id) {
+        return ResultVO.ok(shiCiService.getById(id));
     }
 
     /**
@@ -39,8 +40,8 @@ public class ShiCiController {
      */
     @GetMapping("random")
     @Operation(summary = "获取随机诗词")
-    public ShiCi getRandomShiCi() {
-        return shiCiService.findRandomShiCi();
+    public ResultVO<ShiCi> getRandomShiCi() {
+        return ResultVO.ok(shiCiService.findRandomShiCi());
     }
 }
 

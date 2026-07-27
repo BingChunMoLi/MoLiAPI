@@ -10,7 +10,7 @@ import com.bingchunmoli.api.bean.ResultVO;
 import com.bingchunmoli.api.bean.enums.CodeEnum;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.exception.ApiParamException;
-import com.bingchunmoli.api.ip.controller.IpController;
+import com.bingchunmoli.api.ip.service.IpService;
 import com.bingchunmoli.api.utils.RedisUtil;
 import com.bingchunmoli.api.weather.bean.WeatherSub;
 import com.bingchunmoli.api.weather.bean.WeatherSubscribeParam;
@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.JsonNode;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 @ConditionalOnProperty(prefix = "moli.apiConfig", name = {"weatherKey"})
 public class WeatherController {
     private final WeatherService weatherService;
-    private final IpController ipController;
+    private final IpService ipService;
     private final RedisUtil redisUtil;
     private final ApiConfig apiConfig;
 
@@ -61,15 +61,19 @@ public class WeatherController {
      */
     @GetMapping("byDay")
     @Operation(summary = "按天查询天气", description = "可以查询未来n天的天气,n的取值为3,7,10,15")
-    public String getWeatherByDay(@RequestParam(defaultValue = "3") Integer day, @RequestParam String location, HttpServletRequest request) throws IOException {
+    public ResultVO<JsonNode> getWeatherByDay(
+            @RequestParam(defaultValue = "3") final Integer day,
+            @RequestParam String location,
+            final HttpServletRequest request
+    ) {
         if (StrUtil.isBlank(location)) {
-            IPInfo ipInfo = ipController.getAddress(request);
+            final IPInfo ipInfo = ipService.getAddress(request);
             location = ipInfo.getLng() + "," + ipInfo.getLat();
         }
         if (!Objects.equals(day, WeatherDayEnums.THREE_DAY.getDay()) && !Objects.equals(day, WeatherDayEnums.SEVEN_DAY.getDay())) {
             throw new ApiParamException("暂不支持的参数");
         }
-        return weatherService.getWeatherByDay(day, location);
+        return ResultVO.ok(weatherService.getWeatherByDay(day, location));
     }
 
 
@@ -82,9 +86,9 @@ public class WeatherController {
      */
     @GetMapping("now")
     @Operation(summary = "查询当日的天气")
-    public String getWeatherByNow(HttpServletRequest request) throws IOException {
-        IPInfo ipInfo = ipController.getAddress(request);
-        return weatherService.getWeatherByNow(ipInfo.getLng() + "," + ipInfo.getLat());
+    public ResultVO<JsonNode> getWeatherByNow(final HttpServletRequest request) {
+        final IPInfo ipInfo = ipService.getAddress(request);
+        return ResultVO.ok(weatherService.getWeatherByNow(ipInfo.getLng() + "," + ipInfo.getLat()));
     }
 
     /**

@@ -3,6 +3,7 @@ package com.bingchunmoli.api.img.controller;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.config.ApiConfig;
+import com.bingchunmoli.api.controller.advice.RawResponse;
 import com.bingchunmoli.api.img.service.ImgService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("img")
+@RawResponse
 @Tag(name = "随机图", description = "配置中含有moli.apiConfig.[pcPath, mobilePath, path1080]才会生效")
 @ConditionalOnProperty(prefix = "moli.apiConfig", name = {"pcPath", "mobilePath", "path1080"})
 public class ImgController {
