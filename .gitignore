@@ -58,6 +58,9 @@ HELP.md
 src/main/resources/application-*.yml
 src/main/resources/application-*.yaml
 src/main/resources/application-*.properties
+config/application-*.yml
+config/application-*.yaml
+config/application-*.properties
 !src/main/resources/application-template.yml
 !src/main/resources/application-h2.yml
 !src/main/resources/application-sqlite.yml
