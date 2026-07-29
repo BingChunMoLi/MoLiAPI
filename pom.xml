@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <tomcat.version>11.0.24</tomcat.version>
         <mybatis-plus.version>3.5.17</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
         <hutool.version>5.8.37</hutool.version>
