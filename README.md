@@ -1,3 +1,5 @@
+
+
 # [MoLiAPI](https://api.bingchunmoli.com)
 
 ![](https://badgen.net/github/release/bingchunmoli/MoLiApi/stable)
@@ -9,7 +11,7 @@
 
 ## 快速开始:
 ```shell
-docker run -d --name api -p 8090:8090 -v /.api/:/soft/config/ bingchunmoli/moliapi:latest
+docker run -d --name api -p 8090:8090 -v ~/.api/:/soft/.api/config/ bingchunmoli/moliapi:latest
 ```
 or
 ```shell
