@@ -27,7 +27,7 @@
         <tencent-cloud-api.version>3.2.6</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
         <firebase-admin.version>9.10.0</firebase-admin.version>
-        <sqlite-jdbc.version>3.53.2.1</sqlite-jdbc.version>
+        <sqlite-jdbc.version>3.53.4.0</sqlite-jdbc.version>
         <springdoc.version>3.1.0</springdoc.version>
     </properties>
 
