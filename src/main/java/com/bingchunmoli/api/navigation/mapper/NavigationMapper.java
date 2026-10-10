@@ -21,11 +21,18 @@ public interface NavigationMapper extends BaseMapper<NavigationPO> {
      */
     List<Navigation> getNavigationsList(String tenant);
 
-    int saveBatchTags(List<TagPO> tagList);
+    int saveBatchTags(@Param("list") final List<TagPO> tagList);
 
     int saveNavigationTags(@Param("id") Integer id,@Param("tagIdList") List<Integer> tagIdList);
 
-    int updateBatchTags(List<TagPO> list);
+    int updateTag(final TagPO tag);
+
+    default int updateBatchTags(final List<TagPO> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return 0;
+        }
+        return tags.stream().mapToInt(this::updateTag).sum();
+    }
 
     int removeNavigationTagsByNavigationId(Integer id);
 }

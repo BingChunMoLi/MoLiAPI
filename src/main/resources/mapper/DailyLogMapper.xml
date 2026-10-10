@@ -66,10 +66,11 @@
                 </foreach>
             </if>
             <if test="dailyQuery.startDate != null">
-                and create_time > #{dailyQuery.startDate}
+                and create_time >= #{dailyQuery.startDate}
             </if>
             <if test="dailyQuery.endDate != null">
-                and create_time &lt; #{dailyQuery.endDate}
+                <bind name="endDateExclusive" value="dailyQuery.endDate.plusDays(1)"/>
+                and create_time &lt; #{endDateExclusive}
             </if>
             and tenant = #{tenant}
         </where>

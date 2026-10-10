@@ -51,7 +51,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedHeaders("X-Request-Id", "Content-Type", "Origin", "X-Request-With",
                         "If-Modified-Since", "Pragma", "Last-Modified", "Cache-Control",
                         "Expires", "Access-Control-Allow-Credentials", "Dnt", "Keep-Alive",
-                        "User-Agent", "Range")
+                        "User-Agent", "Range", "tenant")
                 .exposedHeaders("X-Request-Id", "Content-Type", "Content-Length",
                         "Content-Md5", "Content-Encoding")
                 .allowCredentials(true)

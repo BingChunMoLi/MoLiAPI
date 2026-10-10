@@ -47,6 +47,7 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
                                     .value((String) paramValue)
                                     .updateTime(LocalDateTime.now())
                                     .build());
+                    config.setValue((String) paramValue);
                     saveOrUpdate(config);
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

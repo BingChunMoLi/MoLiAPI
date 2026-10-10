@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author MoLi
@@ -29,32 +28,47 @@ public class NavigationServiceImpl extends ServiceImpl<NavigationMapper, Navigat
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addNavigation(Navigation navigation) {
-        int navigationInsert = baseMapper.insert(navigation);
+    public boolean addNavigation(final Navigation navigation) {
+        final int navigationInsert = baseMapper.insert(navigation);
         if (navigationInsert < 1) {
             throw new RuntimeException("添加收藏失败");
         }
-        int tagsInsert = baseMapper.saveBatchTags(navigation.getTagList());
+        final List<TagPO> tags = navigation.getTagList();
+        if (tags == null || tags.isEmpty()) {
+            return true;
+        }
+        final int tagsInsert = baseMapper.saveBatchTags(tags);
         if (tagsInsert < 1) {
             throw new RuntimeException("添加标签失败");
         }
-        List<Integer> tagIdList = navigation.getTagList().stream().map(TagPO::getId).toList();
+        final List<Integer> tagIdList = tags.stream().map(TagPO::getId).toList();
         return baseMapper.saveNavigationTags(navigation.getId(), tagIdList) > 0;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateNavigation(Navigation navigation) {
-        updateById(navigation);
-        baseMapper.saveBatchTags(navigation.getTagList().stream()
-                .filter(v -> Objects.isNull(v.getId()))
-                .toList());
-        baseMapper.updateBatchTags(navigation.getTagList().stream()
-                .filter(v -> !Objects.isNull(v.getId()))
-                .toList());
+    public boolean updateNavigation(final Navigation navigation) {
+        if (!updateById(navigation)) {
+            return false;
+        }
+        final List<TagPO> tags = navigation.getTagList();
+        if (tags == null) {
+            return true;
+        }
+        final List<TagPO> newTags = tags.stream().filter(tag -> tag.getId() == null).toList();
+        final List<TagPO> existingTags = tags.stream().filter(tag -> tag.getId() != null).toList();
+        if (!newTags.isEmpty()) {
+            baseMapper.saveBatchTags(newTags);
+        }
+        if (!existingTags.isEmpty()) {
+            baseMapper.updateBatchTags(existingTags);
+        }
         baseMapper.removeNavigationTagsByNavigationId(navigation.getId());
-        baseMapper.saveBatchTags(navigation.getTagList());
-        return true;
+        if (tags.isEmpty()) {
+            return true;
+        }
+        final List<Integer> tagIdList = tags.stream().map(TagPO::getId).toList();
+        return baseMapper.saveNavigationTags(navigation.getId(), tagIdList) > 0;
     }
 
     @Override

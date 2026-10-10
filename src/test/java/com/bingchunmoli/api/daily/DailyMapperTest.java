@@ -12,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author moli
@@ -30,6 +33,8 @@ import java.util.List;
 public class DailyMapperTest {
     @Autowired
     private DailyLogMapper dailyLogMapper;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Configuration
     @EnableAutoConfiguration // 开启自动配置（如 DataSource, MybatisPlusAutoConfiguration）
@@ -67,6 +72,41 @@ public class DailyMapperTest {
         querySignByEndDateTest();
     }
 
+    @Test
+    void includesBothDateBoundariesAndExcludesAdjacentDaysAndOtherTenants() {
+        jdbcTemplate.update("insert into daily_log (id, url, tenant, create_time, type) values "
+                + "(1001, 'month-start', 1, '2026-10-01 00:00:00', 1), "
+                + "(1002, 'month-end', 1, '2026-10-31 23:59:59', 1), "
+                + "(1003, 'before-month', 1, '2026-09-30 23:59:59', 1), "
+                + "(1004, 'next-month', 1, '2026-11-01 00:00:00', 1), "
+                + "(1005, 'other-tenant', 0, '2026-10-31 12:00:00', 1)");
+        final DailyQuery query = DailyQuery.builder()
+                .startDate(LocalDate.of(2026, 10, 1))
+                .endDate(LocalDate.of(2026, 10, 31))
+                .urls(List.of("month-start", "month-end", "before-month", "next-month", "other-tenant"))
+                .build();
+
+        final List<String> urls = dailyLogMapper.querySign(query, 1).stream().map(DailyLogPO::getUrl).sorted().toList();
+
+        assertEquals(List.of("month-end", "month-start"), urls);
+    }
+
+    @Test
+    void includesAnEntireSingleDayWithUrlFiltering() {
+        jdbcTemplate.update("insert into daily_log (id, url, tenant, create_time, type) values "
+                + "(1001, 'selected', 1, '2026-02-28 00:00:00', 1), "
+                + "(1002, 'selected', 1, '2026-02-28 23:59:59', 1), "
+                + "(1003, 'selected', 1, '2026-03-01 00:00:00', 1), "
+                + "(1004, 'other', 1, '2026-02-28 12:00:00', 1)");
+        final DailyQuery query = DailyQuery.builder()
+                .startDate(LocalDate.of(2026, 2, 28))
+                .endDate(LocalDate.of(2026, 2, 28))
+                .urls(List.of("selected"))
+                .build();
+
+        assertEquals(2, dailyLogMapper.querySign(query, 1).size());
+    }
+
 
     private void querySignNoQueryTest() {
         DailyQuery query = DailyQuery.builder()
@@ -100,7 +140,7 @@ public class DailyMapperTest {
                 .build();
         List<DailyLogPO> res = dailyLogMapper.querySign(query, 0);
         Assert.notEmpty(res, "dailyLog查询不应为空");
-        Assert.isTrue(res.size() == 1, "dailyLog查询结果不正确");
+        Assert.isTrue(res.size() == 3, "dailyLog查询结果不正确");
     }
 
 }
