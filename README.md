@@ -1,7 +1,11 @@
 # A moliapi golang version
 
+Go 分支已补充公开 API、导航/签到、后台配置与登录、天气订阅和业务定时任务。
+接口清单、配置与兼容范围见 [Go 功能迁移说明](docs/GO_MIGRATION.md)。
+环境变量模板见 [.env.example](.env.example)，Vue 管理界面位于 `web/admin`。
+
 ## Quick start
-> go build -o moliapi main.go && ./moliapi
+> go build -o moliapi . && ./moliapi
 
 ## Docker
 

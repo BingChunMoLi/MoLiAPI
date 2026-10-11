@@ -4,9 +4,19 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"sync"
 
 	"gopkg.in/yaml.v3"
 )
+
+var providerMu sync.RWMutex
+var legacyProvider func() map[string]string
+
+func SetLegacyConfigProvider(provider func() map[string]string) {
+	providerMu.Lock()
+	defer providerMu.Unlock()
+	legacyProvider = provider
+}
 
 type TargetConfig struct {
 	Provider string `json:"provider" yaml:"provider"`
@@ -80,5 +90,15 @@ func LoadConfig() *GlobalConfig {
 		}
 	}
 
+	providerMu.RLock()
+	provider := legacyProvider
+	providerMu.RUnlock()
+	if len(cfg.Tasks) == 0 && provider != nil {
+		values := provider()
+		if values["certificatePath"] != "" && values["privateKeyPath"] != "" && values["domain"] != "" {
+			cfg.Tasks = []CertTask{{CertPath: values["certificatePath"], KeyPath: values["privateKeyPath"],
+				Targets: []TargetConfig{{Provider: "tencent", Service: "cdn", Domain: values["domain"]}}}}
+		}
+	}
 	return cfg
 }

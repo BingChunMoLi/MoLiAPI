@@ -12,15 +12,15 @@ import (
 )
 
 type YiYanEntity struct {
-	Id         int16  `json:"id,omitempty"`
+	Id         int64  `json:"id,omitempty"`
 	Uuid       string `json:"uuid,omitempty"`
 	Hitokoto   string `json:"hitokoto,omitempty"`
 	Type       string `json:"type,omitempty"`
 	From       string `json:"from,omitempty"`
 	FromWho    string `json:"from_who,omitempty"`
 	Creator    string `json:"creator,omitempty"`
-	CreatorUid int16  `json:"creator_uid,omitempty"`
-	Reviewer   int16  `json:"reviewer,omitempty"`
+	CreatorUid int64  `json:"creator_uid,omitempty"`
+	Reviewer   int64  `json:"reviewer,omitempty"`
 	CommitFrom string `json:"commit_from,omitempty"`
 	CreatedAt  string `json:"created_at,omitempty"`
 	Length     int16  `json:"length,omitempty"`
@@ -57,6 +57,10 @@ func YiYan(c *gin.Context) {
 		return
 	}
 
+	if len(yiYans) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Not Found"})
+		return
+	}
 	randYiYanIndex := rand.Intn(len(yiYans))
 	c.JSON(http.StatusOK, yiYans[randYiYanIndex])
 }
@@ -90,6 +94,10 @@ func Poetry(c *gin.Context) {
 		return
 	}
 
+	if len(yiYans) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Not Found"})
+		return
+	}
 	randIndex := rand.Intn(len(yiYans))
 	y := yiYans[randIndex]
 

@@ -13,7 +13,7 @@ type CertUpdater interface {
 
 func InitCron() *cron.Cron {
 	c := cron.New()
-	
+
 	// Skip cron if we are in a serverless environment (often detected by specific env vars)
 	if os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "" || os.Getenv("VERCEL") != "" || os.Getenv("DISABLE_CRON") == "true" {
 		log.Println("Cron disabled (Serverless or DISABLE_CRON=true)")
@@ -23,7 +23,6 @@ func InitCron() *cron.Cron {
 	cfg := LoadConfig()
 	if len(cfg.Tasks) == 0 {
 		log.Println("No certificate tasks configured.")
-		return c
 	}
 
 	_, err := c.AddFunc(cfg.Cron, func() {

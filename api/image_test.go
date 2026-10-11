@@ -3,10 +3,24 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
+func mockBing(t *testing.T) {
+	t.Helper()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"images":[{"url":"/image.jpg"}]}`))
+	}))
+	previousClient, previousURL := bingClient, bingBaseURL
+	bingClient, bingBaseURL = server.Client(), server.URL
+	t.Cleanup(func() { bingClient, bingBaseURL = previousClient, previousURL; server.Close() })
+}
+
 func TestBingImg(t *testing.T) {
+	mockBing(t)
 	r := setupRouter()
 	r.GET("/bing/img", BingImg)
 
@@ -25,6 +39,7 @@ func TestBingImg(t *testing.T) {
 }
 
 func TestBingImgJson(t *testing.T) {
+	mockBing(t)
 	r := setupRouter()
 	r.GET("/bing/img", BingImg)
 
@@ -43,6 +58,14 @@ func TestBingImgJson(t *testing.T) {
 }
 
 func TestImg(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("PC_PATH", dir)
+	if err := os.WriteFile(filepath.Join(dir, "image.png"), []byte("test-image"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Join(dir, "directory.jpg"), 0700); err != nil {
+		t.Fatal(err)
+	}
 	r := setupRouter()
 	r.GET("/img/random", Img)
 
@@ -50,7 +73,7 @@ func TestImg(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK && w.Code != http.StatusNotFound && w.Code != http.StatusInternalServerError {
-		t.Errorf("Expected status 200, 404, or 500, got %d", w.Code)
+	if w.Code != http.StatusOK || w.Body.String() != "test-image" {
+		t.Errorf("Expected image body with status 200, got %d %s", w.Code, w.Body.String())
 	}
 }
