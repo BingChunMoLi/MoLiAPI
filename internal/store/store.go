@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 	"sync"
 	"time"
 )
@@ -106,14 +108,21 @@ func Decode(data []byte) (*State, error) {
 	if err := json.Unmarshal(data, s); err != nil {
 		return nil, fmt.Errorf("decode state: %w", err)
 	}
+	if err := s.validate(); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
+func (s *State) validate() error {
 	if s.Version != 1 {
-		return nil, fmt.Errorf("unsupported state version %d", s.Version)
+		return fmt.Errorf("unsupported state version %d", s.Version)
 	}
 	if s.NextID < 1 || s.Config == nil || s.Daily == nil || s.Bing == nil || s.Hosts == nil ||
 		s.Playlists == nil || s.Media == nil {
-		return nil, errors.New("invalid state")
+		return errors.New("invalid state")
 	}
-	return s, nil
+	return nil
 }
 
 type Store interface {
@@ -145,11 +154,51 @@ func Open(path string) (*File, error) {
 }
 
 func clone(s *State) (*State, error) {
-	data, err := json.Marshal(s)
-	if err != nil {
+	if err := s.validate(); err != nil {
 		return nil, err
 	}
-	return Decode(data)
+	// Strings are immutable and can be shared. Copy every mutable container so
+	// snapshots and failed updates cannot change the committed state.
+	next := *s
+	if s.User != nil {
+		user := *s.User
+		next.User = &user
+	}
+	next.Config = maps.Clone(s.Config)
+	next.Navigations = slices.Clone(s.Navigations)
+	for i := range next.Navigations {
+		next.Navigations[i].Tags = slices.Clone(s.Navigations[i].Tags)
+	}
+	next.Daily = maps.Clone(s.Daily)
+	for key, values := range s.Daily {
+		next.Daily[key] = slices.Clone(values)
+	}
+	next.Logs = slices.Clone(s.Logs)
+	next.Devices = slices.Clone(s.Devices)
+	next.Subscriptions = slices.Clone(s.Subscriptions)
+	next.Hosts = maps.Clone(s.Hosts)
+	next.Playlists = maps.Clone(s.Playlists)
+	for key, data := range s.Playlists {
+		if data != nil && !json.Valid(data) {
+			return nil, fmt.Errorf("invalid playlist JSON %q", key)
+		}
+		next.Playlists[key] = slices.Clone(data)
+	}
+	next.Media = maps.Clone(s.Media)
+	next.PushLogs = slices.Clone(s.PushLogs)
+	// Bing contains arbitrary JSON values. Keep JSON's normalization and deep
+	// copy semantics for this field without encoding the rest of the state.
+	next.Bing = map[string]map[string]any{}
+	if len(s.Bing) > 0 {
+		data, err := json.Marshal(s.Bing)
+		if err != nil {
+			return nil, err
+		}
+		if err := json.Unmarshal(data, &next.Bing); err != nil {
+			return nil, err
+		}
+	}
+	return &next, nil
 }
 
 func (f *File) View(fn func(*State) error) error {

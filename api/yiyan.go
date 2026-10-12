@@ -2,13 +2,13 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
-	"path/filepath"
+	"strconv"
+
+	"bingchunmoli.com/moliapi/internal/quotes"
+	"github.com/gin-gonic/gin"
 )
 
 type YiYanEntity struct {
@@ -31,25 +31,17 @@ func YiYan(c *gin.Context) {
 	if yiYanType == "" || len(yiYanType) != 1 || yiYanType[0] < 'a' || yiYanType[0] > 'l' {
 		yiYanType = string(rune(rand.Intn(12) + 97))
 	}
-	file, err := os.ReadFile(filepath.Join("yiyan", yiYanType+".json"))
+	yiYans, err := quotes.Default.Category(yiYanType[0])
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
-	var yiYans []YiYanEntity
-	err = json.Unmarshal(file, &yiYans)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-		return
-	}
-
 	idStr := c.Query("id")
 	if idStr != "" {
 		for _, y := range yiYans {
-			if fmt.Sprintf("%d", y.Id) == idStr {
-				c.JSON(http.StatusOK, y)
+			if strconv.FormatInt(y.ID, 10) == idStr {
+				writeQuote(c, y.JSON, false)
 				return
 			}
 		}
@@ -62,31 +54,23 @@ func YiYan(c *gin.Context) {
 		return
 	}
 	randYiYanIndex := rand.Intn(len(yiYans))
-	c.JSON(http.StatusOK, yiYans[randYiYanIndex])
+	writeQuote(c, yiYans[randYiYanIndex].JSON, false)
 }
 
 // Poetry 随机诗词或指定
 func Poetry(c *gin.Context) {
 	// 读取诗词库，即 yiyan/i.json
-	file, err := os.ReadFile(filepath.Join("yiyan", "i.json"))
+	yiYans, err := quotes.Default.Category('i')
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
-	var yiYans []YiYanEntity
-	err = json.Unmarshal(file, &yiYans)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-		return
-	}
-
 	idStr := c.Query("id")
 	if idStr != "" {
 		for _, y := range yiYans {
-			if fmt.Sprintf("%d", y.Id) == idStr {
-				c.JSON(http.StatusOK, y)
+			if strconv.FormatInt(y.ID, 10) == idStr {
+				writeQuote(c, y.JSON, false)
 				return
 			}
 		}
@@ -99,9 +83,18 @@ func Poetry(c *gin.Context) {
 		return
 	}
 	randIndex := rand.Intn(len(yiYans))
-	y := yiYans[randIndex]
+	writeQuote(c, yiYans[randIndex].JSON, c.Query("type") == "text")
+}
 
-	if c.Query("type") == "text" {
+// Decode only the selected record, keeping the legacy omitempty response format.
+func writeQuote(c *gin.Context, data json.RawMessage, text bool) {
+	var y YiYanEntity
+	if err := json.Unmarshal(data, &y); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+	if text {
 		c.String(http.StatusOK, "%s —— %s", y.Hitokoto, y.From)
 		return
 	}

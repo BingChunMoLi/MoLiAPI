@@ -3,6 +3,7 @@
 Go 分支已补充公开 API、导航/签到、后台配置与登录、天气订阅和业务定时任务。
 接口清单、配置与兼容范围见 [Go 功能迁移说明](docs/GO_MIGRATION.md)。
 环境变量模板见 [.env.example](.env.example)，Vue 管理界面位于 `web/admin`。
+内存优化内容、基准数据与缓存行为见 [内存优化记录](docs/MEMORY_OPTIMIZATION.md)。
 
 ## Quick start
 > go build -o moliapi . && ./moliapi

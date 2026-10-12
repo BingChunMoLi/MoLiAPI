@@ -13,6 +13,7 @@ import (
 	"sync"
 	"time"
 
+	"bingchunmoli.com/moliapi/internal/quotes"
 	"bingchunmoli.com/moliapi/internal/store"
 	"github.com/gin-gonic/gin"
 )
@@ -47,7 +48,7 @@ type Server struct {
 	pending   map[string]time.Time
 	jobs      sync.Mutex
 	quoteOnce sync.Once
-	quotes    []map[string]any
+	quotes    []quotes.Entry
 	quoteErr  error
 }
 

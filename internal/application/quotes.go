@@ -3,40 +3,24 @@ package application
 import (
 	_ "embed"
 	"encoding/json"
-	"fmt"
 	"math/rand/v2"
-	"os"
-	"path/filepath"
 	"strconv"
+	"sync"
 
+	"bingchunmoli.com/moliapi/internal/quotes"
 	"github.com/gin-gonic/gin"
 )
 
 //go:embed data/poems.json
 var poemData []byte
 
-func (s *Server) loadQuotes() ([]map[string]any, error) {
+func (s *Server) loadQuotes() ([]quotes.Entry, error) {
 	s.quoteOnce.Do(func() {
-		path := s.defaults["quotePath"]
-		if path == "" {
-			path = "yiyan"
+		library := quotes.Default
+		if path := s.defaults["quotePath"]; path != "" {
+			library = quotes.New(path)
 		}
-		for kind := 'a'; kind <= 'l'; kind++ {
-			data, err := os.ReadFile(filepath.Join(path, string(kind)+".json"))
-			if err != nil {
-				s.quoteErr = err
-				return
-			}
-			var list []map[string]any
-			if err = json.Unmarshal(data, &list); err != nil {
-				s.quoteErr = err
-				return
-			}
-			s.quotes = append(s.quotes, list...)
-		}
-		if len(s.quotes) == 0 {
-			s.quoteErr = fmt.Errorf("empty quote library")
-		}
+		s.quotes, s.quoteErr = library.All()
 	})
 	return s.quotes, s.quoteErr
 }
@@ -53,8 +37,8 @@ func (s *Server) quoteByID(c *gin.Context) {
 		return
 	}
 	for _, quote := range list {
-		if quote["id"] == float64(id) {
-			ok(c, quote)
+		if quote.ID == int64(id) {
+			ok(c, quote.JSON)
 			return
 		}
 	}
@@ -68,24 +52,32 @@ func (s *Server) QuoteRandom(c *gin.Context) {
 		return
 	}
 	if kind := c.Query("type"); kind != "" {
-		filtered := []map[string]any{}
+		// Reservoir sampling avoids allocating a second slice of matching quotes.
+		var selected json.RawMessage
+		count := 0
 		for _, quote := range list {
-			if quote["type"] == kind {
-				filtered = append(filtered, quote)
+			if quote.Kind == kind {
+				count++
+				if rand.IntN(count) == 0 {
+					selected = quote.JSON
+				}
 			}
 		}
-		if len(filtered) == 0 {
+		if count == 0 {
 			fail(c, 400, "不支持的一言类型")
 			return
 		}
-		list = filtered
+		ok(c, selected)
+		return
 	}
-	ok(c, list[rand.IntN(len(list))])
+	ok(c, list[rand.IntN(len(list))].JSON)
 }
 
+var loadPoems = sync.OnceValues(func() ([]quotes.Entry, error) { return quotes.Parse(poemData) })
+
 func (s *Server) poem(c *gin.Context) {
-	var list []map[string]any
-	if err := json.Unmarshal(poemData, &list); err != nil {
+	list, err := loadPoems()
+	if err != nil {
 		internal(c, err)
 		return
 	}
@@ -94,7 +86,7 @@ func (s *Server) poem(c *gin.Context) {
 		return
 	}
 	if c.Param("id") == "" {
-		ok(c, list[rand.IntN(len(list))])
+		ok(c, list[rand.IntN(len(list))].JSON)
 		return
 	}
 	id, err := strconv.Atoi(c.Param("id"))
@@ -103,8 +95,8 @@ func (s *Server) poem(c *gin.Context) {
 		return
 	}
 	for _, p := range list {
-		if p["id"] == float64(id) {
-			ok(c, p)
+		if p.ID == int64(id) {
+			ok(c, p.JSON)
 			return
 		}
 	}

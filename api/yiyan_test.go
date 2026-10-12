@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"github.com/gin-gonic/gin"
 )
 
 func TestYiYan(t *testing.T) {
@@ -76,5 +78,24 @@ func TestPoetry(t *testing.T) {
 
 	if w.Code != http.StatusOK {
 		t.Errorf("Expected status %d, got %d", http.StatusOK, w.Code)
+	}
+}
+
+func BenchmarkYiYan(b *testing.B) {
+	b.Chdir("..")
+	gin.SetMode(gin.TestMode)
+	r := gin.New()
+	r.GET("/yiyan/random", YiYan)
+	request := httptest.NewRequest("GET", "/yiyan/random?type=d", nil)
+	// Warm any lazy data before measuring steady-state requests.
+	r.ServeHTTP(httptest.NewRecorder(), request)
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, request)
+		if w.Code != 200 {
+			b.Fatal(w.Body.String())
+		}
 	}
 }
