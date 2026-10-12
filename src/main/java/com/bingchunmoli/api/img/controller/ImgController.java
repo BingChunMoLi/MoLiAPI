@@ -11,13 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -35,24 +36,21 @@ public class ImgController {
     private final ImgService imgService;
     private final ApiConfig apiConfig;
 
-    /**
-     * 手机版
-     * @return BufferedImage|图片
-     */
-    @GetMapping(value = "mobile", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping("mobile")
     @Operation(summary = "移动端随机图,图片来源: 熙宝")
-    public BufferedImage randomImgByMobile() {
-        return imgService.getRandomImageMobile();
+    public ResponseEntity<FileSystemResource> randomImgByMobile() {
+        final File image = imgService.getRandomImageFile(ApiConstant.REDIS_MOBILE_IMG_KEY, apiConfig.getMobilePath());
+        return imageResponse(image);
     }
 
     /**
      * pc图片 使用ResponseEntity写出
      * @return ResponseEntity<FileSystemResource>|ResponseEntity<FileSystemResource>
      */
-    @GetMapping(value = "pc",produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping("pc")
     @Operation(summary = "电脑端随机图,图片来源: 熙宝")
-    public ResponseEntity<FileSystemResource> randomImgByPc1(){
-        return ResponseEntity.ok(new FileSystemResource(imgService.getRandomImgByRedis(ApiConstant.REDIS_PC_IMG_KEY)));
+    public ResponseEntity<FileSystemResource> randomImgByPc1() {
+        return imageResponse(imgService.getRandomImageFile(ApiConstant.REDIS_PC_IMG_KEY, apiConfig.getPcPath()));
     }
 
     /**
@@ -66,13 +64,19 @@ public class ImgController {
         return ResponseEntity.ok(new FileSystemResource(apiConfig.getPath1080() + "1080P" + i + ".webp"));
     }
 
-    @GetMapping(produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping
     @Operation(summary = "根据useragent自动判断使用pc还是移动端, 图库来源: 熙宝")
-    public ResponseEntity<FileSystemResource> getRandomImage(@RequestHeader String userAgent) {
+    public ResponseEntity<FileSystemResource> getRandomImage(@RequestHeader final String userAgent) {
         if (UserAgentUtil.parse(userAgent).isMobile()) {
-            return ResponseEntity.ok(new FileSystemResource(imgService.getRandomImgByRedis(ApiConstant.REDIS_MOBILE_IMG_KEY)));
-        } else {
-            return ResponseEntity.ok(new FileSystemResource(imgService.getRandomImgByRedis(ApiConstant.REDIS_PC_IMG_KEY)));
+            return randomImgByMobile();
         }
+        return randomImgByPc1();
+    }
+
+    private ResponseEntity<FileSystemResource> imageResponse(final File file) {
+        final FileSystemResource resource = new FileSystemResource(file);
+        final MediaType contentType = MediaTypeFactory.getMediaType(resource)
+                .orElse(MediaType.APPLICATION_OCTET_STREAM);
+        return ResponseEntity.ok().contentType(contentType).body(resource);
     }
 }

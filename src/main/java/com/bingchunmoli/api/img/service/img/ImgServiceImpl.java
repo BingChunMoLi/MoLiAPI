@@ -3,9 +3,11 @@ package com.bingchunmoli.api.img.service.img;
 import com.bingchunmoli.api.bean.ApiConstant;
 import com.bingchunmoli.api.config.ApiConfig;
 import com.bingchunmoli.api.exception.ApiCacheException;
+import com.bingchunmoli.api.exception.ApiImgException;
 import com.bingchunmoli.api.img.service.ImgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author BingChunMoLi
@@ -34,6 +36,23 @@ public class ImgServiceImpl implements ImgService {
 
     private final ApiConfig apiConfig;
     private final RedisTemplate<String, Object> redisTemplate;
+
+    @Override
+    public File getRandomImageFile(final String key, final String path) {
+        try {
+            final File cachedFile = getRandomImgByRedis(key);
+            if (cachedFile.isFile() && cachedFile.canRead()) {
+                return cachedFile;
+            }
+        } catch (DataAccessException | ApiCacheException exception) {
+            log.debug("Random image cache unavailable for {}", key, exception);
+        }
+        try {
+            return getRandomImgByFileSystem(path);
+        } catch (IOException exception) {
+            throw new ApiImgException(exception);
+        }
+    }
 
     @Override
     public BufferedImage getRandomImageByPc() {
@@ -93,18 +112,37 @@ public class ImgServiceImpl implements ImgService {
 
 
     @Override
-    public File getRandomImgByFileSystem(String path) throws IOException {
-        List<Path> list = getImgListByFileSystem(path);
-        return list.get(new Random().nextInt(list.size())).toFile();
+    public File getRandomImgByFileSystem(final String path) throws IOException {
+        if (path == null || path.isBlank()) {
+            throw new ApiImgException("随机图路径未配置");
+        }
+        Path selected = null;
+        long count = 0;
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
+            for (final Path candidate : stream) {
+                final boolean readableFile = Files.isRegularFile(candidate) && Files.isReadable(candidate);
+                if (readableFile && ThreadLocalRandom.current().nextLong(++count) == 0) {
+                    selected = candidate;
+                }
+            }
+        }
+        if (selected == null) {
+            throw new ApiImgException("随机图目录中没有可读取的文件");
+        }
+        return selected.toFile();
     }
 
     @Override
-    public File getRandomImgByRedis(String key) {
-        Long size = redisTemplate.opsForList().size(key);
-        if (size == null) {
+    public File getRandomImgByRedis(final String key) {
+        final Long size = redisTemplate.opsForList().size(key);
+        if (size == null || size <= 0) {
             throw new ApiCacheException("随机图缓存失效");
         }
-        return new File(String.valueOf(redisTemplate.opsForList().index(key, new Random().nextInt(Math.toIntExact(size)))));
+        final Object cachedPath = redisTemplate.opsForList().index(key, ThreadLocalRandom.current().nextLong(size));
+        if (!(cachedPath instanceof String imagePath) || imagePath.isBlank()) {
+            throw new ApiCacheException("随机图缓存失效");
+        }
+        return new File(imagePath);
     }
 
     @Override

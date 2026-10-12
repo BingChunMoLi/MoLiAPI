@@ -34,10 +34,6 @@ public class ShiCiController {
         return ResultVO.ok(shiCiService.getById(id));
     }
 
-    /**
-     * 从缓存中读取一条随机诗词，如果不存在从数据库读取
-     * @return 返回一条诗词
-     */
     @GetMapping("random")
     @Operation(summary = "获取随机诗词")
     public ResultVO<ShiCi> getRandomShiCi() {

@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <p>
@@ -23,17 +22,13 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class ShiCiServiceImpl extends ServiceImpl<ShiCiMapper, ShiCi> implements ShiCiService {
-    private List<ShiCi> list;
-
     @Override
     public ShiCi findRandomShiCi() {
-        if (list == null) {
-            list = list();
-        }
-        if (list.isEmpty()) {
+        final long recordCount = count();
+        if (recordCount == 0) {
             return null;
         }
-        return list.get(new Random().nextInt(list.size()));
+        return baseMapper.findAtOffset(ThreadLocalRandom.current().nextLong(recordCount));
     }
 
 }

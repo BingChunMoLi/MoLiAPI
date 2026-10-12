@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface ImgService {
 
+    File getRandomImageFile(final String key, final String path);
+
     /**
      * 随机PC随机图
      * @return 随机图PC
