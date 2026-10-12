@@ -10,6 +10,7 @@ import com.bingchunmoli.api.bing.bean.enums.BingEnum;
 import com.bingchunmoli.api.bing.controller.BingController;
 import com.bingchunmoli.api.bing.mapper.BingImageMapper;
 import com.bingchunmoli.api.bing.service.BingService;
+import com.bingchunmoli.api.config.web.ApiVersionWebMvcRegistrations;
 import com.bingchunmoli.api.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @AutoConfigureMybatisPlus
 @WebMvcTest(BingController.class)
-@Import(BingController.class)
+@Import({BingController.class, ApiVersionWebMvcRegistrations.class})
 public class BingControllerTest {
 
     @Autowired

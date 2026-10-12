@@ -18,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.accept.InvalidApiVersionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -43,6 +45,13 @@ public class ExceptionControllerAdvice {
     private String mailFrom;
 
     private final ObjectMapper om;
+
+    @ExceptionHandler
+    public ResponseEntity<ResultVO<String>> invalidApiVersionException(final InvalidApiVersionException exception) {
+        final ResultVO<String> result = new ResultVO<>(CodeEnum.ERROR, exception.getReason());
+        result.setMsg("请求的 API 版本无效或不受支持");
+        return ResponseEntity.badRequest().body(result);
+    }
 
     @ExceptionHandler
     public ResultVO<String> apiUserNonFoundException(ApiUserNonFoundException e) {

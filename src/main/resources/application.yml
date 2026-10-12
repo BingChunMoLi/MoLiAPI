@@ -46,9 +46,8 @@ server:
 spring:
   mvc:
     apiversion:
-      default: 1.0.0
-      use:
-        header: moli-version
+      default: '1'
+      supported: ['1', '2']
   flyway:
     enabled: true
     baseline-on-migrate: true

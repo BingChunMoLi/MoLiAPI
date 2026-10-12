@@ -44,6 +44,9 @@ def main():
             time.sleep(1)
 
     check_json(args.base_url, "/shici/random", require_data=True)
+    check_json(args.base_url, "/v1/version", require_data=True)
+    check_json(args.base_url, "/v2/version", require_data=True)
+    check_json(args.base_url, "/v1/shici/random", require_data=True)
     check_json(args.base_url, "/yiyan/random", require_data=True)
     check_json(args.base_url, "/navigation", require_data=True)
     emoji_query = urllib.parse.urlencode({"emoji": ":smile:"})
@@ -69,6 +72,22 @@ def main():
     if status != 401:
         raise RuntimeError(f"Unauthenticated configuration request returned {status} instead of 401")
     print("PASS configuration authentication")
+
+    status, _, _ = request(args.base_url, "/v1/system", {"Accept": "application/json"})
+    if status != 401:
+        raise RuntimeError(f"Versioned configuration request returned {status} instead of 401")
+    print("PASS versioned configuration authentication")
+
+    for path in ("/v3/version", "/v2/shici/random"):
+        status, _, body = request(args.base_url, path, {"Accept": "application/json"})
+        if status != 400 or json.loads(body).get("code") != "A0001":
+            raise RuntimeError(f"{path}: expected HTTP 400 for unsupported API version")
+        print(f"PASS version rejection {path}")
+
+    status, _, body = request(args.base_url, "/v3/api-docs")
+    if status != 200 or not json.loads(body).get("openapi"):
+        raise RuntimeError("OpenAPI documentation was intercepted by API version routing")
+    print("PASS OpenAPI documentation")
 
 
 if __name__ == "__main__":

@@ -73,6 +73,13 @@ docker compose --profile observability up -d
 java -Dspring.profiles.active=h2 -jar moliapi.jar
 ```
 
+## API 版本控制
+
+采用 Spring MVC 原生 API 版本控制：无前缀 URL 和 `/v1/**` 使用 v1，`/v2/**` 仅匹配声明了 v2 的接口。
+例如 `/version`、`/v1/version`、`/v2/version` 均可查询应用版本；现有其他业务接口归属 v1。
+`moli-version` 请求头不再选择版本。新增版本方法使用 `@GetMapping(version = "2")` 等原生注解，
+项目会自动添加版本前缀路径。详见 [API 版本控制说明](docs/api-versioning.md)。
+
 ## Native 打包
 
 Linux 原生可执行文件使用 GraalVM 25+ 构建，Java 源码仍保持 Java 17：

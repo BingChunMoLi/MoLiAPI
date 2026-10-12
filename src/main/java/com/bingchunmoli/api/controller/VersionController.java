@@ -18,9 +18,15 @@ public class VersionController {
     @Value("${moli.version}")
     private String version;
 
-    @GetMapping("version")
+    @GetMapping(path = "version", version = "1")
     @Operation(summary = "获取当前版本")
     public ResultVO<String> getVersion(){
+        return ResultVO.ok(version);
+    }
+
+    @GetMapping(path = "version", version = "2")
+    @Operation(summary = "获取当前版本（API v2）")
+    public ResultVO<String> getVersionV2() {
         return ResultVO.ok(version);
     }
 

@@ -41,7 +41,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(ipInterceptor).addPathPatterns("/**");
         registry.addInterceptor(requestTraceIdInterceptor).addPathPatterns("/**");
-        registry.addInterceptor(systemAuthenticationInterceptor).addPathPatterns("/system/**", "/actuator/**");
+        registry.addInterceptor(systemAuthenticationInterceptor).addPathPatterns(
+                "/system/**", "/actuator/**",
+                ApiVersionRequestMappingHandlerMapping.VERSIONED_PATH_PREFIX + "/system/**");
     }
 
     @Override
