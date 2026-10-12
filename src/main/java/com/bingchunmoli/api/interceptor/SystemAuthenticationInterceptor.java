@@ -2,8 +2,8 @@ package com.bingchunmoli.api.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -34,7 +34,8 @@ public class SystemAuthenticationInterceptor implements HandlerInterceptor {
      * @throws Exception in case of errors
      */
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
+    public boolean preHandle(@NonNull final HttpServletRequest request,
+                             @NonNull final HttpServletResponse response, @NonNull final Object handler) {
         Integer userId = (Integer) request.getSession().getAttribute("user");
         if (userId == null || userId < 1) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

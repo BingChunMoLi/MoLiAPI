@@ -2,8 +2,8 @@ package com.bingchunmoli.api.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -24,9 +24,9 @@ public class RequestTraceIdInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(
-            @NotNull final HttpServletRequest request,
-            @NotNull final HttpServletResponse response,
-            @NotNull final Object handler) {
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final Object handler) {
         MDC.put(REQUEST_ID, UUID.randomUUID().toString());
         response.setHeader("X-Request-Id", MDC.get(REQUEST_ID));
         return true;
@@ -34,9 +34,9 @@ public class RequestTraceIdInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(
-            @NotNull final HttpServletRequest request,
-            @NotNull final HttpServletResponse response,
-            @NotNull final Object handler,
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final Object handler,
             final Exception ex) {
         MDC.remove(REQUEST_ID);
     }

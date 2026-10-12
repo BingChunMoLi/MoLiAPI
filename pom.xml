@@ -23,6 +23,7 @@
         <hutool.version>5.8.37</hutool.version>
         <zxing.version>3.5.4</zxing.version>
         <emoji.version>5.1.1</emoji.version>
+        <org-json.version>20260814</org-json.version>
         <ip-info.version>2.2.0</ip-info.version>
         <tencent-cloud-api.version>3.2.21</tencent-cloud-api.version>
         <kotlin.version>2.0.20</kotlin.version>
@@ -90,6 +91,12 @@
                     <artifactId>json</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${org-json.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -166,8 +173,8 @@
             <artifactId>micrometer-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -232,5 +239,59 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>native</id>
+            <properties>
+                <native.spring.profiles>h2</native.spring.profiles>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <includeOptional>true</includeOptional>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>process-aot</id>
+                                <configuration>
+                                    <profiles>${native.spring.profiles}</profiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <configuration>
+                            <imageName>${project.artifactId}</imageName>
+                            <requiredVersion>25</requiredVersion>
+                            <useArgFile>true</useArgFile>
+                            <buildArgs>
+                                <buildArg>--enable-url-protocols=http,https</buildArg>
+                                <buildArg>-H:+AddAllCharsets</buildArg>
+                                <buildArg>-Djava.awt.headless=true</buildArg>
+                            </buildArgs>
+                            <metadataRepository>
+                                <enabled>true</enabled>
+                            </metadataRepository>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>compile-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

@@ -73,6 +73,24 @@ docker compose --profile observability up -d
 java -Dspring.profiles.active=h2 -jar moliapi.jar
 ```
 
+## Native 打包
+
+Linux 原生可执行文件使用 GraalVM 25+ 构建，Java 源码仍保持 Java 17：
+
+```shell
+mvn -Pnative package
+./target/moliapi
+```
+
+也可以在 Windows 的 Docker Desktop Linux 容器中构建 Linux 镜像：
+
+```shell
+docker build -f Dockerfile.native -t moliapi:native .
+```
+
+构建环境、数据库 profile、Windows AOT 验证、伴随动态库与功能开关限制见
+[Native 构建说明](docs/native-build.md)。
+
 ## Database profiles
 
 H2 is the default in-memory database for local development and tests:

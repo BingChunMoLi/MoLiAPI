@@ -1,0 +1,73 @@
+name: Native build
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [develop, master]
+    paths:
+      - pom.xml
+      - src/main/**
+      - src/test/**
+      - scripts/native-smoke-test.py
+      - .mvn/**
+      - mvnw
+      - Dockerfile.native
+      - Dockerfile.native.dockerignore
+      - .github/workflows/native.yml
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          cache: maven
+      - name: Install image processing libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zlib1g-dev libfreetype6-dev libfontconfig1-dev \
+            libx11-dev libxext-dev libxrender-dev libxi-dev libxtst-dev
+      - name: Test and build native executable
+        run: mvn -B -Pnative -DquickBuild -DjvmArgs=-Xmx5g package
+      - name: Smoke test native executable
+        run: |
+          ./target/moliapi > target/native-smoke.log 2>&1 &
+          native_pid=$!
+          trap 'kill "$native_pid" 2>/dev/null || true' EXIT
+          python3 scripts/native-smoke-test.py || { cat target/native-smoke.log; exit 1; }
+      - name: Package executable and companion libraries
+        run: |
+          mkdir -p target/native-dist
+          cp target/moliapi target/native-dist/
+          find target -maxdepth 1 -type f -name '*.so' -exec cp '{}' target/native-dist/ \;
+          tar -czf target/moliapi-linux-x64.tar.gz -C target/native-dist .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moliapi-native-linux-x64
+          path: target/moliapi-linux-x64.tar.gz
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-build-diagnostics
+          path: |
+            target/native-smoke.log
+            target/surefire-reports/
+          if-no-files-found: ignore

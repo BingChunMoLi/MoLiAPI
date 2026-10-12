@@ -4,9 +4,9 @@ import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.bingchunmoli.api.utils.RedisUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -25,7 +25,8 @@ public class IpInterceptor implements HandlerInterceptor {
 
 
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
+    public boolean preHandle(@NonNull final HttpServletRequest request,
+                             @NonNull final HttpServletResponse response, @NonNull final Object handler) {
         String requestURI = request.getRequestURI();
         String clientIP = JakartaServletUtil.getClientIP(request);
         String key = "filter:" + requestURI + ":" + clientIP + ":" + request.getRequestedSessionId();

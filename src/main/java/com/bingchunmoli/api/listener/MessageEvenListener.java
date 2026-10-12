@@ -6,8 +6,8 @@ import com.bingchunmoli.api.push.Push;
 import com.bingchunmoli.api.push.PushLogService;
 import com.bingchunmoli.api.push.PushLoggingWrapper;
 import com.bingchunmoli.api.push.bean.Message;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class MessageEvenListener implements ApplicationListener<MessageEven> {
 
     @Async
     @Override
-    public void onApplicationEvent(@NotNull MessageEven event) {
+    public void onApplicationEvent(@NonNull final MessageEven event) {
         Message message = event.getMessage();
         Push push = pushList.stream().filter(v -> v.isEnable() && v.support(message)).findFirst().orElseThrow(() -> new ApiMessageException("没有找到或者未开启合适的推送渠道"));
         new PushLoggingWrapper(push, pushLogService, event.getSource()).send(message);
