@@ -21,6 +21,7 @@
         <mybatis-plus.version>3.5.17</mybatis-plus.version>
         <docker-plugin.version>1.4.13</docker-plugin.version>
         <hutool.version>5.8.37</hutool.version>
+        <httpclient.version>4.5.14</httpclient.version>
         <zxing.version>3.5.4</zxing.version>
         <emoji.version>5.1.1</emoji.version>
         <org-json.version>20260814</org-json.version>
@@ -75,6 +76,11 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
