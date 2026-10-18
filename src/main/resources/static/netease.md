@@ -15,10 +15,37 @@
 请求示例:
 https://api.bingchunmoli.com/music/playlist?id=***&cookie=***
 
-成功返回示例:
+成功返回示例（歌单详情字段会随歌单内容变化）:
 ```json
-暂无
+{
+  "code": "00000",
+  "msg": "一切OK",
+  "data": {
+    "code": 200,
+    "msg": "成功",
+    "result": {
+      "id": 123456,
+      "name": "示例歌单",
+      "trackCount": 1,
+      "tracks": [
+        {"id": 10001, "name": "示例歌曲"}
+      ]
+    }
+  }
+}
 ```
+
+若不提供 cookie，受网易云限制通常只能获取前十首，且不支持“我喜欢”歌单。
+
+## 获取歌单歌曲列表
+
+`GET /music/{id}` 根据已收集的歌单 ID 获取歌曲列表。
+
+```text
+GET https://api.bingchunmoli.com/music/123456
+```
+
+响应 `data` 为歌曲对象数组，包含歌曲名称及播放信息。
 
 ## <span id="获取随机歌曲">获取随机歌曲</spsn>
 
@@ -31,7 +58,8 @@ https://api.bingchunmoli.com/music/playlist?id=***&cookie=***
 请求示例:
 https://api.bingchunmoli.com/music/random
 
-成功返回示例:  
+成功时服务端返回 `302 Found`，`Location` 指向网易云歌曲 MP3 地址，并附带 JSON 响应体：
+
 ```json
-暂无
+{"code":"00000","msg":"一切OK","data":"https://music.163.com/song/media/outer/url?id=123456.mp3"}
 ```

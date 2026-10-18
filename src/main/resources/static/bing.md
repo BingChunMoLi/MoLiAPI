@@ -118,3 +118,21 @@ fetch('https://api.bingchunmoli.com/bing/all')
     }
 }
 ```
+
+## 随机图片链接
+
+`GET /bing/random` 返回随机日期 Bing 图片的 URL 字符串：
+
+```json
+{"code":"00000","msg":"一切OK","data":"https://www.bing.com/th?id=OHR.Example_1920x1080.jpg"}
+```
+
+## 按日期查询
+
+可使用路径日期 `GET /bing/{year}/{month}/{day}`，例如 `/bing/2026/10/18`；也可使用 ISO 日期参数：
+
+```text
+GET https://api.bingchunmoli.com/bing/date?date=2026-10-18
+```
+
+两种形式都返回指定日期的 Bing 图片对象；日期需为有效公历日期。

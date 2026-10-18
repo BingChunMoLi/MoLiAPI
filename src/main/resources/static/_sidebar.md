@@ -17,3 +17,7 @@
 - [签到](daily)
 - [网易云音乐歌单](netease)
 - [b站收藏夹](down)
+- [导航](navigation)
+- [应用设备](app)
+- [用户与系统配置](system)
+- [其他接口](misc)

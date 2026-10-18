@@ -54,7 +54,7 @@ https://api.bingchunmoli.com/emoji/unicode?emoji=:smile:
 请求参数: emoji (emoji表情Unicode字符)
 
 请求示例:
-https://api.bingchunmoli.com/emoji/unicode?emoji=👦🏿
+https://api.bingchunmoli.com/emoji/html?emoji=👦🏿
 
 成功返回示例:
 
@@ -226,7 +226,7 @@ https://api.bingchunmoli.com/emoji/getByAlise?alise=happy
 
 8. removeAllEmojis
 
-> https://api.bingchunmoli.com/emoji/getByAlise
+> https://api.bingchunmoli.com/emoji/removeAllEmojis
 
 请求方式: Get
 
